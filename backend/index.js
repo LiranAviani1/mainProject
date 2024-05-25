@@ -184,9 +184,8 @@ app.get("/get-user", authenticateToken, async (req, res) => {
 
 // Add Note
 app.post("/add-note", authenticateToken, async (req, res) => {
-  const { title, content, tags } = req.body;
+  const { title, content, category, subCategory, dateStart, dateEnd, capacity, status } = req.body;
   const { user } = req.user;
-
   if (!title) {
     return res.status(400).json({ error: true, message: "Title is required" });
   }
@@ -197,12 +196,51 @@ app.post("/add-note", authenticateToken, async (req, res) => {
       .json({ error: true, message: "Content is required" });
   }
 
+  if (!category) {
+    return res
+      .status(400)
+      .json({ error: true, message: "Category is required" });
+  }
+
+  if (!subCategory) {
+    return res
+      .status(400)
+      .json({ error: true, message: "SubCategory is required" });
+  }
+
+  if (!dateStart) {
+    return res
+      .status(400)
+      .json({ error: true, message: "DateStart is required" });
+  }
+
+  if (!dateEnd) {
+    return res
+      .status(400)
+      .json({ error: true, message: "DateEnd is required" });
+  }
+
+  if (!capacity) {
+    return res
+      .status(400)
+      .json({ error: true, message: "Capacity is required" });
+  }
+
+  
+
   try {
     const note = new Note({
       title,
       content,
-      tags: tags || [],
+      category,
+      subCategory,
+      dateStart,
+      dateEnd,
+      capacity,
+      members: [],
+      status,
       userId: user._id,
+
     });
 
     await note.save();

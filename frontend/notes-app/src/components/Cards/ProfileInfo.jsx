@@ -11,14 +11,14 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
         </div>
 
         <div>
-          <p class="text-sm font-medium group text-black transition duration-300">
+          <p className="text-sm font-medium group text-black transition duration-300">
             <Link to="/edit">{userInfo.fullName}</Link>
-            <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
+            <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
           </p>
           <button
             className="text-sm font-medium group text-red-500 transition duration-30" onClick={onLogout}>
             Logout
-            <span class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
+            <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
           </button>
         </div>
       </div>

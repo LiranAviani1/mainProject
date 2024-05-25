@@ -162,8 +162,13 @@ const Home = () => {
                   key={item._id}
                   title={item.title}
                   content={item.content}
-                  date={item.createdOn}
-                  tags={item.tags}
+                  category={item.category}
+                  subCategory={item.subCategory}
+                  dateStart={item.dateStart}
+                  dateEnd={item.dateEnd}
+                  capacity={item.capacity}
+                  members={item.members}
+                  status={item.status}
                   isPinned={item.isPinned}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => deleteNote(item)}

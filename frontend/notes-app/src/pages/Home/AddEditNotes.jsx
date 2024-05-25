@@ -12,7 +12,12 @@ const AddEditNotes = ({
 }) => {
   const [title, setTitle] = useState(noteData?.title || "");
   const [content, setContent] = useState(noteData?.content || "");
-  const [tags, setTags] = useState(noteData?.tags || []);
+  const [category, setCategory] = useState(noteData?.category || "");
+  const [subCategory, setSubCategory] = useState(noteData?.subCategory || "");
+  const [dateStart, setDateStart] = useState(noteData?.dateStart || "");
+  const [dateEnd, setDateEnd] = useState(noteData?.dateEnd || "");
+  const [capacity, setCapacity] = useState(noteData?.capacity || "");
+  const [status, setStatus] = useState(noteData?.status || "");
   const [error, setError] = useState(null);
 
   const addNewNote = async () => {
@@ -20,7 +25,12 @@ const AddEditNotes = ({
       const response = await axiosInstance.post("/add-note", {
         title,
         content,
-        tags,
+        category,
+        subCategory,
+        dateStart,
+        dateEnd,
+        capacity,
+        status,
       });
 
       if (response.data && response.data.note) {
@@ -48,7 +58,12 @@ const AddEditNotes = ({
       const response = await axiosInstance.put("/edit-note/" + noteId, {
         title,
         content,
-        tags,
+        category,
+        subCategory,
+        dateStart,
+        dateEnd,
+        capacity,
+        status,
       });
 
       if (response.data && response.data.note) {
@@ -80,6 +95,36 @@ const AddEditNotes = ({
       return;
     }
 
+    if (!category) {
+      setError("Please enter the category");
+      return;
+    }
+
+    if (!subCategory) {
+      setError("Please enter the subCategory");
+      return;
+    }
+
+    if (!dateStart) {
+      setError("Please enter the dateStart");
+      return;
+    }
+
+    if (!dateEnd) {
+      setError("Please enter the dateEnd");
+      return;
+    }
+
+    if (!capacity) {
+      setError("Please enter the capacity");
+      return;
+    }
+
+    if(!status){
+      setError("Please enter the status");
+      return;
+    }
+
     setError("");
 
     if(type === 'edit'){
@@ -103,7 +148,7 @@ const AddEditNotes = ({
         <input
           type="text"
           className="text-2xl text-slate-950 outline-none"
-          placeholder="Go To Gym At 5"
+          placeholder="Java Script basics"
           value={title}
           onChange={({ target }) => setTitle(target.value)}
         />
@@ -121,10 +166,71 @@ const AddEditNotes = ({
         />
       </div>
 
-      <div className="mt-3">
-        <label className="input-label">TAGS</label>
-        <TagInput tags={tags} setTags={setTags} />
+      <div className="flex flex-col gap-2">
+        <label className="input-label">CATEGORY</label>
+        <input
+          type="text"
+          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
+          placeholder="Programming"
+          value={category}
+          onChange={({ target }) => setCategory(target.value)}
+        />
       </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="input-label">SUBCATEGORY</label>
+        <input
+          type="text"
+          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
+          placeholder="Java Script"
+          value={subCategory}
+          onChange={({ target }) => setSubCategory(target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="input-label">DATE START</label>
+        <input
+          type="date"
+          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
+          placeholder="25/05/2024"
+          value={dateStart}
+          onChange={({ target }) => setDateStart(target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="input-label">DATE END</label>
+        <input
+          type="date"
+          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
+          placeholder="26/05/2024"
+          value={dateEnd}
+          onChange={({ target }) => setDateEnd(target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="input-label">CAPACITY</label>
+        <input
+          type="number"
+          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
+          placeholder="5"
+          value={capacity}
+          onChange={({ target }) => setCapacity(target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="input-label">STATUS</label>
+        <select id="status" name="status" className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded" value={status}
+          onChange={({ target }) => setStatus(target.value)}>
+          <option value="open">Open</option>
+          <option value="closed">Closed</option>
+        </select>
+        
+      </div>
+
 
       {error && <p className="text-red-500 text-xs pt-4">{error}</p>}
 
