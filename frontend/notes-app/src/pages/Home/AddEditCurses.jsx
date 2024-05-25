@@ -14,12 +14,16 @@ const AddEditCurses = ({
   const [content, setContent] = useState(curseData?.content || "");
   const [category, setCategory] = useState(curseData?.category || "");
   const [subCategory, setSubCategory] = useState(curseData?.subCategory || "");
-  const [dateStart, setDateStart] = useState(curseData?.dateStart || new Date().toISOString().split('T')[0]);
-  const [dateEnd, setDateEnd] = useState(curseData?.dateEnd || new Date().toISOString().split('T')[0]);
+  const [dateStart, setDateStart] = useState(
+    curseData?.dateStart || new Date().toISOString().split("T")[0]
+  );
+  const [dateEnd, setDateEnd] = useState(
+    curseData?.dateEnd || new Date().toISOString().split("T")[0]
+  );
   const [capacity, setCapacity] = useState(curseData?.capacity || "");
   const [status, setStatus] = useState(curseData?.status || "open");
   const [error, setError] = useState(null);
-  
+
   const addNewCurse = async () => {
     try {
       const response = await axiosInstance.post("/add-curse", {
@@ -52,7 +56,7 @@ const AddEditCurses = ({
   };
 
   const editCurse = async () => {
-    const curseId = curseData._id
+    const curseId = curseData._id;
 
     try {
       const response = await axiosInstance.put("/edit-curse/" + curseId, {
@@ -65,9 +69,9 @@ const AddEditCurses = ({
         capacity,
         status,
       });
-      
+
       if (response.data && response.data.curse) {
-        showToastMessage("Curse Updated Successfully", 'update');
+        showToastMessage("Curse Updated Successfully", "update");
         getAllCurses();
         onClose();
       }
@@ -115,7 +119,7 @@ const AddEditCurses = ({
       return;
     }
 
-    if(dateStart > dateEnd){
+    if (dateStart > dateEnd) {
       setError("Date Start should be less than Date End");
       return;
     }
@@ -125,17 +129,22 @@ const AddEditCurses = ({
       return;
     }
 
-    if(!status){
+    if (capacity <= 0) {
+      setError("Capacity should be greater than 0");
+      return;
+    }
+
+    if (!status) {
       setError("Please enter the status");
       return;
     }
 
     setError("");
 
-    if(type === 'edit'){
-      editCurse()
-    }else {
-      addNewCurse()
+    if (type === "edit") {
+      editCurse();
+    } else {
+      addNewCurse();
     }
   };
 
@@ -198,10 +207,9 @@ const AddEditCurses = ({
         <input
           type="date"
           className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
-          value={new Date(dateStart).toISOString().split('T')[0]}
+          value={new Date(dateStart).toISOString().split("T")[0]}
           onChange={({ target }) => setDateStart(target.value)}
         />
-        
       </div>
 
       <div className="flex flex-col gap-2">
@@ -210,7 +218,7 @@ const AddEditCurses = ({
           type="date"
           className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
           placeholder="26/05/2024"
-          value={new Date(dateEnd).toISOString().split('T')[0]}
+          value={new Date(dateEnd).toISOString().split("T")[0]}
           onChange={({ target }) => setDateEnd(target.value)}
         />
       </div>
@@ -228,14 +236,17 @@ const AddEditCurses = ({
 
       <div className="flex flex-col gap-2">
         <label className="input-label">STATUS</label>
-        <select id="status" name="status" className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded" value={status}
-          onChange={({ target }) => setStatus(target.value)}>
+        <select
+          id="status"
+          name="status"
+          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
+          value={status}
+          onChange={({ target }) => setStatus(target.value)}
+        >
           <option value="open">Open</option>
           <option value="closed">Closed</option>
         </select>
-        
       </div>
-
 
       {error && <p className="text-red-500 text-xs pt-4">{error}</p>}
 
@@ -243,7 +254,7 @@ const AddEditCurses = ({
         className="btn-primary font-medium mt-5 p-3"
         onClick={handleAddCurse}
       >
-       {type === 'add' ?  "ADD" : "Update"}
+        {type === "add" ? "ADD" : "Update"}
       </button>
     </div>
   );
