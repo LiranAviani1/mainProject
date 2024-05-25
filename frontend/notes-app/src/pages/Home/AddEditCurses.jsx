@@ -115,6 +115,11 @@ const AddEditCurses = ({
       return;
     }
 
+    if(dateStart > dateEnd){
+      setError("Date Start should be less than Date End");
+      return;
+    }
+
     if (!capacity) {
       setError("Please enter the capacity");
       return;
