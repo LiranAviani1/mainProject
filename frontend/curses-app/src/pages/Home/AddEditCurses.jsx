@@ -21,6 +21,7 @@ const AddEditCurses = ({
     curseData?.dateEnd || new Date().toISOString().split("T")[0]
   );
   const [capacity, setCapacity] = useState(curseData?.capacity || "");
+  const [members, setMembers] = useState(curseData?.members || []);
   const [status, setStatus] = useState(curseData?.status || "open");
   const [error, setError] = useState(null);
 
@@ -131,6 +132,11 @@ const AddEditCurses = ({
 
     if (capacity <= 0) {
       setError("Capacity should be greater than 0");
+      return;
+    }
+
+    if(members.length > capacity) {
+      setError("Members should be less than or equal to capacity");
       return;
     }
 
