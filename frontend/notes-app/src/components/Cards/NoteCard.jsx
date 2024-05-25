@@ -19,6 +19,17 @@ const NoteCard = ({title, content, category, subCategory,dateStart,dateEnd,capac
       <p className="text-xs text-slate-600 mt-2">
         Content: {content?.slice(0, 60)}
       </p>
+      <div className="flex gap-3 mt-2">
+        <div className="text-xs text-slate-500">Date Start: {moment(dateStart).format("DD-MM-YYYY")}</div>
+        <div className="text-xs text-slate-500">Date End: {moment(dateEnd).format("DD-MM-YYYY")}</div>
+      </div>
+      <div className="flex gap-3 mt-2">
+        <div className="text-xs text-slate-500">Capacity: {capacity}</div>
+        <div className="text-xs text-slate-500">Members: {members.length}</div>
+      </div>
+      <div className="flex gap-3 mt-2">
+        <div className="text-xs text-slate-500">Status: {status}</div>
+      </div>
 
       
       <div className="flex right gap-2 mt-3">

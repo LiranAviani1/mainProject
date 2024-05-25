@@ -14,12 +14,12 @@ const AddEditNotes = ({
   const [content, setContent] = useState(noteData?.content || "");
   const [category, setCategory] = useState(noteData?.category || "");
   const [subCategory, setSubCategory] = useState(noteData?.subCategory || "");
-  const [dateStart, setDateStart] = useState(noteData?.dateStart || "");
-  const [dateEnd, setDateEnd] = useState(noteData?.dateEnd || "");
+  const [dateStart, setDateStart] = useState(noteData?.dateStart || new Date().toISOString().split('T')[0]);
+  const [dateEnd, setDateEnd] = useState(noteData?.dateEnd || new Date().toISOString().split('T')[0]);
   const [capacity, setCapacity] = useState(noteData?.capacity || "");
-  const [status, setStatus] = useState(noteData?.status || "");
+  const [status, setStatus] = useState(noteData?.status || "open");
   const [error, setError] = useState(null);
-
+  
   const addNewNote = async () => {
     try {
       const response = await axiosInstance.post("/add-note", {
@@ -65,7 +65,7 @@ const AddEditNotes = ({
         capacity,
         status,
       });
-
+      
       if (response.data && response.data.note) {
         showToastMessage("Note Updated Successfully", 'update');
         getAllNotes();
@@ -193,10 +193,10 @@ const AddEditNotes = ({
         <input
           type="date"
           className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
-          placeholder="25/05/2024"
-          value={dateStart}
+          value={new Date(dateStart).toISOString().split('T')[0]}
           onChange={({ target }) => setDateStart(target.value)}
         />
+        
       </div>
 
       <div className="flex flex-col gap-2">
@@ -205,7 +205,7 @@ const AddEditNotes = ({
           type="date"
           className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
           placeholder="26/05/2024"
-          value={dateEnd}
+          value={new Date(dateEnd).toISOString().split('T')[0]}
           onChange={({ target }) => setDateEnd(target.value)}
         />
       </div>
