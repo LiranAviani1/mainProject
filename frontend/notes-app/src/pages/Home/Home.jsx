@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
-import NoteCard from "../../components/Cards/NoteCard";
+import CurseCard from "../../components/Cards/CurseCard";
 import { MdAdd } from "react-icons/md";
 import Modal from "react-modal";
-import AddEditNotes from "./AddEditNotes";
+import AddEditCurses from "./AddEditCurses";
 import Toast from "../../components/ToastMessage/Toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import AddNotesImg from "../../assets/images/add-notes.svg";
+import AddCursesImg from "../../assets/images/add-curses.svg";
 import NoDataImg from "../../assets/images/no-data.svg";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
 
 const Home = () => {
-  const [allNotes, setAllNotes] = useState([]);
+  const [allCurses, setAllCurses] = useState([]);
 
   const [isSearch, setIsSearch] = useState(false);
 
@@ -32,8 +32,8 @@ const Home = () => {
     type: "add",
   });
 
-  const handleEdit = (noteDetails) => {
-    setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit" });
+  const handleEdit = (curseDetails) => {
+    setOpenAddEditModal({ isShown: true, data: curseDetails, type: "edit" });
   };
 
   const showToastMessage = (message, type) => {
@@ -51,28 +51,28 @@ const Home = () => {
     });
   };
 
-  // Get all notes
-  const getAllNotes = async () => {
+  // Get all Curses
+  const getAllCurses = async () => {
     try {
-      const response = await axiosInstance.get("/get-all-notes");
+      const response = await axiosInstance.get("/get-all-curses");
 
-      if (response.data && response.data.notes) {
-        setAllNotes(response.data.notes);
+      if (response.data && response.data.curses) {
+        setAllCurses(response.data.curses);
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
 
-  // Delete Note
-  const deleteNote = async (data) => {
-    const noteId = data._id;
+  // Delete Curse
+  const deleteCurse = async (data) => {
+    const curseId = data._id;
     try {
-      const response = await axiosInstance.delete("/delete-note/" + noteId);
+      const response = await axiosInstance.delete("/delete-curse/" + curseId);
 
       if (response.data && !response.data.error) {
-        showToastMessage("Note Deleted Successfully", "delete");
-        getAllNotes();
+        showToastMessage("Curse Deleted Successfully", "delete");
+        getAllCurses();
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -94,36 +94,36 @@ const Home = () => {
     }
   };
 
-  // Search for a Note
-  const onSearchNote = async (query) => {
+  // Search for a Curse
+  const onSearchCurse = async (query) => {
     try {
-      const response = await axiosInstance.get("/search-notes", {
+      const response = await axiosInstance.get("/search-curses", {
         params: { query },
       });
 
-      if (response.data && response.data.notes) {
+      if (response.data && response.data.curses) {
         setIsSearch(true);
-        setAllNotes(response.data.notes);
+        setAllCurses(response.data.curses);
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
 
-  const updateIsPinned = async (noteData) => {
-    const noteId = noteData._id;
+  const updateIsPinned = async (curseData) => {
+    const curseId = curseData._id;
 
     try {
       const response = await axiosInstance.put(
-        "/update-note-pinned/" + noteId,
+        "/update-curse-pinned/" + curseId,
         {
-          isPinned: !noteData.isPinned,
+          isPinned: !curseData.isPinned,
         }
       );
 
-      if (response.data && response.data.note) {
-        showToastMessage("Note Updated Successfully", "update");
-        getAllNotes();
+      if (response.data && response.data.curse) {
+        showToastMessage("Curse Updated Successfully", "update");
+        getAllCurses();
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -132,11 +132,11 @@ const Home = () => {
 
   const handleClearSearch = () => {
     setIsSearch(false);
-    getAllNotes();
+    getAllCurses();
   };
 
   useEffect(() => {
-    getAllNotes();
+    getAllCurses();
     getUserInfo();
     return () => {};
   }, []);
@@ -145,7 +145,7 @@ const Home = () => {
     <>
       <Navbar
         userInfo={userInfo}
-        onSearchNote={onSearchNote}
+        onSearchCurse={onSearchCurse}
         handleClearSearch={handleClearSearch}
       />
 
@@ -154,11 +154,11 @@ const Home = () => {
           <h3 className="text-lg font-medium mt-5">Search Results</h3>
         )}
 
-        {allNotes.length > 0 ? (
+        {allCurses.length > 0 ? (
           <div className="grid grid-cols-3 gap-4 mt-8">
-            {allNotes.map((item) => {
+            {allCurses.map((item) => {
               return (
-                <NoteCard
+                <CurseCard
                   key={item._id}
                   title={item.title}
                   content={item.content}
@@ -171,19 +171,19 @@ const Home = () => {
                   status={item.status}
                   isPinned={item.isPinned}
                   onEdit={() => handleEdit(item)}
-                  onDelete={() => deleteNote(item)}
-                  onPinNote={() => updateIsPinned(item)}
+                  onDelete={() => deleteCurse(item)}
+                  onPinCurse={() => updateIsPinned(item)}
                 />
               );
             })}
           </div>
         ) : (
           <EmptyCard
-            imgSrc={isSearch ? NoDataImg : AddNotesImg}
+            imgSrc={isSearch ? NoDataImg : AddCursesImg}
             message={
               isSearch
-                ? `Oops! No notes found matching your search.`
-                : `Start creating your first note! Click the 'Add' button to jot down your
+                ? `Oops! No curses found matching your search.`
+                : `Start creating your first curse! Click the 'Add' button to jot down your
           thoughts, ideas, and reminders. Let's get started!`
             }
           />
@@ -210,14 +210,14 @@ const Home = () => {
         contentLabel="Example Modal"
         className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll"
       >
-        <AddEditNotes
+        <AddEditCurses
           type={openAddEditModal.type}
-          noteData={openAddEditModal.data}
+          curseData={openAddEditModal.data}
           onClose={() => {
             setOpenAddEditModal({ isShown: false, type: "add", data: null });
           }}
           showToastMessage={showToastMessage}
-          getAllNotes={getAllNotes}
+          getAllCurses={getAllCurses}
         />
       </Modal>
 

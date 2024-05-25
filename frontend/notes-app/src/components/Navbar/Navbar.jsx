@@ -4,7 +4,7 @@ import ProfileInfo from "../Cards/ProfileInfo";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
+const Navbar = ({ userInfo, onSearchCurse, handleClearSearch }) => {
   const isToken = localStorage.getItem("token");
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,7 +18,7 @@ const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
 
   const handleSearch = () => {
     if(searchQuery){
-      onSearchNote(searchQuery)
+      onSearchCurse(searchQuery)
     }
   };
 

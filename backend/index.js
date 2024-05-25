@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 mongoose.connect(config.connectionString);
 
 const User = require("./models/user.model");
-const Note = require("./models/note.model");
+const Curse = require("./models/curse.model");
 
 const express = require("express");
 const cors = require("cors");
@@ -182,8 +182,8 @@ app.get("/get-user", authenticateToken, async (req, res) => {
   });
 });
 
-// Add Note
-app.post("/add-note", authenticateToken, async (req, res) => {
+// Add Curse
+app.post("/add-curse", authenticateToken, async (req, res) => {
   const { title, content, category, subCategory, dateStart, dateEnd, capacity, status } = req.body;
   const { user } = req.user;
   if (!title) {
@@ -229,7 +229,7 @@ app.post("/add-note", authenticateToken, async (req, res) => {
   
 
   try {
-    const note = new Note({
+    const curse = new Curse({
       title,
       content,
       category,
@@ -243,12 +243,12 @@ app.post("/add-note", authenticateToken, async (req, res) => {
 
     });
 
-    await note.save();
+    await curse.save();
 
     return res.json({
       error: false,
-      note,
-      message: "Note added successfully",
+      curse,
+      message: "Curse added successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -258,9 +258,9 @@ app.post("/add-note", authenticateToken, async (req, res) => {
   }
 });
 
-// Edit Note
-app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
-  const noteId = req.params.noteId;
+// Edit Curse
+app.put("/edit-curse/:curseId", authenticateToken, async (req, res) => {
+  const curseId = req.params.curseId;
   const { title, content, category, subCategory, dateStart, dateEnd, capacity, status} = req.body;
   const { user } = req.user;
 
@@ -271,28 +271,28 @@ app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
   }
 
   try {
-    const note = await Note.findOne({ _id: noteId, userId: user._id });
+    const curse = await Curse.findOne({ _id: curseId, userId: user._id });
 
-    if (!note) {
-      return res.status(404).json({ error: true, message: "Note not found" });
+    if (!curse) {
+      return res.status(404).json({ error: true, message: "Curse not found" });
     }
 
-    if (title) note.title = title;
-    if (content) note.content = content;
-    if (category) note.category = category;
-    if (subCategory) note.subCategory = subCategory;
-    if (dateStart) note.dateStart = dateStart;
-    if (dateEnd) note.dateEnd = dateEnd;
-    if (capacity) note.capacity = capacity;
-    if (status) note.status = status;
+    if (title) curse.title = title;
+    if (content) curse.content = content;
+    if (category) curse.category = category;
+    if (subCategory) curse.subCategory = subCategory;
+    if (dateStart) curse.dateStart = dateStart;
+    if (dateEnd) curse.dateEnd = dateEnd;
+    if (capacity) curse.capacity = capacity;
+    if (status) curse.status = status;
 
 
-    await note.save();
+    await curse.save();
 
     return res.json({
       error: false,
-      note,
-      message: "Note updated successfully",
+      curse,
+      message: "Curse updated successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -302,17 +302,17 @@ app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
   }
 });
 
-// Get all Notes
-app.get("/get-all-notes", authenticateToken, async (req, res) => {
+// Get all Curses
+app.get("/get-all-curses", authenticateToken, async (req, res) => {
   const { user } = req.user;
 
   try {
-    const notes = await Note.find({ userId: user._id }).sort({ isPinned: -1 });
+    const curses = await Curse.find({ userId: user._id }).sort({ isPinned: -1 });
 
     return res.json({
       error: false,
-      notes,
-      message: "All notes retrieved successfully",
+      curses,
+      message: "All curses retrieved successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -322,23 +322,23 @@ app.get("/get-all-notes", authenticateToken, async (req, res) => {
   }
 });
 
-// Delete Note
-app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
-  const noteId = req.params.noteId;
+// Delete Curse
+app.delete("/delete-curse/:curseId", authenticateToken, async (req, res) => {
+  const curseId = req.params.curseId;
   const { user } = req.user;
 
   try {
-    const note = await Note.findOne({ _id: noteId, userId: user._id });
+    const curse = await Curse.findOne({ _id: curseId, userId: user._id });
 
-    if (!note) {
-      return res.status(404).json({ error: true, message: "Note not found" });
+    if (!curse) {
+      return res.status(404).json({ error: true, message: "Curse not found" });
     }
 
-    await Note.deleteOne({ _id: noteId, userId: user._id });
+    await Curse.deleteOne({ _id: curseId, userId: user._id });
 
     return res.json({
       error: false,
-      message: "Note deleted successfully",
+      message: "Curse deleted successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -348,8 +348,8 @@ app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
   }
 });
 
-// Search Notes
-app.get("/search-notes", authenticateToken, async (req, res) => {
+// Search Curses
+app.get("/search-curses", authenticateToken, async (req, res) => {
   const { user } = req.user;
   const { query } = req.query;
 
@@ -360,7 +360,7 @@ app.get("/search-notes", authenticateToken, async (req, res) => {
   }
 
   try {
-    const matchingNotes = await Note.find({
+    const matchingCurses = await Curse.find({
       userId: user._id,
       $or: [
         { title: { $regex: new RegExp(query, "i") } }, // Case-insensitive title match
@@ -370,8 +370,8 @@ app.get("/search-notes", authenticateToken, async (req, res) => {
 
     return res.json({
       error: false,
-      notes: matchingNotes,
-      message: "Notes matching the search query retrieved successfully",
+      curses: matchingCurses,
+      message: "Curses matching the search query retrieved successfully",
     });
   } catch (error) {
     return res.status(500).json({

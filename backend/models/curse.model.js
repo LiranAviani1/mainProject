@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const noteSchema = new Schema({
+const curseSchema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   category: { type: String, required: true},
@@ -14,4 +14,4 @@ const noteSchema = new Schema({
   userId: { type: String, required: true },
 });
 
-module.exports = mongoose.model("Note", noteSchema);
+module.exports = mongoose.model("Curse", curseSchema);

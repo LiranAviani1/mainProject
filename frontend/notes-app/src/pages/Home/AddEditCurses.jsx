@@ -3,26 +3,26 @@ import TagInput from "../../components/Input/TagInput";
 import { MdClose } from "react-icons/md";
 import axiosInstance from "../../utils/axiosInstance";
 
-const AddEditNotes = ({
-  noteData,
+const AddEditCurses = ({
+  curseData,
   type,
   onClose,
   showToastMessage,
-  getAllNotes,
+  getAllCurses,
 }) => {
-  const [title, setTitle] = useState(noteData?.title || "");
-  const [content, setContent] = useState(noteData?.content || "");
-  const [category, setCategory] = useState(noteData?.category || "");
-  const [subCategory, setSubCategory] = useState(noteData?.subCategory || "");
-  const [dateStart, setDateStart] = useState(noteData?.dateStart || new Date().toISOString().split('T')[0]);
-  const [dateEnd, setDateEnd] = useState(noteData?.dateEnd || new Date().toISOString().split('T')[0]);
-  const [capacity, setCapacity] = useState(noteData?.capacity || "");
-  const [status, setStatus] = useState(noteData?.status || "open");
+  const [title, setTitle] = useState(curseData?.title || "");
+  const [content, setContent] = useState(curseData?.content || "");
+  const [category, setCategory] = useState(curseData?.category || "");
+  const [subCategory, setSubCategory] = useState(curseData?.subCategory || "");
+  const [dateStart, setDateStart] = useState(curseData?.dateStart || new Date().toISOString().split('T')[0]);
+  const [dateEnd, setDateEnd] = useState(curseData?.dateEnd || new Date().toISOString().split('T')[0]);
+  const [capacity, setCapacity] = useState(curseData?.capacity || "");
+  const [status, setStatus] = useState(curseData?.status || "open");
   const [error, setError] = useState(null);
   
-  const addNewNote = async () => {
+  const addNewCurse = async () => {
     try {
-      const response = await axiosInstance.post("/add-note", {
+      const response = await axiosInstance.post("/add-curse", {
         title,
         content,
         category,
@@ -33,9 +33,9 @@ const AddEditNotes = ({
         status,
       });
 
-      if (response.data && response.data.note) {
-        showToastMessage("Note Added Successfully");
-        getAllNotes();
+      if (response.data && response.data.curse) {
+        showToastMessage("Curse Added Successfully");
+        getAllCurses();
         onClose();
       }
     } catch (error) {
@@ -51,11 +51,11 @@ const AddEditNotes = ({
     }
   };
 
-  const editNote = async () => {
-    const noteId = noteData._id
+  const editCurse = async () => {
+    const curseId = curseData._id
 
     try {
-      const response = await axiosInstance.put("/edit-note/" + noteId, {
+      const response = await axiosInstance.put("/edit-curse/" + curseId, {
         title,
         content,
         category,
@@ -66,9 +66,9 @@ const AddEditNotes = ({
         status,
       });
       
-      if (response.data && response.data.note) {
-        showToastMessage("Note Updated Successfully", 'update');
-        getAllNotes();
+      if (response.data && response.data.curse) {
+        showToastMessage("Curse Updated Successfully", 'update');
+        getAllCurses();
         onClose();
       }
     } catch (error) {
@@ -84,7 +84,7 @@ const AddEditNotes = ({
     }
   };
 
-  const handleAddNote = () => {
+  const handleAddCurse = () => {
     if (!title) {
       setError("Please enter the title");
       return;
@@ -128,9 +128,9 @@ const AddEditNotes = ({
     setError("");
 
     if(type === 'edit'){
-      editNote()
+      editCurse()
     }else {
-      addNewNote()
+      addNewCurse()
     }
   };
 
@@ -236,7 +236,7 @@ const AddEditNotes = ({
 
       <button
         className="btn-primary font-medium mt-5 p-3"
-        onClick={handleAddNote}
+        onClick={handleAddCurse}
       >
        {type === 'add' ?  "ADD" : "Update"}
       </button>
@@ -244,4 +244,4 @@ const AddEditNotes = ({
   );
 };
 
-export default AddEditNotes;
+export default AddEditCurses;
