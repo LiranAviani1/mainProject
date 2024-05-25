@@ -261,10 +261,10 @@ app.post("/add-note", authenticateToken, async (req, res) => {
 // Edit Note
 app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
   const noteId = req.params.noteId;
-  const { title, content, tags, isPinned } = req.body;
+  const { title, content, category, subCategory, dateStart, dateEnd, capacity, status} = req.body;
   const { user } = req.user;
 
-  if (!title && !content && !tags) {
+  if (!title && !content && !category && !subCategory && !dateStart && !dateEnd && !capacity && !status) {
     return res
       .status(400)
       .json({ error: true, message: "No changes provided" });
@@ -279,8 +279,13 @@ app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
 
     if (title) note.title = title;
     if (content) note.content = content;
-    if (tags) note.tags = tags;
-    if (isPinned) note.isPinned = isPinned;
+    if (category) note.category = category;
+    if (subCategory) note.subCategory = subCategory;
+    if (dateStart) note.dateStart = dateStart;
+    if (dateEnd) note.dateEnd = dateEnd;
+    if (capacity) note.capacity = capacity;
+    if (status) note.status = status;
+
 
     await note.save();
 
@@ -288,36 +293,6 @@ app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
       error: false,
       note,
       message: "Note updated successfully",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      error: true,
-      message: "Internal Server Error",
-    });
-  }
-});
-
-// Update isPinned
-app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
-  const noteId = req.params.noteId;
-  const { isPinned } = req.body;
-  const { user } = req.user;
-
-  try {
-    const note = await Note.findOne({ _id: noteId, userId: user._id });
-
-    if (!note) {
-      return res.status(404).json({ error: true, message: "Note not found" });
-    }
-
-    note.isPinned = isPinned;
-
-    await note.save();
-
-    return res.json({
-      error: false,
-      note,
-      message: "Note pinned status updated successfully",
     });
   } catch (error) {
     return res.status(500).json({
