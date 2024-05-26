@@ -44,10 +44,10 @@ const CurseCard = ({
       </div>
       <div className="flex justify-center gap-3 mt-2">
         <div className="text-xs text-black font-semibold">
-          Capacity: {capacity}
+          Members: {members.length}
         </div>
         <div className="text-xs text-black font-semibold">
-          Members: {members.length}
+          Capacity: {capacity}
         </div>
       </div>
       <div className="flex justify-center gap-3 mt-2">
