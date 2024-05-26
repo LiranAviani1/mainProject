@@ -1,96 +1,44 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import PasswordInput from "../../components/Input/PasswordInput";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 
 const Edit = () => {
+  const [user, setUser] = useState();
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [phone, setPhone] = useState("");
-  const [adress, setAdress] = useState("");
+  const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-
   const navigate = useNavigate();
 
-  const handleSignUp = async (e) => {
+  const handleEditUser = async (e) => {
     e.preventDefault();
-
-    if (!name) {
-      setError("Please enter your name");
-      return;
-    }else if(name.length < 2){
-      setError("Name should be atleast 2 characters long");
-      return;
-    }
-
-    if (!age) {
-      setError("Please enter your age");
-      return;
-    }else if(age > 100){
-      setError("Please enter a valid age");
-      return;
-    }
-
-    if (!phone) {
-      setError("Please enter your phone number");
-      return;
-    }else if(phone.length !== 10){
-      setError("Please enter a valid phone number");
-      return;
-    }
-
-    if (!adress) {
-      setError("Please enter your address");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    if (!password) {
-      setError("Please enter the password");
-      return;
-    }else if(password.length < 6 && password.length > 20){
-      setError("Password should be between 6 to 20 characters long");
-      return;
-    }else if(!password.match(/[a-z]/g) || !password.match(/[A-Z]/g) || !password.match(/[0-9]/g)){
-      setError("Password should contain atleast one uppercase, one lowercase and one number");
-      return;
-    }
     
 
-    setError("");
-
-    // SignUp API Call
+    if (!validateEmail(email)) {
+      setError("Invalid email");
+      return;
+    }
 
     try {
-      const response = await axiosInstance.post("/create-account", {
-        fullName: name,
-        age: age,
-        phone: phone,
-        address: adress,
-        email: email,
-        password: password,
+      const response = await axiosInstance.put("/edit-user/" + "6650e5d950b954423a122668", {
+        email,
+        password,
+        name,
+        age,
+        phone,
+        address,
       });
 
-      // Handle successful registration response
-      if (response.data && response.data.error) {
-        setError(response.data.message);
-        return;
-      }
-
-      if (response.data && response.data.accessToken) {
-        localStorage.setItem("token", response.data.accessToken);
-        navigate("/dashboard");
+      if (response.data && response.data.user) {
+        navigate("/");
       }
     } catch (error) {
-      // Handle login error
       if (
         error.response &&
         error.response.data &&
@@ -109,7 +57,7 @@ const Edit = () => {
 
       <div className="flex items-center justify-center mt-28">
         <div className="w-96 border rounded bg-white px-7 py-10">
-          <form onSubmit={handleSignUp}>
+          <form onSubmit={handleEditUser}>
             <h4 className="text-2xl mb-7">Edit User</h4>
 
             <input
@@ -154,8 +102,8 @@ const Edit = () => {
               type="text"
               placeholder="Address"
               className="input-box"
-              value={adress}
-              onChange={(e) => setAdress(e.target.value)}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
             />
 
             {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
