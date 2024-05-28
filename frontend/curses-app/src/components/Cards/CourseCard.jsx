@@ -3,7 +3,7 @@ import React from "react";
 import { MdOutlinePushPin } from "react-icons/md";
 import { MdCreate, MdDelete } from "react-icons/md";
 
-const CurseCard = ({
+const CourseCard = ({
   title,
   content,
   category,
@@ -62,4 +62,4 @@ const CurseCard = ({
   );
 };
 
-export default CurseCard;
+export default CourseCard;

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const curseSchema = new Schema({
+const courseSchema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   category: { type: String, required: true },
@@ -11,7 +11,6 @@ const curseSchema = new Schema({
   capacity: { type: Number, default: 0 },
   members: { type: [String], default: [] },
   status: { type: String, default: "open" },
-  userId: { type: String, required: true },
 });
 
-module.exports = mongoose.model("Curse", curseSchema);
+module.exports = mongoose.model("Course", courseSchema);

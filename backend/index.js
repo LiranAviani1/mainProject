@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 mongoose.connect(config.connectionString);
 
 const User = require("./models/user.model");
-const Curse = require("./models/curse.model");
+const Course = require("./models/course.model");
 
 const express = require("express");
 const cors = require("cors");
@@ -182,8 +182,8 @@ app.get("/get-user", authenticateToken, async (req, res) => {
   });
 });
 
-// Add Curse
-app.post("/add-curse", authenticateToken, async (req, res) => {
+// Add Course
+app.post("/add-course", authenticateToken, async (req, res) => {
   const { title, content, category, subCategory, dateStart, dateEnd, capacity, status } = req.body;
   const { user } = req.user;
   if (!title) {
@@ -229,7 +229,7 @@ app.post("/add-curse", authenticateToken, async (req, res) => {
   
 
   try {
-    const curse = new Curse({
+    const course = new Course({
       title,
       content,
       category,
@@ -243,12 +243,12 @@ app.post("/add-curse", authenticateToken, async (req, res) => {
 
     });
 
-    await curse.save();
+    await course.save();
 
     return res.json({
       error: false,
-      curse,
-      message: "Curse added successfully",
+      course,
+      message: "Course added successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -258,9 +258,9 @@ app.post("/add-curse", authenticateToken, async (req, res) => {
   }
 });
 
-// Edit Curse
-app.put("/edit-curse/:curseId", authenticateToken, async (req, res) => {
-  const curseId = req.params.curseId;
+// Edit Course
+app.put("/edit-course/:courseId", authenticateToken, async (req, res) => {
+  const courseId = req.params.courseId;
   const { title, content, category, subCategory, dateStart, dateEnd, capacity, status} = req.body;
   const { user } = req.user;
 
@@ -271,28 +271,28 @@ app.put("/edit-curse/:curseId", authenticateToken, async (req, res) => {
   }
 
   try {
-    const curse = await Curse.findOne({ _id: curseId, userId: user._id });
+    const course = await Course.findOne({ _id: courseId, userId: user._id });
 
-    if (!curse) {
-      return res.status(404).json({ error: true, message: "Curse not found" });
+    if (!course) {
+      return res.status(404).json({ error: true, message: "Course not found" });
     }
 
-    if (title) curse.title = title;
-    if (content) curse.content = content;
-    if (category) curse.category = category;
-    if (subCategory) curse.subCategory = subCategory;
-    if (dateStart) curse.dateStart = dateStart;
-    if (dateEnd) curse.dateEnd = dateEnd;
-    if (capacity) curse.capacity = capacity;
-    if (status) curse.status = status;
+    if (title) course.title = title;
+    if (content) course.content = content;
+    if (category) course.category = category;
+    if (subCategory) course.subCategory = subCategory;
+    if (dateStart) course.dateStart = dateStart;
+    if (dateEnd) course.dateEnd = dateEnd;
+    if (capacity) course.capacity = capacity;
+    if (status) course.status = status;
 
 
-    await curse.save();
+    await course.save();
 
     return res.json({
       error: false,
-      curse,
-      message: "Curse updated successfully",
+      course,
+      message: "Course updated successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -302,17 +302,17 @@ app.put("/edit-curse/:curseId", authenticateToken, async (req, res) => {
   }
 });
 
-// Get all Curses
-app.get("/get-all-curses", authenticateToken, async (req, res) => {
+// Get all Courses
+app.get("/get-all-courses", authenticateToken, async (req, res) => {
   const { user } = req.user;
 
   try {
-    const curses = await Curse.find({ userId: user._id }).sort({ isPinned: -1 });
+    const courses = await Course.find().exec();
 
     return res.json({
       error: false,
-      curses,
-      message: "All curses retrieved successfully",
+      courses,
+      message: "All courses retrieved successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -322,23 +322,23 @@ app.get("/get-all-curses", authenticateToken, async (req, res) => {
   }
 });
 
-// Delete Curse
-app.delete("/delete-curse/:curseId", authenticateToken, async (req, res) => {
-  const curseId = req.params.curseId;
+// Delete Course
+app.delete("/delete-course/:courseId", authenticateToken, async (req, res) => {
+  const courseId = req.params.courseId;
   const { user } = req.user;
 
   try {
-    const curse = await Curse.findOne({ _id: curseId, userId: user._id });
+    const course = await Course.findOne({ _id: courseId, userId: user._id });
 
-    if (!curse) {
-      return res.status(404).json({ error: true, message: "Curse not found" });
+    if (!course) {
+      return res.status(404).json({ error: true, message: "Course not found" });
     }
 
-    await Curse.deleteOne({ _id: curseId, userId: user._id });
+    await Course.deleteOne({ _id: courseId, userId: user._id });
 
     return res.json({
       error: false,
-      message: "Curse deleted successfully",
+      message: "Course deleted successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -348,8 +348,8 @@ app.delete("/delete-curse/:curseId", authenticateToken, async (req, res) => {
   }
 });
 
-// Search Curses
-app.get("/search-curses", authenticateToken, async (req, res) => {
+// Search Courses
+app.get("/search-courses", authenticateToken, async (req, res) => {
   const { user } = req.user;
   const { query } = req.query;
 
@@ -360,7 +360,7 @@ app.get("/search-curses", authenticateToken, async (req, res) => {
   }
 
   try {
-    const matchingCurses = await Curse.find({
+    const matchingCourses = await Course.find({
       userId: user._id,
       $or: [
         { title: { $regex: new RegExp(query, "i") } }, // Case-insensitive title match
@@ -370,8 +370,8 @@ app.get("/search-curses", authenticateToken, async (req, res) => {
 
     return res.json({
       error: false,
-      curses: matchingCurses,
-      message: "Curses matching the search query retrieved successfully",
+      courses: matchingCourses,
+      message: "Courses matching the search query retrieved successfully",
     });
   } catch (error) {
     return res.status(500).json({

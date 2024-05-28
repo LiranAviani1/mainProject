@@ -2,31 +2,31 @@ import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import axiosInstance from "../../utils/axiosInstance";
 
-const AddEditCurses = ({
-  curseData,
+const AddEditCourses = ({
+  courseData,
   type,
   onClose,
   showToastMessage,
-  getAllCurses,
+  getAllCourses,
 }) => {
-  const [title, setTitle] = useState(curseData?.title || "");
-  const [content, setContent] = useState(curseData?.content || "");
-  const [category, setCategory] = useState(curseData?.category || "");
-  const [subCategory, setSubCategory] = useState(curseData?.subCategory || "");
+  const [title, setTitle] = useState(courseData?.title || "");
+  const [content, setContent] = useState(courseData?.content || "");
+  const [category, setCategory] = useState(courseData?.category || "");
+  const [subCategory, setSubCategory] = useState(courseData?.subCategory || "");
   const [dateStart, setDateStart] = useState(
-    curseData?.dateStart || new Date().toISOString().split("T")[0]
+    courseData?.dateStart || new Date().toISOString().split("T")[0]
   );
   const [dateEnd, setDateEnd] = useState(
-    curseData?.dateEnd || new Date().toISOString().split("T")[0]
+    courseData?.dateEnd || new Date().toISOString().split("T")[0]
   );
-  const [capacity, setCapacity] = useState(curseData?.capacity || "");
-  const [members, setMembers] = useState(curseData?.members || []);
-  const [status, setStatus] = useState(curseData?.status || "open");
+  const [capacity, setCapacity] = useState(courseData?.capacity || "");
+  const [members, setMembers] = useState(courseData?.members || []);
+  const [status, setStatus] = useState(courseData?.status || "open");
   const [error, setError] = useState(null);
 
-  const addNewCurse = async () => {
+  const addNewCourse = async () => {
     try {
-      const response = await axiosInstance.post("/add-curse", {
+      const response = await axiosInstance.post("/add-course", {
         title,
         content,
         category,
@@ -37,9 +37,9 @@ const AddEditCurses = ({
         status,
       });
 
-      if (response.data && response.data.curse) {
-        showToastMessage("Curse Added Successfully");
-        getAllCurses();
+      if (response.data && response.data.course) {
+        showToastMessage("Course Added Successfully");
+        getAllCourses();
         onClose();
       }
     } catch (error) {
@@ -55,11 +55,11 @@ const AddEditCurses = ({
     }
   };
 
-  const editCurse = async () => {
-    const curseId = curseData._id;
+  const editCourse = async () => {
+    const courseId = courseData._id;
 
     try {
-      const response = await axiosInstance.put("/edit-curse/" + curseId, {
+      const response = await axiosInstance.put("/edit-course/" + courseId, {
         title,
         content,
         category,
@@ -70,9 +70,9 @@ const AddEditCurses = ({
         status,
       });
 
-      if (response.data && response.data.curse) {
-        showToastMessage("Curse Updated Successfully", "update");
-        getAllCurses();
+      if (response.data && response.data.course) {
+        showToastMessage("Course Updated Successfully", "update");
+        getAllCourses();
         onClose();
       }
     } catch (error) {
@@ -88,7 +88,7 @@ const AddEditCurses = ({
     }
   };
 
-  const handleAddCurse = () => {
+  const handleAddCourse = () => {
     if (!title) {
       setError("Please enter the title");
       return;
@@ -147,9 +147,9 @@ const AddEditCurses = ({
     setError("");
 
     if (type === "edit") {
-      editCurse();
+      editCourse();
     } else {
-      addNewCurse();
+      addNewCourse();
     }
   };
 
@@ -257,7 +257,7 @@ const AddEditCurses = ({
 
       <button
         className="btn-primary font-medium mt-5 p-3"
-        onClick={handleAddCurse}
+        onClick={handleAddCourse}
       >
         {type === "add" ? "ADD" : "Update"}
       </button>
@@ -265,4 +265,4 @@ const AddEditCurses = ({
   );
 };
 
-export default AddEditCurses;
+export default AddEditCourses;

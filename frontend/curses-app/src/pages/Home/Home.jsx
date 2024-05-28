@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
-import CurseCard from "../../components/Cards/CurseCard";
+import CourseCard from "../../components/Cards/CourseCard";
 import { MdAdd } from "react-icons/md";
 import Modal from "react-modal";
-import AddEditCurses from "./AddEditCurses";
+import AddEditCourses from "./AddEditCourses";
 import Toast from "../../components/ToastMessage/Toast";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import AddCursesImg from "../../assets/images/add-curses.svg";
+import AddCoursesImg from "../../assets/images/add-courses.svg";
 import NoDataImg from "../../assets/images/no-data.svg";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
 
 const Home = () => {
-  const [allCurses, setAllCurses] = useState([]);
+  const [allCourses, setAllCourses] = useState([]);
 
   const [isSearch, setIsSearch] = useState(false);
 
@@ -32,8 +32,8 @@ const Home = () => {
     type: "add",
   });
 
-  const handleEdit = (curseDetails) => {
-    setOpenAddEditModal({ isShown: true, data: curseDetails, type: "edit" });
+  const handleEdit = (courseDetails) => {
+    setOpenAddEditModal({ isShown: true, data: courseDetails, type: "edit" });
   };
 
   const showToastMessage = (message, type) => {
@@ -51,28 +51,28 @@ const Home = () => {
     });
   };
 
-  // Get all Curses
-  const getAllCurses = async () => {
+  // Get all Courses
+  const getAllCourses = async () => {
     try {
-      const response = await axiosInstance.get("/get-all-curses");
+      const response = await axiosInstance.get("/get-all-courses");
 
-      if (response.data && response.data.curses) {
-        setAllCurses(response.data.curses);
+      if (response.data && response.data.courses) {
+        setAllCourses(response.data.courses);
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
 
-  // Delete Curse
-  const deleteCurse = async (data) => {
-    const curseId = data._id;
+  // Delete Course
+  const deleteCourse = async (data) => {
+    const courseId = data._id;
     try {
-      const response = await axiosInstance.delete("/delete-curse/" + curseId);
+      const response = await axiosInstance.delete("/delete-course/" + courseId);
 
       if (response.data && !response.data.error) {
-        showToastMessage("Curse Deleted Successfully", "delete");
-        getAllCurses();
+        showToastMessage("Course Deleted Successfully", "delete");
+        getAllCourses();
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -94,36 +94,36 @@ const Home = () => {
     }
   };
 
-  // Search for a Curse
-  const onSearchCurse = async (query) => {
+  // Search for a Course
+  const onSearchCourse = async (query) => {
     try {
-      const response = await axiosInstance.get("/search-curses", {
+      const response = await axiosInstance.get("/search-courses", {
         params: { query },
       });
 
-      if (response.data && response.data.curses) {
+      if (response.data && response.data.courses) {
         setIsSearch(true);
-        setAllCurses(response.data.curses);
+        setAllCourses(response.data.courses);
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
 
-  const updateIsPinned = async (curseData) => {
-    const curseId = curseData._id;
+  const updateIsPinned = async (courseData) => {
+    const courseId = courseData._id;
 
     try {
       const response = await axiosInstance.put(
-        "/update-curse-pinned/" + curseId,
+        "/update-course-pinned/" + courseId,
         {
-          isPinned: !curseData.isPinned,
+          isPinned: !courseData.isPinned,
         }
       );
 
-      if (response.data && response.data.curse) {
-        showToastMessage("Curse Updated Successfully", "update");
-        getAllCurses();
+      if (response.data && response.data.course) {
+        showToastMessage("Course Updated Successfully", "update");
+        getAllCourses();
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -132,11 +132,11 @@ const Home = () => {
 
   const handleClearSearch = () => {
     setIsSearch(false);
-    getAllCurses();
+    getAllCourses();
   };
 
   useEffect(() => {
-    getAllCurses();
+    getAllCourses();
     getUserInfo();
     return () => {};
   }, []);
@@ -145,7 +145,7 @@ const Home = () => {
     <>
       <Navbar
         userInfo={userInfo}
-        onSearchCurse={onSearchCurse}
+        onSearchCourse={onSearchCourse}
         handleClearSearch={handleClearSearch}
       />
 
@@ -154,11 +154,11 @@ const Home = () => {
           <h3 className="text-lg font-medium mt-5">Search Results</h3>
         )}
 
-        {allCurses.length > 0 ? (
+        {allCourses.length > 0 ? (
           <div className="grid grid-cols-3 gap-4 mt-8">
-            {allCurses.map((item) => {
+            {allCourses.map((item) => {
               return (
-                <CurseCard
+                <CourseCard
                   key={item._id}
                   title={item.title}
                   content={item.content}
@@ -171,19 +171,19 @@ const Home = () => {
                   status={item.status}
                   isPinned={item.isPinned}
                   onEdit={() => handleEdit(item)}
-                  onDelete={() => deleteCurse(item)}
-                  onPinCurse={() => updateIsPinned(item)}
+                  onDelete={() => deleteCourse(item)}
+                  onPinCourse={() => updateIsPinned(item)}
                 />
               );
             })}
           </div>
         ) : (
           <EmptyCard
-            imgSrc={isSearch ? NoDataImg : AddCursesImg}
+            imgSrc={isSearch ? NoDataImg : AddCoursesImg}
             message={
               isSearch
-                ? `Oops! No curses found matching your search.`
-                : `Start creating your first curse! Click the 'Add' button to jot down your
+                ? `Oops! No courses found matching your search.`
+                : `Start creating your first course! Click the 'Add' button to jot down your
           thoughts, ideas, and reminders. Let's get started!`
             }
           />
@@ -210,14 +210,14 @@ const Home = () => {
         contentLabel="Example Modal"
         className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll"
       >
-        <AddEditCurses
+        <AddEditCourses
           type={openAddEditModal.type}
-          curseData={openAddEditModal.data}
+          courseData={openAddEditModal.data}
           onClose={() => {
             setOpenAddEditModal({ isShown: false, type: "add", data: null });
           }}
           showToastMessage={showToastMessage}
-          getAllCurses={getAllCurses}
+          getAllCourses={getAllCourses}
         />
       </Modal>
 
