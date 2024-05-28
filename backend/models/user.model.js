@@ -9,6 +9,7 @@ const userSchema = new Schema({
   phone: { type: Number },
   address: { type: String },
   createdOn: { type: Date, default: new Date().getTime() },
+  role: { type: String, default: "user" },
 });
 
 module.exports = mongoose.model("User", userSchema);
