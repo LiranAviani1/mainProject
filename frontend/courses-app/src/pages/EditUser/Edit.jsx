@@ -9,12 +9,12 @@ import Toast from "../../components/ToastMessage/Toast";
 const Edit = () => {
   const location = useLocation();
   const userInfo = location.state;
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [fullName, setFullName ] = useState( userInfo.fullName? userInfo.fullName : "");
+  const [age, setAge] = useState(userInfo.age? userInfo.age : "");
+  const [phone, setPhone] = useState(userInfo.phone? userInfo.phone : "");
+  const [address, setAddress] = useState(userInfo.address? userInfo.address : "");
+  const [email, setEmail] = useState(userInfo.email? userInfo.email : "");
+  const [password, setPassword] = useState(userInfo.password? userInfo.password : "");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -52,7 +52,7 @@ const Edit = () => {
       const response = await axiosInstance.put("/edit-user/" + userInfo._id, {
         email,
         password,
-        name,
+        fullName,
         age,
         phone,
         address,
@@ -100,10 +100,10 @@ const Edit = () => {
 
             <input
               type="text"
-              placeholder="Name"
+              placeholder="FullName"
               className="input-box"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
             />
 
             <input
