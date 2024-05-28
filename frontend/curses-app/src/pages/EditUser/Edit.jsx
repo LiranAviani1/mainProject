@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import PasswordInput from "../../components/Input/PasswordInput";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 
 const Edit = () => {
-  const [user, setUser] = useState();
+  const location = useLocation();
+  const userInfo = location.state;
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [phone, setPhone] = useState("");
@@ -26,7 +27,7 @@ const Edit = () => {
     }
 
     try {
-      const response = await axiosInstance.put("/edit-user/" + "6650e5d950b954423a122668", {
+      const response = await axiosInstance.put("/edit-user/" + userInfo._id, {
         email,
         password,
         name,
@@ -64,7 +65,7 @@ const Edit = () => {
               type="text"
               placeholder="Email"
               className="input-box"
-              value={email}
+              value={userInfo.email}
               onChange={(e) => setEmail(e.target.value)}
             />
 
