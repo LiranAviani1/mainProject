@@ -4,6 +4,7 @@ import PasswordInput from "../../components/Input/PasswordInput";
 import { useNavigate, useLocation } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
+import Toast from "../../components/ToastMessage/Toast";
 
 const Edit = () => {
   const location = useLocation();
@@ -16,6 +17,27 @@ const Edit = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const [showToastMsg, setShowToastMsg] = useState({
+    isShown: false,
+    message: "",
+    type: "add",
+  });
+
+  const showToastMessage = (message, type) => {
+    setShowToastMsg({
+      isShown: true,
+      message: message,
+      type,
+    });
+  };
+
+  const handleCloseToast = () => {
+    setShowToastMsg({
+      isShown: false,
+      message: "",
+    });
+  };
 
   const handleEditUser = async (e) => {
     e.preventDefault();
@@ -37,6 +59,7 @@ const Edit = () => {
       });
 
       if (response.data && response.data.user) {
+        showToastMessage("User Edited Successfully", "edit");
         navigate("/");
       }
     } catch (error) {
@@ -65,7 +88,7 @@ const Edit = () => {
               type="text"
               placeholder="Email"
               className="input-box"
-              value={userInfo.email}
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
 
@@ -116,6 +139,12 @@ const Edit = () => {
           </form>
         </div>
       </div>
+      <Toast
+        isShown={showToastMsg.isShown}
+        message={showToastMsg.message}
+        type={showToastMsg.type}
+        onClose={handleCloseToast}
+      />
     </>
   );
 };
