@@ -55,18 +55,20 @@ const CourseCard = ({
         <div className="text-xs text-black font-semibold">Status: {status}</div>
       </div>
       <div className="flex justify-end gap-2 mt-3">
-      {userInfo.role === "admin" || userInfo.role === "teacher" && userId === userInfo._id ? (
-        <>
-          <MdCreate
-            className="icon-btn hover:text-green-600"
-            onClick={onEdit}
-          />
-          <MdDelete
-            className="icon-btn hover:text-red-500"
-            onClick={onDelete}
-          />
-        </>
-      ) : null}
+        {userInfo &&
+          (userInfo.role === "admin" ||
+            (userInfo.role === "teacher" && userId === userInfo._id)) && (
+            <>
+              <MdCreate
+                className="icon-btn hover:text-green-600"
+                onClick={onEdit}
+              />
+              <MdDelete
+                className="icon-btn hover:text-red-500"
+                onClick={onDelete}
+              />
+            </>
+          )}
       </div>
     </div>
   );
