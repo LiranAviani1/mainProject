@@ -12,7 +12,7 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
 
         <div>
           <p className="text-sm font-medium group text-black transition duration-300">
-            <Link to="/edit" state={userInfo}>{userInfo.fullName}</Link>
+            <Link to="/profile" state={userInfo}>{userInfo.fullName}</Link>
             <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-black"></span>
           </p>
           <button
