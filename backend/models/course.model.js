@@ -11,6 +11,7 @@ const courseSchema = new Schema({
   capacity: { type: Number, default: 0 },
   members: { type: [String], default: [] },
   status: { type: String, default: "open" },
+  userId: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Course", courseSchema);
