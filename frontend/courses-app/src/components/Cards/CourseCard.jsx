@@ -1,9 +1,9 @@
 import moment from "moment";
 import React from "react";
-import { MdOutlinePushPin } from "react-icons/md";
 import { MdCreate, MdDelete } from "react-icons/md";
 
 const CourseCard = ({
+  userInfo,
   title,
   content,
   category,
@@ -53,10 +53,19 @@ const CourseCard = ({
       <div className="flex justify-center gap-3 mt-2">
         <div className="text-xs text-black font-semibold">Status: {status}</div>
       </div>
-
       <div className="flex justify-end gap-2 mt-3">
-        <MdCreate className="icon-btn hover:text-green-600" onClick={onEdit} />
-        <MdDelete className="icon-btn hover:text-red-500" onClick={onDelete} />
+      {userInfo.role === "admin" || userInfo.role === "teacher" ? (
+        <>
+          <MdCreate
+            className="icon-btn hover:text-green-600"
+            onClick={onEdit}
+          />
+          <MdDelete
+            className="icon-btn hover:text-red-500"
+            onClick={onDelete}
+          />
+        </>
+      ) : null}
       </div>
     </div>
   );

@@ -110,26 +110,6 @@ const Home = () => {
     }
   };
 
-  const updateIsPinned = async (courseData) => {
-    const courseId = courseData._id;
-
-    try {
-      const response = await axiosInstance.put(
-        "/update-course-pinned/" + courseId,
-        {
-          isPinned: !courseData.isPinned,
-        }
-      );
-
-      if (response.data && response.data.course) {
-        showToastMessage("Course Updated Successfully", "update");
-        getAllCourses();
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
   const handleClearSearch = () => {
     setIsSearch(false);
     getAllCourses();
@@ -159,6 +139,7 @@ const Home = () => {
             {allCourses.map((item) => {
               return (
                 <CourseCard
+                  userInfo={userInfo? userInfo : getUserInfo()}
                   key={item._id}
                   title={item.title}
                   content={item.content}
@@ -169,10 +150,8 @@ const Home = () => {
                   capacity={item.capacity}
                   members={item.members}
                   status={item.status}
-                  isPinned={item.isPinned}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => deleteCourse(item)}
-                  onPinCourse={() => updateIsPinned(item)}
                 />
               );
             })}
