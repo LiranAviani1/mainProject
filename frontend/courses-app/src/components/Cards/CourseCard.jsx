@@ -4,6 +4,7 @@ import { MdCreate, MdDelete } from "react-icons/md";
 
 const CourseCard = ({
   userInfo,
+  userId,
   title,
   content,
   category,
@@ -54,7 +55,7 @@ const CourseCard = ({
         <div className="text-xs text-black font-semibold">Status: {status}</div>
       </div>
       <div className="flex justify-end gap-2 mt-3">
-      {userInfo.role === "admin" || userInfo.role === "teacher" ? (
+      {userInfo.role === "admin" || userInfo.role === "teacher" && userId === userInfo._id ? (
         <>
           <MdCreate
             className="icon-btn hover:text-green-600"

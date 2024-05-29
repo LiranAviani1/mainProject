@@ -45,7 +45,9 @@ app.post("/create-account", async (req, res) => {
   }
 
   if (!address) {
-    return res.status(400).json({ error: true, message: "Address is required" });
+    return res
+      .status(400)
+      .json({ error: true, message: "Address is required" });
   }
 
   if (!email) {
@@ -53,7 +55,9 @@ app.post("/create-account", async (req, res) => {
   }
 
   if (!password) {
-    return res.status(400).json({ error: true, message: "Password is required" });
+    return res
+      .status(400)
+      .json({ error: true, message: "Password is required" });
   }
 
   const isUser = await User.findOne({ email: email });
@@ -184,7 +188,16 @@ app.get("/get-user", authenticateToken, async (req, res) => {
 
 // Add Course
 app.post("/add-course", authenticateToken, async (req, res) => {
-  const { title, content, category, subCategory, dateStart, dateEnd, capacity, status } = req.body;
+  const {
+    title,
+    content,
+    category,
+    subCategory,
+    dateStart,
+    dateEnd,
+    capacity,
+    status,
+  } = req.body;
   const { user } = req.user;
   if (!title) {
     return res.status(400).json({ error: true, message: "Title is required" });
@@ -226,8 +239,6 @@ app.post("/add-course", authenticateToken, async (req, res) => {
       .json({ error: true, message: "Capacity is required" });
   }
 
-  
-
   try {
     const course = new Course({
       title,
@@ -240,7 +251,6 @@ app.post("/add-course", authenticateToken, async (req, res) => {
       members: [],
       status,
       userId: user._id,
-
     });
 
     await course.save();
@@ -261,17 +271,35 @@ app.post("/add-course", authenticateToken, async (req, res) => {
 // Edit Course
 app.put("/edit-course/:courseId", authenticateToken, async (req, res) => {
   const courseId = req.params.courseId;
-  const { title, content, category, subCategory, dateStart, dateEnd, capacity, status} = req.body;
+  const {
+    title,
+    content,
+    category,
+    subCategory,
+    dateStart,
+    dateEnd,
+    capacity,
+    status,
+  } = req.body;
   const { user } = req.user;
 
-  if (!title && !content && !category && !subCategory && !dateStart && !dateEnd && !capacity && !status) {
+  if (
+    !title &&
+    !content &&
+    !category &&
+    !subCategory &&
+    !dateStart &&
+    !dateEnd &&
+    !capacity &&
+    !status
+  ) {
     return res
       .status(400)
       .json({ error: true, message: "No changes provided" });
   }
 
   try {
-    const course = await Course.findOne({ _id: courseId, userId: user._id });
+    const course = await Course.findOne({ _id: courseId });
 
     if (!course) {
       return res.status(404).json({ error: true, message: "Course not found" });
@@ -285,7 +313,6 @@ app.put("/edit-course/:courseId", authenticateToken, async (req, res) => {
     if (dateEnd) course.dateEnd = dateEnd;
     if (capacity) course.capacity = capacity;
     if (status) course.status = status;
-
 
     await course.save();
 
@@ -328,13 +355,13 @@ app.delete("/delete-course/:courseId", authenticateToken, async (req, res) => {
   const { user } = req.user;
 
   try {
-    const course = await Course.findOne({ _id: courseId, userId: user._id });
+    const course = await Course.findOne({ _id: courseId });
 
     if (!course) {
       return res.status(404).json({ error: true, message: "Course not found" });
     }
 
-    await Course.deleteOne({ _id: courseId, userId: user._id });
+    await Course.deleteOne({ _id: courseId });
 
     return res.json({
       error: false,
@@ -361,10 +388,12 @@ app.get("/search-courses", authenticateToken, async (req, res) => {
 
   try {
     const matchingCourses = await Course.find({
-      userId: user._id,
       $or: [
         { title: { $regex: new RegExp(query, "i") } }, // Case-insensitive title match
         { content: { $regex: new RegExp(query, "i") } }, // Case-insensitive content match
+        { category: { $regex: new RegExp(query, "i") } }, // Case-insensitive category match
+        { subCategory: { $regex: new RegExp(query, "i") } }, // Case-insensitive subCategory match
+        
       ],
     });
 
