@@ -6,7 +6,6 @@ import Toast from "../../components/ToastMessage/Toast";
 import moment from "moment";
 import Navbar from "../../components/Navbar/Navbar";
 
-
 const View = () => {
   const location = useLocation();
   const userInfo = location.state.userInfo;
@@ -69,7 +68,6 @@ const View = () => {
     getAllCourses();
   };
 
-
   const handleRegisterd = () => {
     const userCourses = userInfo.courses;
     const courseId = courseDetails._id;
@@ -113,15 +111,22 @@ const View = () => {
   };
   return (
     <>
-     <Navbar
+      <Navbar
         userInfo={userInfo}
         onSearchCourse={onSearchCourse}
         handleClearSearch={handleClearSearch}
       />
       {handleRegisterd() ? (
-        <div className="container mx-auto mt-10">
-          <h1>test</h1>
+        <div>
+          <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
+            <h2>teacher info</h2>
+            <h2>course info</h2>
+            <h2>grades info</h2>
           </div>
+          <div className="container mx-auto mt-10">
+            <h3>test</h3>
+          </div>
+        </div>
       ) : (
         <div className="container mx-auto mt-10">
           <div className="border rounded text-center p-4 bg-white hover:shadow-xl transition-all ease-in-out">
@@ -145,7 +150,8 @@ const View = () => {
             </p>
             <div className="flex justify-center gap-3 mt-2">
               <div className="text-xs text-black font-semibold">
-                Date Start: {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
+                Date Start:{" "}
+                {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
               </div>
               <div className="text-xs text-black font-semibold">
                 Date End: {moment(courseDetails.dateEnd).format("DD-MM-YYYY")}
@@ -186,6 +192,6 @@ const View = () => {
       />
     </>
   );
-}
-  
+};
+
 export default View;
