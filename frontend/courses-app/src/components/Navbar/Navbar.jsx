@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
   const isToken = localStorage.getItem("token");
+  
 
   const [searchQuery, setSearchQuery] = useState("");
 

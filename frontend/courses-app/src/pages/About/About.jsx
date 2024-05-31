@@ -1,28 +1,13 @@
 import React from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import axiosInstance from "../../utils/axiosInstance";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 function About() {
   const [allCourses, setAllCourses] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
-    
-
-  const getUserInfo = async () => {
-    try {
-      const response = await axiosInstance.get("/get-user");
-      if (response.data && response.data.user) {
-        setUserInfo(response.data.user);
-      }
-    } catch (error) {
-      if (error.response.status === 401) {
-        localStorage.clear();
-        navigate("/login");
-      }
-    }
-  };
-  const [userInfo, setUserInfo] = useState(getUserInfo());
+  const [userInfo, setUserInfo] = useState(null);
 
   const getAllCourses = async () => {
     try {
@@ -55,6 +40,25 @@ function About() {
     setIsSearch(false);
     getAllCourses();
   };
+
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/get-user");
+      if (response.data && response.data.user) {
+        setUserInfo(response.data.user);
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        localStorage.clear();
+        navigate("/login");
+      }
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
+    return () => {};
+  }, []);
 
   return (
     <>
