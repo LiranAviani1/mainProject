@@ -32,6 +32,15 @@ const View = () => {
     });
   };
 
+  const handleRegisterd = () => {
+    const userCourses = userInfo.courses;
+    const courseId = courseDetails._id;
+    if (userCourses.includes(courseId)) {
+      return true;
+    }
+    return false;
+  };
+
   // handleRegister function
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -108,9 +117,17 @@ const View = () => {
             </div>
           </div>
           <div className="flex justify-center gap-3 mt-2">
-            <button className="btn-primary" onClick={handleRegister}>
-              Register
-            </button>
+            <div className="flex justify-center gap-3 mt-2">
+              {handleRegisterd() ? (
+                <button className="btn-primary" disabled>
+                  Already Registered
+                </button>
+              ) : (
+                <button className="btn-primary" onClick={handleRegister}>
+                  Register
+                </button>
+              ) }
+            </div>
           </div>
         </div>
       </div>
