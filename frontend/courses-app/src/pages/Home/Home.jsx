@@ -37,7 +37,7 @@ const Home = () => {
   };
 
   const handleView = (courseDetails) => {
-    navigate("/course-view", { state: courseDetails });
+    navigate("/course-view", { state: { userInfo: userInfo, courseDetails: courseDetails } });
   };
 
   const showToastMessage = (message, type) => {

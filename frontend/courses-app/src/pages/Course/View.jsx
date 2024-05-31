@@ -3,53 +3,57 @@ import { useLocation } from "react-router-dom";
 
 const View = () => {
   const location = useLocation();
-  const courseInfo = location.state;
+  const userInfo = location.state.userInfo;
+  const courseDetails = location.state.courseDetails;
+  
 
   const handleRegister = () => {
     console.log("Registering for course");
-    };
+  };
   return (
     <div className="container mx-auto mt-10">
       <div className="border rounded text-center p-4 bg-white hover:shadow-xl transition-all ease-in-out">
         <div className="text-center justify-between">
           <div>
-            <h6 className="text-sm font-bold underline">{courseInfo.title}</h6>
+            <h6 className="text-sm font-bold underline">{courseDetails.title}</h6>
           </div>
         </div>
         <div className="flex justify-center gap-3 mt-1">
           <div className="text-xs text-black font-semibold">
-            Category: {courseInfo.category}
+            Category: {courseDetails.category}
           </div>
           <div className="text-xs text-black font-semibold">
-            Sub-Category: {courseInfo.subCategory}
+            Sub-Category: {courseDetails.subCategory}
           </div>
         </div>
         <p className="text-xs text-black font-semibold mt-2">
-          Content: {courseInfo.content}
+          Content: {courseDetails.content}
         </p>
         <div className="flex justify-center gap-3 mt-2">
           <div className="text-xs text-black font-semibold">
-            Date Start: {courseInfo.dateStart}
+            Date Start: {courseDetails.dateStart}
           </div>
           <div className="text-xs text-black font-semibold">
-            Date End: {courseInfo.dateEnd}
+            Date End: {courseDetails.dateEnd}
           </div>
         </div>
         <div className="flex justify-center gap-3 mt-2">
           <div className="text-xs text-black font-semibold">
-            Members: {courseInfo.members.length}
+            Members: {courseDetails.members.length}
           </div>
           <div className="text-xs text-black font-semibold">
-            Capacity: {courseInfo.capacity}
+            Capacity: {courseDetails.capacity}
           </div>
         </div>
         <div className="flex justify-center gap-3 mt-2">
           <div className="text-xs text-black font-semibold">
-            Status: {courseInfo.status}
+            Status: {courseDetails.status}
           </div>
         </div>
         <div className="flex justify-center gap-3 mt-2">
-          <button className="btn-primary" onClick={handleRegister}>Register</button>
+          <button className="btn-primary" onClick={handleRegister}>
+            Register
+          </button>
         </div>
       </div>
     </div>
