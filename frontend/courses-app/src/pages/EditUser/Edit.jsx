@@ -60,7 +60,9 @@ const Edit = () => {
 
       if (response.data && response.data.user) {
         showToastMessage("User Edited Successfully", "edit");
-        navigate("/");
+        setTimeout(() => {
+          navigate("/");
+          }, 1000);
       }
     } catch (error) {
       if (

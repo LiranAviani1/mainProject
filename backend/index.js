@@ -76,6 +76,9 @@ app.post("/create-account", async (req, res) => {
     age,
     phone,
     address,
+    courses: [],
+    role: "user",
+    createdOn: new Date().getTime(),
   });
 
   await user.save();
@@ -329,6 +332,65 @@ app.put("/edit-course/:courseId", authenticateToken, async (req, res) => {
   }
 });
 
+// update course
+app.put("/register-course/:courseId", authenticateToken, async (req, res) => {
+  const courseId = req.params.courseId;
+
+  try {
+    const user = await User.findOne({ _id: req.body.userId });
+    const course = await Course.findOne({ _id: courseId });
+
+    if (!course) {
+      return res.status(404).json({ error: true, message: "Course not found" });
+    }
+
+    if (!user) {
+      return res.status(404).json({ error: true, message: "User not found" });
+    }
+
+    if (course.members.includes(req.body.userId)) {
+      return res.json({
+        error: true,
+        message: "User already registered for this course",
+      });
+    } else if (course.members.length >= course.capacity) {
+      return res.json({
+        error: true,
+        message: "Course is full",
+      });
+    } else if (course.status === "closed") {
+      return res.json({
+        error: true,
+        message: "Course is closed",
+      });
+    } else {
+      course.members.push(req.body.userId);
+      if (!user.courses.includes(courseId)) {
+        user.courses.push(courseId);
+      } else {
+        return res.json({
+          error: true,
+          message: "User already registered for this course",
+        });
+      }
+    }
+
+    await user.save();
+    await course.save();
+
+    return res.json({
+      error: false,
+      course,
+      message: "Course updated successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
+});
+
 // Get all Courses
 app.get("/get-all-courses", authenticateToken, async (req, res) => {
   const { user } = req.user;
@@ -393,7 +455,6 @@ app.get("/search-courses", authenticateToken, async (req, res) => {
         { content: { $regex: new RegExp(query, "i") } }, // Case-insensitive content match
         { category: { $regex: new RegExp(query, "i") } }, // Case-insensitive category match
         { subCategory: { $regex: new RegExp(query, "i") } }, // Case-insensitive subCategory match
-        
       ],
     });
 

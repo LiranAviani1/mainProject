@@ -8,6 +8,7 @@ const userSchema = new Schema({
   age: { type: Number },
   phone: { type: Number },
   address: { type: String },
+  courses: { type: [String], default: [] },
   createdOn: { type: Date, default: new Date().getTime() },
   role: { type: String, default: "user" },
 });
