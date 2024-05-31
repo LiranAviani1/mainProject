@@ -365,6 +365,9 @@ app.put("/register-course/:courseId", authenticateToken, async (req, res) => {
       });
     } else {
       course.members.push(req.body.userId);
+      if(course.members.length == course.capacity) {
+        course.status = "closed";
+      }
       if (!user.courses.includes(courseId)) {
         user.courses.push(courseId);
       } else {
