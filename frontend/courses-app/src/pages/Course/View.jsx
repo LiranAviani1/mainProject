@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { useState } from "react";
 import Toast from "../../components/ToastMessage/Toast";
+import moment from "moment";
 
 const View = () => {
   const location = useLocation();
@@ -97,10 +98,10 @@ const View = () => {
           </p>
           <div className="flex justify-center gap-3 mt-2">
             <div className="text-xs text-black font-semibold">
-              Date Start: {courseDetails.dateStart}
+              Date Start: {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
             </div>
             <div className="text-xs text-black font-semibold">
-              Date End: {courseDetails.dateEnd}
+              Date End: {moment(courseDetails.dateEnd).format("DD-MM-YYYY")}
             </div>
           </div>
           <div className="flex justify-center gap-3 mt-2">
@@ -126,7 +127,7 @@ const View = () => {
                 <button className="btn-primary" onClick={handleRegister}>
                   Register
                 </button>
-              ) }
+              )}
             </div>
           </div>
         </div>
