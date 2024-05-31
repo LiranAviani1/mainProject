@@ -29,7 +29,11 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
 
   return (
     <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
-      <h2 className="text-xl font-medium text-black py-2"><Link to="/">Courses</Link></h2>
+      <h2 className="text-m font-medium text-black py-2">Courses</h2>
+      <h3 className="text-m font-medium text-black py-2"><Link to="/dashboard">Home</Link></h3>
+      <h3 className="text-m font-medium text-black py-2"><Link to="/about">About</Link></h3>
+    
+
 
       {isToken && (
         <>

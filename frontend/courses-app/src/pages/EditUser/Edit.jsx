@@ -16,6 +16,8 @@ const Edit = () => {
   const [email, setEmail] = useState(userInfo.email? userInfo.email : "");
   const [password, setPassword] = useState(userInfo.password? userInfo.password : "");
   const [error, setError] = useState(null);
+  const [allCourses, setAllCourses] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
 
   const [showToastMsg, setShowToastMsg] = useState({
@@ -38,6 +40,40 @@ const Edit = () => {
       message: "",
     });
   };
+
+  
+  const getAllCourses = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-courses");
+
+      if (response.data && response.data.courses) {
+        setAllCourses(response.data.courses);
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  const onSearchCourse = async (query) => {
+    try {
+      const response = await axiosInstance.get("/search-courses", {
+        params: { query },
+      });
+
+      if (response.data && response.data.courses) {
+        setIsSearch(true);
+        setAllCourses(response.data.courses);
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  const handleClearSearch = () => {
+    setIsSearch(false);
+    getAllCourses();
+  };
+
 
   const handleEditUser = async (e) => {
     e.preventDefault();
@@ -79,7 +115,11 @@ const Edit = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar
+        userInfo={userInfo}
+        onSearchCourse={onSearchCourse}
+        handleClearSearch={handleClearSearch}
+      />
 
       <div className="flex items-center justify-center mt-28">
         <div className="w-96 border rounded bg-white px-7 py-10">
