@@ -16,6 +16,7 @@ const CourseCard = ({
   status,
   onEdit,
   onDelete,
+  onView,
 }) => {
   return (
     <div className="border rounded text-center p-4 bg-white hover:shadow-xl transition-all ease-in-out">
@@ -53,6 +54,9 @@ const CourseCard = ({
       </div>
       <div className="flex justify-center gap-3 mt-2">
         <div className="text-xs text-black font-semibold">Status: {status}</div>
+      </div>
+      <div className="flex justify-center gap-3 mt-2">
+        <button className="btn-primary" onClick={onView}>View Course</button>
       </div>
       <div className="flex justify-end gap-2 mt-3">
         {userInfo &&

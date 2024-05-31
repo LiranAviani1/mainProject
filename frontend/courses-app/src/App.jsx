@@ -5,6 +5,7 @@ import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import Edit from "./pages/EditUser/Edit";
 import Profile from "./pages/UserProfile/Profile";
+import View from "./pages/Course/View";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signUp" exact element={<SignUp />} />
           <Route path="/edit" exact element={<Edit />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/course-view" element={<View />} />
         </Routes>
       </Router>
     </div>

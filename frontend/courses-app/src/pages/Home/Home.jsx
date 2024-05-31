@@ -36,6 +36,10 @@ const Home = () => {
     setOpenAddEditModal({ isShown: true, data: courseDetails, type: "edit" });
   };
 
+  const handleView = (courseDetails) => {
+    navigate("/course-view", { state: courseDetails });
+  };
+
   const showToastMessage = (message, type) => {
     setShowToastMsg({
       isShown: true,
@@ -153,6 +157,7 @@ const Home = () => {
                   status={item.status}
                   onEdit={() => handleEdit(item)}
                   onDelete={() => deleteCourse(item)}
+                  onView={() => handleView(item)}
                 />
               );
             })}
