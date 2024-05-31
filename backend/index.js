@@ -396,7 +396,6 @@ app.put("/register-course/:courseId", authenticateToken, async (req, res) => {
 
 // Get all Courses
 app.get("/get-all-courses", authenticateToken, async (req, res) => {
-  const { user } = req.user;
 
   try {
     const courses = await Course.find().exec();
