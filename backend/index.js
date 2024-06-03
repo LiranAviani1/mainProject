@@ -189,6 +189,22 @@ app.get("/get-user", authenticateToken, async (req, res) => {
   });
 });
 
+//get user by id
+app.get("/get-user/:userId", authenticateToken, async (req, res) => {
+  const userId = req.params.userId;
+  
+
+  const isUser = await User.findOne({ _id: userId });
+  if (!isUser) {
+    return res.sendStatus(401);
+  }
+
+  return res.json({
+    user: isUser,
+    message: "",
+  });
+});
+
 // Add Course
 app.post("/add-course", authenticateToken, async (req, res) => {
   const {

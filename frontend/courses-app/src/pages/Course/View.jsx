@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { useState } from "react";
 import Toast from "../../components/ToastMessage/Toast";
@@ -14,7 +14,6 @@ const View = () => {
   const navigate = useNavigate();
   const [allCourses, setAllCourses] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
-
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
     message: "",
@@ -119,9 +118,9 @@ const View = () => {
       {handleRegisterd() ? (
         <div>
           <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
-            <h2>teacher info</h2>
+            <Link to="/teacher-info" state={courseDetails}>teacher info</Link>
             <h2>course info</h2>
-            <h2>grades info</h2>
+            <h2>grades</h2>
           </div>
           <div className="container mx-auto mt-10">
             <h3>test</h3>
