@@ -8,6 +8,7 @@ import Edit from "./pages/EditUser/Edit";
 import Profile from "./pages/UserProfile/Profile";
 import View from "./pages/Course/View";
 import TeacherInfo from "./pages/Teacher/TeacherInfo";
+import Grades from "./pages/Grades/Grades";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/course-view" element={<View />} />
           <Route path="/teacher-info" element={<TeacherInfo />} />
+          <Route path="/grades" element={<Grades />} />
         </Routes>
       </Router>
     </div>

@@ -119,10 +119,12 @@ const View = () => {
         <div>
           <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
             <Link to="/teacher-info" state={courseDetails}>
-              teacher info
+              Teacher info
             </Link>
-            <Link to="/course-view" className="disabled-link">course info</Link>
-            <h2>grades</h2>
+            <Link to="/course-view" className="disabled-link">
+              Course info
+            </Link>
+            <Link to="/grades">Grades</Link>
           </div>
           <div className="container mx-auto mt-10 text-center">
             <h3 className="text-2xl font-bold text-center underline">
@@ -200,15 +202,9 @@ const View = () => {
               </div>
             </div>
             <div className="flex justify-center gap-3 mt-2">
-              {handleRegisterd() ? (
-                <button className="btn-primary" disabled>
-                  Already Registered
-                </button>
-              ) : (
-                <button className="btn-primary" onClick={handleRegister}>
-                  Register
-                </button>
-              )}
+              <button className="btn-primary" onClick={handleRegister}>
+                Register
+              </button>
             </div>
           </div>
         </div>
