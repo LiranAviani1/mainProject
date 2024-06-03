@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 
 function TeacherInfo() {
   const location = useLocation();
-  const userId = location.state.userId;
+  const userId = location.state.userId ? location.state.userId : location.state;
   const navigate = useNavigate();
   const [allCourses, setAllCourses] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
@@ -84,6 +84,13 @@ function TeacherInfo() {
         onSearchCourse={onSearchCourse}
         handleClearSearch={handleClearSearch}
       />
+      <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
+        <Link to="/teacher-info" className='disabled-link'>
+          teacher info
+        </Link>
+        <button onClick={() => navigate(-1)}>course info</button>
+        <h2>grades</h2>
+      </div>
 
       <div>
         <h1>Teacher Info</h1>

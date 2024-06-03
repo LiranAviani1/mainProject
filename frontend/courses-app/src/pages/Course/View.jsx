@@ -118,12 +118,42 @@ const View = () => {
       {handleRegisterd() ? (
         <div>
           <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
-            <Link to="/teacher-info" state={courseDetails}>teacher info</Link>
-            <h2>course info</h2>
+            <Link to="/teacher-info" state={courseDetails}>
+              teacher info
+            </Link>
+            <Link to="/course-view" className="disabled-link">course info</Link>
             <h2>grades</h2>
           </div>
-          <div className="container mx-auto mt-10">
-            <h3>test</h3>
+          <div className="container mx-auto mt-10 text-center">
+            <h3 className="text-2xl font-bold text-center underline">
+              Course Details
+            </h3>
+            <div>
+              <div>
+                <h6 className="text-sm font-bold underline">
+                  {courseDetails.title}
+                </h6>
+              </div>
+              <div>
+                <div>Category: {courseDetails.category}</div>
+                <div>Sub-Category: {courseDetails.subCategory}</div>
+              </div>
+              <p>Content: {courseDetails.content}</p>
+              <div>
+                <div>
+                  Date Start:{" "}
+                  {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
+                </div>
+                <div>
+                  Date End: {moment(courseDetails.dateEnd).format("DD-MM-YYYY")}
+                </div>
+              </div>
+              <div>
+                <div>Members: {courseDetails.members.length}</div>
+                <div>Capacity: {courseDetails.capacity}</div>
+              </div>
+              <div>Status: {courseDetails.status}</div>
+            </div>
           </div>
         </div>
       ) : (
