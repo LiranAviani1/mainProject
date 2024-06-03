@@ -84,7 +84,7 @@ function TeacherInfo() {
         onSearchCourse={onSearchCourse}
         handleClearSearch={handleClearSearch}
       />
-      <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
+      <div className="bg-white flex items-center justify-between px-20 py-2 drop-shadow">
         <Link to="/teacher-info" className='disabled-link'>
           Teacher info
         </Link>
