@@ -121,66 +121,69 @@ const Edit = () => {
         handleClearSearch={handleClearSearch}
       />
 
-      <div className="flex items-center justify-center mt-28">
-        <div className="w-96 border rounded bg-white px-7 py-10">
-          <form onSubmit={handleEditUser}>
-            <h4 className="text-2xl mb-7">Edit User</h4>
+<div className="flex items-center justify-center mt-28">
+      <div className="w-96 border border-gray-300 rounded-lg bg-white px-7 py-10 shadow-lg">
+        <form onSubmit={handleEditUser}>
+          <h4 className="text-3xl text-center underline mb-7 font-semibold">Edit User</h4>
 
-            <input
-              type="text"
-              placeholder="Email"
-              className="input-box"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+          <input
+            type="text"
+            placeholder="Email"
+            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-            <PasswordInput
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <PasswordInput
+            placeholder="Password"
+            className="mb-4 text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-            <input
-              type="text"
-              placeholder="FullName"
-              className="input-box"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-            />
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
 
-            <input
-              type="text"
-              placeholder="Age"
-              className="input-box"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-            />
+          <input
+            type="text"
+            placeholder="Age"
+            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+          />
 
-            <input
-              type="text"
-              placeholder="Phone"
-              className="input-box"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
+          <input
+            type="text"
+            placeholder="Phone"
+            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
 
-            <input
-              type="text"
-              placeholder="Address"
-              className="input-box"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
+          <input
+            type="text"
+            placeholder="Address"
+            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
 
-            {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
+          {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
 
-            <button type="submit" className="btn-primary">
-              Save
-            </button>
-
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="btn-primary text-lg w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
+          >
+            Save
+          </button>
+        </form>
       </div>
+    </div>
       <Toast
         isShown={showToastMsg.isShown}
         message={showToastMsg.message}

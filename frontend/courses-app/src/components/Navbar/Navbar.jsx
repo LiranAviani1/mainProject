@@ -30,10 +30,21 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
 
   return (
     <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">
-      <h2 className="text-m font-medium text-black py-2">Courses</h2>
-      <h3 className="text-m font-medium text-black py-2"><Link to="/dashboard">Home</Link></h3>
-      <h3 className="text-m font-medium text-black py-2"><Link to="/about">About</Link></h3>
-    
+      <h2 className="text-xl font-bold text-black py-2">Courses</h2>
+      <div className="flex items-center space-x-6">
+        <h3 className="text-xl font-medium text-black py-2 group hover:font-bold">
+          <Link to="/dashboard" className="relative">
+            Home
+            <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"></span>
+          </Link>
+        </h3>
+        <h3 className="text-xl font-medium text-black py-2 group hover:font-bold">
+          <Link to="/about" className="relative">
+            About
+            <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"></span>
+          </Link>
+        </h3>
+      </div>
 
 
       {isToken && (

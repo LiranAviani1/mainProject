@@ -51,19 +51,32 @@ export default function Profile() {
         handleClearSearch={handleClearSearch}
       />
       <div className="flex items-center justify-center mt-28 text-center">
-        <div className="w-96 border rounded bg-white px-7 py-10">
-          <h1 className="text-xl text-black font-semibold text-center underline">
+        <div className="w-full max-w-lg border border-gray-300 rounded-lg bg-white px-8 py-10 shadow-lg">
+          <h1 className="text-3xl mb-6 text-black font-semibold underline">
             User Profile
           </h1>
-          <h3 className="text-m text-center"><b className="underline">Email:</b> {userInfo.email}</h3>
-          <h3 className="text-m text-center"><b className="underline">Full Name:</b> {userInfo.fullName}</h3>
-          <h3 className="text-m text-center"><b className="underline">Age:</b> {userInfo.age}</h3>
-          <h3 className="text-m text-center"><b className="underline">Phone:</b> {userInfo.phone}</h3>
-          <h3 className="text-m text-center"><b className="underline">Address:</b> {userInfo.address}</h3>
+          <h3 className="text-lg mb-4">
+            <span className="font-semibold underline">Email:</span>{" "}
+            {userInfo.email}
+          </h3>
+          <h3 className="text-lg mb-4">
+            <span className="font-semibold underline">Full Name:</span>{" "}
+            {userInfo.fullName}
+          </h3>
+          <h3 className="text-lg mb-4">
+            <span className="font-semibold underline">Age:</span> {userInfo.age}
+          </h3>
+          <h3 className="text-lg mb-4">
+            <span className="font-semibold underline">Phone:</span>{" "}
+            {userInfo.phone}
+          </h3>
+          <h3 className="text-lg mb-6">
+            <span className="font-semibold underline">Address:</span>{" "}
+            {userInfo.address}
+          </h3>
           <button
             type="submit"
-            className="btn-primary"
-            style={{ width: "60%" }}
+            className="w-3/5 mx-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
           >
             <Link to="/edit" state={userInfo}>
               Edit Account
