@@ -6,7 +6,7 @@ const userSchema = new Schema({
   password: { type: String },
   fullName: { type: String },
   age: { type: Number },
-  phone: { type: Number },
+  phone: { type: String },
   address: { type: String },
   courses: { type: [String], default: [] },
   createdOn: { type: Date, default: new Date().getTime() },

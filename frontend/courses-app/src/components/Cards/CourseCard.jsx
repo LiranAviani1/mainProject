@@ -33,9 +33,7 @@ const CourseCard = ({
           Sub-Category: {subCategory}
         </div>
       </div>
-      <p className="text-xs text-black font-semibold mt-2">
-        Content: {content?.slice(0, 60)}
-      </p>
+      
       <div className="flex justify-center gap-3 mt-2">
         <div className="text-xs text-black font-semibold">
           Date Start: {moment(dateStart).format("DD-MM-YYYY")}
@@ -53,10 +51,23 @@ const CourseCard = ({
         </div>
       </div>
       <div className="flex justify-center gap-3 mt-2">
-        <div className="text-xs text-black font-semibold">Status: {status}</div>
+        <div
+          className={`text-xs font-semibold ${
+            status === "open" ? "text-green-600" : "text-red-600"
+          }`}
+        >
+          Status: {status}
+        </div>
       </div>
+
       <div className="flex justify-center gap-3 mt-2">
-        <button className="btn-primary" onClick={onView}>View Course</button>
+        <button
+          className="btn-primary"
+          style={{ width: "40%" }}
+          onClick={onView}
+        >
+          View Course
+        </button>
       </div>
       <div className="flex justify-end gap-2 mt-3">
         {userInfo &&
