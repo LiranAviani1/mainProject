@@ -133,7 +133,7 @@ const Home = () => {
         handleClearSearch={handleClearSearch}
       />
 
-      <div className="container mx-auto">
+      <div className="container mx-auto p-[30px]">
         {isSearch && (
           <h3 className="text-lg font-medium mt-5">Search Results</h3>
         )}

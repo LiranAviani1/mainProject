@@ -189,6 +189,9 @@ const View = () => {
               </div>
             </div>
           </div>
+          <div>
+            
+          </div>
         </div>
       ) : (
         <div className="bg-gray-100 p-6 pb-12">
