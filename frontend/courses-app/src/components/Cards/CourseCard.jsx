@@ -20,77 +20,78 @@ const CourseCard = ({
   onView,
 }) => {
   return (
-    <div className="border rounded text-center p-4 bg-white hover:shadow-xl transition-all ease-in-out">
-      <div>
+    <div className="border rounded-lg overflow-hidden bg-white shadow-md hover:shadow-xl transition-transform transform hover:scale-105 duration-300">
+      <div className="relative">
         <img
           src={CourseImage}
           alt="Course"
-          className="h-45 mb-6 rounded-lg shadow-lg"
+          className="w-full h-45 object-cover"
         />
-      </div>
-      <div className="text-center justify-between">
-        <div>
-          <h6 className="text-xl mb-2 font-bold underline">{title}</h6>
+        <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-2 w-full text-center">
+          <h6 className="text-xl font-bold">{title}</h6>
         </div>
       </div>
-
-      <div className="text-s mb-2 text-black font-semibold">
-        Category: {category}
-      </div>
-      <div className="text-s mb-2 text-black font-semibold">
-        Sub-Category: {subCategory}
-      </div>
-
-      <div className="flex justify-center gap-3 mt-2">
-        <div className="text-s text-black font-semibold">
-          Date Start: {moment(dateStart).format("DD-MM-YYYY")}
+      <div className="p-4">
+        <div className="text-center">
+          <div className="text-gray-600 text-m mb-2">
+            <span className="font-bold">Category:</span> {category}
+          </div>
+          <div className="text-gray-600 text-m mb-2">
+            <span className="font-semibold">Sub-Category:</span> {subCategory}
+          </div>
         </div>
-        <div className="text-s text-black font-semibold">
-          Date End: {moment(dateEnd).format("DD-MM-YYYY")}
+        <div className="flex justify-between mt-4">
+          <div className="text-gray-600 text-m">
+            <span className="font-semibold">Start:</span>{" "}
+            {moment(dateStart).format("DD-MM-YYYY")}
+          </div>
+          <div className="text-gray-600 text-m">
+            <span className="font-semibold">End:</span>{" "}
+            {moment(dateEnd).format("DD-MM-YYYY")}
+          </div>
         </div>
-      </div>
-      <div className="flex justify-center gap-3 mt-2">
-        <div className="text-s text-black font-semibold">
-          Members: {members.length}
+        <div className="flex justify-between mt-4">
+          <div className="text-gray-600 text-m">
+            <span className="font-semibold">Members:</span> {members.length}
+          </div>
+          <div className="text-gray-600 text-m">
+            <span className="font-semibold">Capacity:</span> {capacity}
+          </div>
         </div>
-        <div className="text-s text-black font-semibold">
-          Capacity: {capacity}
+        <div className="text-center mt-4">
+          <div className="text-m font-semibold">
+            Status:{" "}
+            <span
+              className={status === "open" ? "text-green-600" : "text-red-600"}
+            >
+              {status === "open" ? "OPEN" : "CLOSE"}
+            </span>
+          </div>
         </div>
-      </div>
-      <div className="flex justify-center gap-3 mt-2">
-        <div
-          className={`text-s mb-4 font-semibold ${
-            status === "open" ? "text-green-600" : "text-red-600"
-          }`}
-        >
-          Status: {status}
+        <div className="flex justify-center gap-3 mt-4">
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+            onClick={onView}
+          >
+            View Course
+          </button>
         </div>
-      </div>
-
-      <div className="flex justify-center gap-3 mt-2">
-        <button
-          className="btn-primary mb-3 text-lg"
-          style={{ width: "45%" }}
-          onClick={onView}
-        >
-          View Course
-        </button>
-      </div>
-      <div className="flex justify-end gap-2 mt-3">
-        {userInfo &&
-          (userInfo.role === "admin" ||
-            (userInfo.role === "teacher" && userId === userInfo._id)) && (
-            <>
-              <MdCreate
-                className="text-2xl icon-btn hover:text-green-600"
-                onClick={onEdit}
-              />
-              <MdDelete
-                className="text-2xl icon-btn hover:text-red-500"
-                onClick={onDelete}
-              />
-            </>
-          )}
+        <div className="flex justify-end gap-2 mt-4">
+          {userInfo &&
+            (userInfo.role === "admin" ||
+              (userInfo.role === "teacher" && userId === userInfo._id)) && (
+              <>
+                <MdCreate
+                  className="text-2xl cursor-pointer hover:text-green-600 transition-colors duration-300"
+                  onClick={onEdit}
+                />
+                <MdDelete
+                  className="text-2xl cursor-pointer hover:text-red-600 transition-colors duration-300"
+                  onClick={onDelete}
+                />
+              </>
+            )}
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Toast from "../../components/ToastMessage/Toast";
 import moment from "moment";
 import Navbar from "../../components/Navbar/Navbar";
@@ -10,6 +10,9 @@ const View = () => {
   const location = useLocation();
   const userInfo = location.state.userInfo;
   const courseDetails = location.state.courseDetails;
+  const teacherId = courseDetails.userId;
+  const [teacherInfo, setTeacherInfo] = useState([]);
+
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [allCourses, setAllCourses] = useState([]);
@@ -19,6 +22,18 @@ const View = () => {
     message: "",
     type: "add",
   });
+
+  const getTeacherInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/get-user/" + teacherId);
+      if (response.data && response.data.user) {
+        setTeacherInfo(response.data.user);
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+      }
+    }
+  };
 
   const showToastMessage = (message, type) => {
     setShowToastMsg({
@@ -76,7 +91,6 @@ const View = () => {
     return false;
   };
 
-  // handleRegister function
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -104,10 +118,16 @@ const View = () => {
       ) {
         setError(error.response.data.message);
       } else {
-        setError("An unexpected error occured");
+        setError("An unexpected error occurred");
       }
     }
   };
+
+  useEffect(() => {
+    getTeacherInfo();
+    return () => {};
+  }, []);
+
   return (
     <>
       <Navbar
@@ -117,140 +137,163 @@ const View = () => {
       />
       {handleRegisterd() ? (
         <div className="bg-gray-100 p-10 pb-12">
-          <div className="bg-white text-center px-8 py-2 shadow-md flex justify-center gap-4 rounded-lg">
-            <Link
-              to="/teacher-info"
-              state={courseDetails}
-              className="text-blue-500 hover:bg-blue-100 hover:text-blue-700 px-4 py-2 rounded transition-colors duration-300 disabled:cursor-not-allowed disabled:text-gray-400 disabled:bg-gray-100"
-            >
-              Teacher info
-            </Link>
-            <button
-              onClick={() => navigate(-1)}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-300"
-            >
-              Course info
-            </button>
-          </div>
-          <div className="container mx-auto mt-6 px-4 text-center">
-            <h3 className="text-3xl font-bold text-center mt-6 mb-2">
+          <div className="container mx-auto mt-8 px-4">
+            <h3 className="text-4xl font-bold text-center mb-8 text-gray-800">
               Course Details
             </h3>
-            <div className="bg-white rounded-lg shadow-md h3-6 p-6">
-              <div className="mb-4">
-                <h6 className="text-xl font-semibold">{courseDetails.title}</h6>
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <div className="mb-6">
+                <h6 className="text-3xl underline font-semibold text-gray-800">
+                  {courseDetails.title}
+                </h6>
               </div>
-              <div className="mb-4">
-                <div className="text-l text-gray-600 mb-4">
-                  <h3 className="font-semibold underline">Category</h3>{" "}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold text-xl underline">Category</h4>
                   {courseDetails.category}
                 </div>
-                <div className="text-l text-gray-600 mb-4">
-                  <h3 className="font-semibold underline">Sub-Category</h3>{" "}
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold text-xl underline">
+                    Sub-Category
+                  </h4>
                   {courseDetails.subCategory}
                 </div>
               </div>
-              <div className="text-l text-gray-700 mb-4">
-                <h3 className="font-semibold underline">Content</h3>{" "}
-                {courseDetails.content}
+              <div className="text-lg text-gray-700 mb-6">
+                <h4 className="font-semibold text-xl mb-1 underline">Content</h4>
+                <p>{courseDetails.content}</p>
               </div>
-              <div>
-                <div className="text-l text-gray-600 mb-4">
-                  <h3 className="font-semibold underline">Date Start</h3>{" "}
-                  {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold text-xl underline">Date Start</h4>
+                  <p className="font-bold">
+                    {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
+                  </p>
                 </div>
-
-                <div className="text-l text-gray-600 mb-4">
-                  <h3 className="font-semibold underline">Date End</h3>{" "}
-                  {moment(courseDetails.dateEnd).format("DD-MM-YYYY")}
-                </div>
-              </div>
-              <div className="mb-4">
-                <div className="text-l text-gray-600 mb-4">
-                  <b className="font-semibold underline">Members:</b>{" "}
-                  {courseDetails.members.length}
-                </div>
-                <div className="text-l text-gray-600">
-                  <b className="font-semibold underline">Capacity:</b>{" "}
-                  {courseDetails.capacity}
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold text-xl underline">Date End</h4>
+                  <p className="font-bold">
+                    {moment(courseDetails.dateEnd).format("DD-MM-YYYY")}
+                  </p>
                 </div>
               </div>
-              <div className="text-l text-gray-600 mb-4">
-                <b className="font-semibold underline">Status:</b>{" "}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div className="text-lg text-gray-600">
+                  <b className="font-semibold text-xl underline">Members</b>
+                  <p className="font-bold">{courseDetails.members.length}</p>
+                </div>
+                <div className="text-lg text-gray-600">
+                  <b className="font-semibold text-xl underline">Capacity</b>
+                  <p className="font-bold">{courseDetails.capacity}</p>
+                </div>
+              </div>
+              <div className="text-lg font-semibold">
+                Status:{" "}
                 <span
                   className={
                     courseDetails.status === "open"
-                      ? "text-green-600 font-semibold"
-                      : "text-red-600 font-semibold"
+                      ? "text-green-600"
+                      : "text-red-600"
                   }
                 >
-                  {courseDetails.status}
+                  {courseDetails.status === "open" ? "OPEN" : "CLOSE"}
                 </span>
               </div>
             </div>
           </div>
-          <div>
-            
-          </div>
+
+          {teacherInfo && (
+            <div className="bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 mt-12">
+              <div className="max-w-4xl mx-auto">
+                <h3 className="text-3xl font-bold mb-6 text-center underline text-gray-800">
+                  Teacher Info
+                </h3>
+                <div className="bg-white rounded-lg shadow-lg p-8">
+                  <div className="mb-6">
+                    <div className="text-lg mb-4 text-gray-700">
+                      <b className="underline">Full Name:</b> {teacherInfo.fullName}
+                    </div>
+                    <div className="text-lg mb-4 text-gray-700">
+                      <b className="underline">Age:</b> {teacherInfo.age}
+                    </div>
+                  </div>
+                  <div className="mb-6">
+                    <div className="text-lg mb-4 text-gray-700">
+                      <b className="underline">Phone:</b> {teacherInfo.phone}
+                    </div>
+                    <div className="text-lg mb-4 text-gray-700">
+                      <b className="underline">Address:</b> {teacherInfo.address}
+                    </div>
+                    <div className="text-lg mb-4 text-gray-700">
+                      <b className="underline">Email:</b> {teacherInfo.email}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div className="bg-gray-100 p-6 pb-12">
           <div className="container mx-auto mt-6 px-4 text-center">
-            <h3 className="text-2xl font-bold mt-6 mb-2">Course Details</h3>
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-2xl font-bold mt-6 mb-4 text-gray-800">
+              Course Details
+            </h3>
+            <div className="bg-white rounded-lg shadow-md p-8">
               <div className="mb-4">
-                <h6 className="text-lg font-semibold">{courseDetails.title}</h6>
+                <h6 className="text-2xl font-semibold text-gray-800">
+                  {courseDetails.title}
+                </h6>
               </div>
-              <div className="mb-4">
-                <div className="text-sm text-gray-600 mb-4">
-                  <h3 className="font-semibold underline">Category</h3>{" "}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold underline">Category</h4>{" "}
                   {courseDetails.category}
                 </div>
-                <div className="text-sm text-gray-600 mb-4">
-                  <h3 className="font-semibold underline">Sub-Category</h3>{" "}
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold underline">Sub-Category</h4>{" "}
                   {courseDetails.subCategory}
                 </div>
               </div>
-              <h3 className="text-sm text-gray-700 mb-4">
-                <h3 className="font-semibold underline">Content</h3>{" "}
+              <div className="text-lg text-gray-700 mb-6">
+                <h4 className="font-semibold underline">Content</h4>{" "}
                 {courseDetails.content}
-              </h3>
-              <div className="mb-4">
-                <div className="text-sm text-gray-600 mb-4">
-                  <h3 className="font-semibold underline">Date Start</h3>{" "}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold underline">Date Start</h4>{" "}
                   {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
                 </div>
-                <div className="text-sm text-gray-600 mb-4">
-                  <h3 className="font-semibold underline">Date End</h3>{" "}
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold underline">Date End</h4>{" "}
                   {moment(courseDetails.dateEnd).format("DD-MM-YYYY")}
                 </div>
               </div>
-              <div className="mb-4">
-                <div className="text-sm text-gray-600 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div className="text-lg text-gray-600">
                   <b className="font-semibold underline">Members:</b>{" "}
                   {courseDetails.members.length}
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-lg text-gray-600">
                   <b className="font-semibold underline">Capacity:</b>{" "}
                   {courseDetails.capacity}
                 </div>
               </div>
-              <div className="text-sm text-gray-600 mb-4">
-                <b className="font-semibold underline">Status:</b>{" "}
+              <div className="text-lg font-semibold">
+                Status:{" "}
                 <span
                   className={
                     courseDetails.status === "open"
-                      ? "text-green-600 font-semibold"
-                      : "text-red-600 font-semibold"
+                      ? "text-green-600"
+                      : "text-red-600"
                   }
                 >
-                  {courseDetails.status}
+                  {courseDetails.status === "open" ? "OPEN" : "CLOSE"}
                 </span>
               </div>
               <div className="flex justify-center">
                 <button
-                  className="btn-primary"
-                  style={{ width: "15%" }}
+                  className="btn-primary text-lg w-[20%] px-4 py-2 rounded-lg transition-colors duration-300"
                   onClick={handleRegister}
                 >
                   Register
