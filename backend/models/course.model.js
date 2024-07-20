@@ -10,6 +10,7 @@ const courseSchema = new Schema({
   dateEnd: { type: Date, default: new Date().getTime() },
   capacity: { type: Number, default: 0 },
   members: { type: [String], default: [] },
+  price: { type: Number, default: 0 },
   status: { type: String, default: "open" },
   userId: { type: String, required: true },
 });

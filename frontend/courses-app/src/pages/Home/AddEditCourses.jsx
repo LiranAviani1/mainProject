@@ -20,6 +20,7 @@ const AddEditCourses = ({
     courseData?.dateEnd || new Date().toISOString().split("T")[0]
   );
   const [capacity, setCapacity] = useState(courseData?.capacity || "");
+  const [price, setPrice] = useState(courseData?.price || "");
   const [members, setMembers] = useState(courseData?.members || []);
   const [status, setStatus] = useState(courseData?.status || "open");
   const [error, setError] = useState(null);
@@ -34,6 +35,7 @@ const AddEditCourses = ({
         dateStart,
         dateEnd,
         capacity,
+        price,
         status,
       });
 
@@ -68,6 +70,7 @@ const AddEditCourses = ({
         dateStart,
         dateEnd,
         capacity,
+        price,
         status,
       });
 
@@ -145,6 +148,16 @@ const AddEditCourses = ({
       return;
     }
 
+    if (!price) {
+      setError("Please enter the price");
+      return;
+    }
+
+    if (price <= 0) {
+      setError("Price should be greater than 0");
+      return;
+    }
+
     setError("");
 
     if (type === "edit") {
@@ -193,14 +206,16 @@ const AddEditCourses = ({
           <div className="flex flex-col gap-2">
             <label className="text-gray-700 font-medium">Content</label>
             <textarea
-  className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 h-52 resize-none"
-  placeholder="Content"
-  rows={5}
-  value={content}
-  onChange={({ target }) => setContent(target.value)}
-/>
+              className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 h-52 resize-none"
+              placeholder="Content"
+              rows={5}
+              value={content}
+              onChange={({ target }) => setContent(target.value)}
+            />
 
-            <p className="text-xs text-gray-500">Provide a detailed description of the course content.</p>
+            <p className="text-xs text-gray-500">
+              Provide a detailed description of the course content.
+            </p>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -212,7 +227,9 @@ const AddEditCourses = ({
               value={category}
               onChange={({ target }) => setCategory(target.value)}
             />
-            <p className="text-xs text-gray-500">Enter the main category of the course.</p>
+            <p className="text-xs text-gray-500">
+              Enter the main category of the course.
+            </p>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -224,7 +241,9 @@ const AddEditCourses = ({
               value={subCategory}
               onChange={({ target }) => setSubCategory(target.value)}
             />
-            <p className="text-xs text-gray-500">Enter the subcategory of the course.</p>
+            <p className="text-xs text-gray-500">
+              Enter the subcategory of the course.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -236,7 +255,9 @@ const AddEditCourses = ({
                 value={new Date(dateStart).toISOString().split("T")[0]}
                 onChange={({ target }) => setDateStart(target.value)}
               />
-              <p className="text-xs text-gray-500">Select the start date of the course.</p>
+              <p className="text-xs text-gray-500">
+                Select the start date of the course.
+              </p>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -247,7 +268,9 @@ const AddEditCourses = ({
                 value={new Date(dateEnd).toISOString().split("T")[0]}
                 onChange={({ target }) => setDateEnd(target.value)}
               />
-              <p className="text-xs text-gray-500">Select the end date of the course.</p>
+              <p className="text-xs text-gray-500">
+                Select the end date of the course.
+              </p>
             </div>
           </div>
 
@@ -260,7 +283,23 @@ const AddEditCourses = ({
               value={capacity}
               onChange={({ target }) => setCapacity(target.value)}
             />
-            <p className="text-xs text-gray-500">Enter the maximum number of students allowed.</p>
+            <p className="text-xs text-gray-500">
+              Enter the maximum number of students allowed.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 font-medium">Price</label>
+            <input
+              type="number"
+              className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="500₪"
+              value={price}
+              onChange={({ target }) => setPrice(target.value)}
+            />
+            <p className="text-xs text-gray-500">
+              Enter the price of the course.
+            </p>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -273,7 +312,9 @@ const AddEditCourses = ({
               <option value="open">Open</option>
               <option value="closed">Closed</option>
             </select>
-            <p className="text-xs text-gray-500">Select the status of the course.</p>
+            <p className="text-xs text-gray-500">
+              Select the status of the course.
+            </p>
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}

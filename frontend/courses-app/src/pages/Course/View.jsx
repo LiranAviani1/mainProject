@@ -160,12 +160,16 @@ const View = () => {
                 </div>
               </div>
               <div className="text-lg text-gray-700 mb-6">
-                <h4 className="font-semibold text-xl mb-1 underline">Content</h4>
+                <h4 className="font-semibold text-xl mb-1 underline">
+                  Content
+                </h4>
                 <p>{courseDetails.content}</p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                 <div className="text-lg text-gray-600">
-                  <h4 className="font-semibold text-xl underline">Date Start</h4>
+                  <h4 className="font-semibold text-xl underline">
+                    Date Start
+                  </h4>
                   <p className="font-bold">
                     {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
                   </p>
@@ -187,17 +191,24 @@ const View = () => {
                   <p className="font-bold">{courseDetails.capacity}</p>
                 </div>
               </div>
-              <div className="text-lg font-semibold">
-                Status:{" "}
-                <span
-                  className={
-                    courseDetails.status === "open"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }
-                >
-                  {courseDetails.status === "open" ? "OPEN" : "CLOSE"}
-                </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div className="text-lg text-gray-600">
+                  <b className="font-semibold text-xl underline">Price</b>
+                  <p className="font-bold">{courseDetails.price} ₪</p>
+                </div>
+
+                <div className="text-lg font-semibold">
+                  Status:{" "}
+                  <span
+                    className={
+                      courseDetails.status === "open"
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }
+                  >
+                    {courseDetails.status === "open" ? "OPEN" : "CLOSE"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -211,7 +222,8 @@ const View = () => {
                 <div className="bg-white rounded-lg shadow-lg p-8">
                   <div className="mb-6">
                     <div className="text-lg mb-4 text-gray-700">
-                      <b className="underline">Full Name:</b> {teacherInfo.fullName}
+                      <b className="underline">Full Name:</b>{" "}
+                      {teacherInfo.fullName}
                     </div>
                     <div className="text-lg mb-4 text-gray-700">
                       <b className="underline">Age:</b> {teacherInfo.age}
@@ -220,9 +232,6 @@ const View = () => {
                   <div className="mb-6">
                     <div className="text-lg mb-4 text-gray-700">
                       <b className="underline">Phone:</b> {teacherInfo.phone}
-                    </div>
-                    <div className="text-lg mb-4 text-gray-700">
-                      <b className="underline">Address:</b> {teacherInfo.address}
                     </div>
                     <div className="text-lg mb-4 text-gray-700">
                       <b className="underline">Email:</b> {teacherInfo.email}
@@ -279,17 +288,24 @@ const View = () => {
                   {courseDetails.capacity}
                 </div>
               </div>
-              <div className="text-lg font-semibold">
-                Status:{" "}
-                <span
-                  className={
-                    courseDetails.status === "open"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }
-                >
-                  {courseDetails.status === "open" ? "OPEN" : "CLOSE"}
-                </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div className="text-lg text-gray-600">
+                  <b className="font-semibold text-xl underline">Price</b>
+                  <p className="font-bold">{courseDetails.price} ₪</p>
+                </div>
+
+                <div className="text-lg font-semibold">
+                  Status:{" "}
+                  <span
+                    className={
+                      courseDetails.status === "open"
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }
+                  >
+                    {courseDetails.status === "open" ? "OPEN" : "CLOSE"}
+                  </span>
+                </div>
               </div>
               <div className="flex justify-center">
                 <button

@@ -215,6 +215,7 @@ app.post("/add-course", authenticateToken, async (req, res) => {
     dateStart,
     dateEnd,
     capacity,
+    price,
     status,
   } = req.body;
   const { user } = req.user;
@@ -258,6 +259,12 @@ app.post("/add-course", authenticateToken, async (req, res) => {
       .json({ error: true, message: "Capacity is required" });
   }
 
+  if (!price) {
+    return res
+      .status(400)
+      .json({ error: true, message: "Price is required" });
+  }
+
   try {
     const course = new Course({
       title,
@@ -268,6 +275,7 @@ app.post("/add-course", authenticateToken, async (req, res) => {
       dateEnd,
       capacity,
       members: [],
+      price,
       status,
       userId: user._id,
     });
@@ -298,6 +306,7 @@ app.put("/edit-course/:courseId", authenticateToken, async (req, res) => {
     dateStart,
     dateEnd,
     capacity,
+    price,
     status,
   } = req.body;
   const { user } = req.user;
@@ -310,6 +319,7 @@ app.put("/edit-course/:courseId", authenticateToken, async (req, res) => {
     !dateStart &&
     !dateEnd &&
     !capacity &&
+    !price &&
     !status
   ) {
     return res
@@ -331,6 +341,7 @@ app.put("/edit-course/:courseId", authenticateToken, async (req, res) => {
     if (dateStart) course.dateStart = dateStart;
     if (dateEnd) course.dateEnd = dateEnd;
     if (capacity) course.capacity = capacity;
+    if (price) course.price = price;
     if (status) course.status = status;
 
     await course.save();
