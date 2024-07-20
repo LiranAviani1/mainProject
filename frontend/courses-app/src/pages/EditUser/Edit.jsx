@@ -9,14 +9,20 @@ import Toast from "../../components/ToastMessage/Toast";
 const Edit = () => {
   const location = useLocation();
   const userInfo = location.state;
-  const [fullName, setFullName] = useState(userInfo.fullName ? userInfo.fullName : "");
-  const [age, setAge] = useState(userInfo.age ? userInfo.age : "");
-  const [phone, setPhone] = useState(userInfo.phone ? userInfo.phone : "");
-  const [address, setAddress] = useState(userInfo.address ? userInfo.address : "");
-  const [email, setEmail] = useState(userInfo.email ? userInfo.email : "");
-  const [password, setPassword] = useState(userInfo.password ? userInfo.password : "");
-  const [birthday, setBirthday] = useState(userInfo.birthday ? userInfo.birthday : "");
-  const [gender, setGender] = useState(userInfo.gender ? userInfo.gender : "");
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0]; // Ensure the date is in YYYY-MM-DD format
+  };
+
+  const [fullName, setFullName] = useState(userInfo.fullName || "");
+  const [age, setAge] = useState(userInfo.age || "");
+  const [phone, setPhone] = useState(userInfo.phone || "");
+  const [address, setAddress] = useState(userInfo.address || "");
+  const [email, setEmail] = useState(userInfo.email || "");
+  const [password, setPassword] = useState(userInfo.password || "");
+  const [birthday, setBirthday] = useState(userInfo.birthday ? formatDate(userInfo.birthday) : "");
+  const [gender, setGender] = useState(userInfo.gender || "");
   const [error, setError] = useState(null);
   const [allCourses, setAllCourses] = useState([]);
   const [isSearch, setIsSearch] = useState(false);

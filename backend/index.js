@@ -28,7 +28,8 @@ app.get("/", (req, res) => {
 
 // Create Account
 app.post("/create-account", async (req, res) => {
-  const { fullName,birthday,gender, age, phone, address, email, password } = req.body;
+  const { fullName, birthday, gender, age, phone, address, email, password } =
+    req.body;
 
   if (!fullName) {
     return res
@@ -42,7 +43,7 @@ app.post("/create-account", async (req, res) => {
       .json({ error: true, message: "Birthday is required" });
   }
 
-  if(birthday) {
+  if (birthday) {
     const date = new Date(birthday);
     const today = new Date();
     const age = today.getFullYear() - date.getFullYear();
@@ -50,20 +51,31 @@ app.post("/create-account", async (req, res) => {
     if (month < 0 || (month === 0 && today.getDate() < date.getDate())) {
       age--;
     }
-    if(age < 18) {
+    if (age < 18) {
       return res
         .status(400)
         .json({ error: true, message: "You must be 18 years or older" });
     }
   }
 
-
-  if(!gender) {
-    return res
-      .status(400)
-      .json({ error: true, message: "gender is required" });
+  if (birthday && age) {
+    const date = new Date(birthday);
+    const today = new Date();
+    const ageCheck = today.getFullYear() - date.getFullYear();
+    const month = today.getMonth() - date.getMonth();
+    if (month < 0 || (month === 0 && today.getDate() < date.getDate())) {
+      ageCheck--;
+    }
+    if (ageCheck != age) {
+      return res
+        .status(400)
+        .json({ error: true, message: "Age does not match birthday" });
+    }
   }
 
+  if (!gender) {
+    return res.status(400).json({ error: true, message: "gender is required" });
+  }
 
   if (!age) {
     return res.status(400).json({ error: true, message: "Age is required" });
@@ -129,9 +141,49 @@ app.post("/create-account", async (req, res) => {
 //edit user
 app.put("/edit-user/:userId", authenticateToken, async (req, res) => {
   const userId = req.params.userId;
-  const { email, password, fullName, birthday, gender, age, phone, address } = req.body;
+  const { email, password, fullName, birthday, gender, age, phone, address } =
+    req.body;
 
-  if (!email && !password && !fullName && !birthday && !gender && !age && !phone && !address) {
+  if (birthday) {
+    const date = new Date(birthday);
+    const today = new Date();
+    const age = today.getFullYear() - date.getFullYear();
+    const month = today.getMonth() - date.getMonth();
+    if (month < 0 || (month === 0 && today.getDate() < date.getDate())) {
+      age--;
+    }
+    if (age < 18) {
+      return res
+        .status(400)
+        .json({ error: true, message: "You must be 18 years or older" });
+    }
+  }
+
+  if (birthday && age) {
+    const date = new Date(birthday);
+    const today = new Date();
+    const ageCheck = today.getFullYear() - date.getFullYear();
+    const month = today.getMonth() - date.getMonth();
+    if (month < 0 || (month === 0 && today.getDate() < date.getDate())) {
+      ageCheck--;
+    }
+    if (ageCheck != age) {
+      return res
+        .status(400)
+        .json({ error: true, message: "Age does not match birthday" });
+    }
+  }
+
+  if (
+    !email &&
+    !password &&
+    !fullName &&
+    !birthday &&
+    !gender &&
+    !age &&
+    !phone &&
+    !address
+  ) {
     return res
       .status(400)
       .json({ error: true, message: "No changes provided" });
@@ -225,7 +277,6 @@ app.get("/get-user", authenticateToken, async (req, res) => {
 //get user by id
 app.get("/get-user/:userId", authenticateToken, async (req, res) => {
   const userId = req.params.userId;
-  
 
   const isUser = await User.findOne({ _id: userId });
   if (!isUser) {
@@ -293,9 +344,7 @@ app.post("/add-course", authenticateToken, async (req, res) => {
   }
 
   if (!price) {
-    return res
-      .status(400)
-      .json({ error: true, message: "Price is required" });
+    return res.status(400).json({ error: true, message: "Price is required" });
   }
 
   try {
@@ -425,7 +474,7 @@ app.put("/register-course/:courseId", authenticateToken, async (req, res) => {
       });
     } else {
       course.members.push(req.body.userId);
-      if(course.members.length == course.capacity) {
+      if (course.members.length == course.capacity) {
         course.status = "closed";
       }
       if (!user.courses.includes(courseId)) {
@@ -456,7 +505,6 @@ app.put("/register-course/:courseId", authenticateToken, async (req, res) => {
 
 // Get all Courses
 app.get("/get-all-courses", authenticateToken, async (req, res) => {
-
   try {
     const courses = await Course.find().exec();
 
