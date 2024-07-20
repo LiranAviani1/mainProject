@@ -12,6 +12,8 @@ const SignUp = () => {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [gender, setGender] = useState("");
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
@@ -56,7 +58,7 @@ const SignUp = () => {
     if (!password) {
       setError("Please enter the password");
       return;
-    } else if (password.length < 6 && password.length > 20) {
+    } else if (password.length < 6 || password.length > 20) {
       setError("Password should be between 6 to 20 characters long");
       return;
     } else if (!password.match(/[a-z]/g) || !password.match(/[A-Z]/g) || !password.match(/[0-9]/g)) {
@@ -64,10 +66,19 @@ const SignUp = () => {
       return;
     }
 
+    if (!birthday) {
+      setError("Please enter your birthday");
+      return;
+    }
+
+    if (!gender) {
+      setError("Please select your gender");
+      return;
+    }
+
     setError("");
 
     // SignUp API Call
-
     try {
       const response = await axiosInstance.post("/create-account", {
         fullName: name,
@@ -76,6 +87,8 @@ const SignUp = () => {
         address: address,
         email: email,
         password: password,
+        birthday: birthday,
+        gender: gender,
       });
 
       // Handle successful registration response
@@ -89,7 +102,7 @@ const SignUp = () => {
         navigate("/dashboard");
       }
     } catch (error) {
-      // Handle login error
+      // Handle sign-up error
       if (error.response && error.response.data && error.response.data.message) {
         setError(error.response.data.message);
       } else {
@@ -153,6 +166,25 @@ const SignUp = () => {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
+
+              <input
+                type="date"
+                placeholder="Birthday"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+                value={birthday}
+                onChange={(e) => setBirthday(e.target.value)}
+              />
+
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
             </div>
 
             {error && <p className="text-red-500 text-xs mt-2">{error}</p>}

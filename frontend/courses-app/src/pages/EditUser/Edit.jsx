@@ -15,6 +15,8 @@ const Edit = () => {
   const [address, setAddress] = useState(userInfo.address ? userInfo.address : "");
   const [email, setEmail] = useState(userInfo.email ? userInfo.email : "");
   const [password, setPassword] = useState(userInfo.password ? userInfo.password : "");
+  const [birthday, setBirthday] = useState(userInfo.birthday ? userInfo.birthday : "");
+  const [gender, setGender] = useState(userInfo.gender ? userInfo.gender : "");
   const [error, setError] = useState(null);
   const [allCourses, setAllCourses] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
@@ -89,6 +91,8 @@ const Edit = () => {
         age,
         phone,
         address,
+        birthday,
+        gender,
       });
 
       if (response.data && response.data.user) {
@@ -181,6 +185,30 @@ const Edit = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                 />
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Birthday</label>
+                <input
+                  type="date"
+                  className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={birthday}
+                  onChange={(e) => setBirthday(e.target.value)}
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Gender</label>
+                <select
+                  className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
 
               {error && <p className="text-red-500 text-xs">{error}</p>}

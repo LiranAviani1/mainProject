@@ -43,6 +43,15 @@ export default function Profile() {
     getAllCourses();
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("he-IL", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  };
+
   return (
     <>
       <Navbar
@@ -66,6 +75,12 @@ export default function Profile() {
           </h3>
           <h3 className="text-lg mb-4 text-gray-700">
             <span className="font-semibold">Phone:</span> {userInfo.phone}
+          </h3>
+          <h3 className="text-lg mb-4 text-gray-700">
+            <span className="font-semibold">Birthday:</span> {formatDate(userInfo.birthday)}
+          </h3>
+          <h3 className="text-lg mb-4 text-gray-700">
+            <span className="font-semibold">Gender:</span> {userInfo.gender}
           </h3>
           <h3 className="text-lg mb-6 text-gray-700">
             <span className="font-semibold">Address:</span> {userInfo.address}
