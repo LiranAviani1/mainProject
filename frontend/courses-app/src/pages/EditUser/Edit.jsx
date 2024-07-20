@@ -9,12 +9,12 @@ import Toast from "../../components/ToastMessage/Toast";
 const Edit = () => {
   const location = useLocation();
   const userInfo = location.state;
-  const [fullName, setFullName ] = useState( userInfo.fullName? userInfo.fullName : "");
-  const [age, setAge] = useState(userInfo.age? userInfo.age : "");
-  const [phone, setPhone] = useState(userInfo.phone? userInfo.phone : "");
-  const [address, setAddress] = useState(userInfo.address? userInfo.address : "");
-  const [email, setEmail] = useState(userInfo.email? userInfo.email : "");
-  const [password, setPassword] = useState(userInfo.password? userInfo.password : "");
+  const [fullName, setFullName] = useState(userInfo.fullName ? userInfo.fullName : "");
+  const [age, setAge] = useState(userInfo.age ? userInfo.age : "");
+  const [phone, setPhone] = useState(userInfo.phone ? userInfo.phone : "");
+  const [address, setAddress] = useState(userInfo.address ? userInfo.address : "");
+  const [email, setEmail] = useState(userInfo.email ? userInfo.email : "");
+  const [password, setPassword] = useState(userInfo.password ? userInfo.password : "");
   const [error, setError] = useState(null);
   const [allCourses, setAllCourses] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
@@ -41,7 +41,6 @@ const Edit = () => {
     });
   };
 
-  
   const getAllCourses = async () => {
     try {
       const response = await axiosInstance.get("/get-all-courses");
@@ -74,10 +73,8 @@ const Edit = () => {
     getAllCourses();
   };
 
-
   const handleEditUser = async (e) => {
     e.preventDefault();
-    
 
     if (!validateEmail(email)) {
       setError("Invalid email");
@@ -98,7 +95,7 @@ const Edit = () => {
         showToastMessage("User Edited Successfully", "edit");
         setTimeout(() => {
           navigate("/");
-          }, 1000);
+        }, 1000);
       }
     } catch (error) {
       if (
@@ -121,69 +118,84 @@ const Edit = () => {
         handleClearSearch={handleClearSearch}
       />
 
-<div className="flex items-center justify-center mt-28">
-      <div className="w-96 border border-gray-300 rounded-lg bg-white px-7 py-10 shadow-lg">
-        <form onSubmit={handleEditUser}>
-          <h4 className="text-3xl text-center underline mb-7 font-semibold">Edit User</h4>
+      <div className="flex items-center justify-center mt-20">
+        <div className="w-full max-w-lg border border-gray-300 rounded-lg bg-white px-8 py-10 shadow-lg">
+          <form onSubmit={handleEditUser}>
+            <h4 className="text-2xl text-center mb-8 font-semibold">Edit User</h4>
 
-          <input
-            type="text"
-            placeholder="Email"
-            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+            <div className="space-y-4">
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="text"
+                  className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
 
-          <PasswordInput
-            placeholder="Password"
-            className="mb-4 text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Password</label>
+                <PasswordInput
+                  className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
 
-          <input
-            type="text"
-            placeholder="Full Name"
-            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-          />
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Full Name</label>
+                <input
+                  type="text"
+                  className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </div>
 
-          <input
-            type="text"
-            placeholder="Age"
-            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-          />
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Age</label>
+                <input
+                  type="text"
+                  className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                />
+              </div>
 
-          <input
-            type="text"
-            placeholder="Phone"
-            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Phone</label>
+                <input
+                  type="text"
+                  className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
 
-          <input
-            type="text"
-            placeholder="Address"
-            className="input-box text-lg mb-4 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-gray-700">Address</label>
+                <input
+                  type="text"
+                  className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
 
-          {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
+              {error && <p className="text-red-500 text-xs">{error}</p>}
 
-          <button
-            type="submit"
-            className="btn-primary text-lg w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
-          >
-            Save
-          </button>
-        </form>
+              <button
+                type="submit"
+                className="w-full mt-4 bg-blue-500 text-white text-lg px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+
       <Toast
         isShown={showToastMsg.isShown}
         message={showToastMsg.message}

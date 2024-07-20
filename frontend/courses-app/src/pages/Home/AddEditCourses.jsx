@@ -41,6 +41,7 @@ const AddEditCourses = ({
         showToastMessage("Course Added Successfully");
         getAllCourses();
         onClose();
+        clearFields();
       }
     } catch (error) {
       if (
@@ -134,7 +135,7 @@ const AddEditCourses = ({
       return;
     }
 
-    if(members.length > capacity) {
+    if (members.length > capacity) {
       setError("Members should be less than or equal to capacity");
       return;
     }
@@ -153,114 +154,139 @@ const AddEditCourses = ({
     }
   };
 
+  const clearFields = () => {
+    setTitle("");
+    setContent("");
+    setCategory("");
+    setSubCategory("");
+    setDateStart(new Date().toISOString().split("T")[0]);
+    setDateEnd(new Date().toISOString().split("T")[0]);
+    setCapacity("");
+    setStatus("open");
+  };
+
   return (
-    <div className="relative">
-      <button
-        className="w-10 h-10 rounded-full flex items-center justify-center absolute -top-3 -right-3 hover:bg-slate-50"
-        onClick={onClose}
-      >
-        <MdClose className="text-xl text-slate-400" />
-      </button>
-
-      <div className="flex flex-col gap-2">
-        <label className="input-label">TITLE</label>
-        <input
-          type="text"
-          className="text-2xl text-slate-950 outline-none"
-          placeholder="Java Script basics"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2 mt-4">
-        <label className="input-label">CONTENT</label>
-        <textarea
-          type="text"
-          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
-          placeholder="Content"
-          rows={10}
-          value={content}
-          onChange={({ target }) => setContent(target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="input-label">CATEGORY</label>
-        <input
-          type="text"
-          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
-          placeholder="Programming"
-          value={category}
-          onChange={({ target }) => setCategory(target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="input-label">SUBCATEGORY</label>
-        <input
-          type="text"
-          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
-          placeholder="Java Script"
-          value={subCategory}
-          onChange={({ target }) => setSubCategory(target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="input-label">DATE START</label>
-        <input
-          type="date"
-          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
-          value={new Date(dateStart).toISOString().split("T")[0]}
-          onChange={({ target }) => setDateStart(target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="input-label">DATE END</label>
-        <input
-          type="date"
-          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
-          placeholder="26/05/2024"
-          value={new Date(dateEnd).toISOString().split("T")[0]}
-          onChange={({ target }) => setDateEnd(target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="input-label">CAPACITY</label>
-        <input
-          type="number"
-          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
-          placeholder="5"
-          value={capacity}
-          onChange={({ target }) => setCapacity(target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label className="input-label">STATUS</label>
-        <select
-          id="status"
-          name="status"
-          className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
-          value={status}
-          onChange={({ target }) => setStatus(target.value)}
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-100">
+      <div className="relative bg-white rounded-lg shadow-lg p-8 max-w-lg w-full mx-auto overflow-y-auto">
+        <button
+          className="w-10 h-10 rounded-full flex items-center justify-center absolute top-4 right-4 hover:bg-gray-200 transition-colors"
+          onClick={onClose}
         >
-          <option value="open">Open</option>
-          <option value="closed">Closed</option>
-        </select>
+          <MdClose className="text-2xl text-gray-600" />
+        </button>
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          {type === "add" ? "Add New Course" : "Edit Course"}
+        </h2>
+        <div className="space-y-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 font-medium">Title</label>
+            <input
+              type="text"
+              className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Java Script basics"
+              value={title}
+              onChange={({ target }) => setTitle(target.value)}
+            />
+            <p className="text-xs text-gray-500">Enter the course title.</p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 font-medium">Content</label>
+            <textarea
+  className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 h-52 resize-none"
+  placeholder="Content"
+  rows={5}
+  value={content}
+  onChange={({ target }) => setContent(target.value)}
+/>
+
+            <p className="text-xs text-gray-500">Provide a detailed description of the course content.</p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 font-medium">Category</label>
+            <input
+              type="text"
+              className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Programming"
+              value={category}
+              onChange={({ target }) => setCategory(target.value)}
+            />
+            <p className="text-xs text-gray-500">Enter the main category of the course.</p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 font-medium">Subcategory</label>
+            <input
+              type="text"
+              className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Java Script"
+              value={subCategory}
+              onChange={({ target }) => setSubCategory(target.value)}
+            />
+            <p className="text-xs text-gray-500">Enter the subcategory of the course.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-gray-700 font-medium">Date Start</label>
+              <input
+                type="date"
+                className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={new Date(dateStart).toISOString().split("T")[0]}
+                onChange={({ target }) => setDateStart(target.value)}
+              />
+              <p className="text-xs text-gray-500">Select the start date of the course.</p>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-gray-700 font-medium">Date End</label>
+              <input
+                type="date"
+                className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={new Date(dateEnd).toISOString().split("T")[0]}
+                onChange={({ target }) => setDateEnd(target.value)}
+              />
+              <p className="text-xs text-gray-500">Select the end date of the course.</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 font-medium">Capacity</label>
+            <input
+              type="number"
+              className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="5"
+              value={capacity}
+              onChange={({ target }) => setCapacity(target.value)}
+            />
+            <p className="text-xs text-gray-500">Enter the maximum number of students allowed.</p>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 font-medium">Status</label>
+            <select
+              className="text-lg text-gray-900 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={status}
+              onChange={({ target }) => setStatus(target.value)}
+            >
+              <option value="open">Open</option>
+              <option value="closed">Closed</option>
+            </select>
+            <p className="text-xs text-gray-500">Select the status of the course.</p>
+          </div>
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+        </div>
+        <div className="mt-6">
+          <button
+            className="w-full bg-indigo-500 text-white font-medium rounded-lg p-3 hover:bg-indigo-600 transition-colors"
+            onClick={handleAddCourse}
+          >
+            {type === "add" ? "Add Course" : "Update Course"}
+          </button>
+        </div>
       </div>
-
-      {error && <p className="text-red-500 text-xs pt-4">{error}</p>}
-
-      <button
-        className="btn-primary font-medium mt-5 p-3"
-        onClick={handleAddCourse}
-      >
-        {type === "add" ? "ADD" : "Update"}
-      </button>
     </div>
   );
 };

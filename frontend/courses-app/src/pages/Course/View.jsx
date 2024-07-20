@@ -241,7 +241,7 @@ const View = () => {
             </h3>
             <div className="bg-white rounded-lg shadow-md p-8">
               <div className="mb-4">
-                <h6 className="text-2xl font-semibold text-gray-800">
+                <h6 className="text-2xl underline font-semibold text-gray-800">
                   {courseDetails.title}
                 </h6>
               </div>

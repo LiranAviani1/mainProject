@@ -10,7 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ const Login = () => {
       return;
     }
 
-    setError('')
+    setError("");
 
     //Login API Call
 
@@ -34,11 +34,11 @@ const Login = () => {
         email: email,
         password: password,
       });
-      
+
       // Handle successful login response 
-      if(response.data && response.data.accessToken){
-        localStorage.setItem("token", response.data.accessToken)
-        navigate('/dashboard')
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem("token", response.data.accessToken);
+        navigate('/dashboard');
       }
 
     } catch (error) {
@@ -54,29 +54,34 @@ const Login = () => {
   return (
     <>
       <Navbar />
-      <div className="flex items-center justify-center mt-28">
-        <div className="w-96 border rounded bg-white px-7 py-10">
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
           <form onSubmit={handleLogin}>
-            <h4 className="text-2xl mb-7">Login</h4>
+            <h4 className="text-2xl font-semibold text-center mb-6">Login</h4>
 
-            <input 
-              type="text" 
-              placeholder="Email" 
-              className="input-box" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} />
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Email"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-            <PasswordInput 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="mb-4">
+              <PasswordInput
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-            {error && <p className="text-red-500 text-xs pb-1">{error}</p>}
+            {error && <p className="text-red-500 text-sm pb-2">{error}</p>}
 
-            <button type="submit" className="btn-primary">Login</button>
+            <button type="submit" className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">Login</button>
 
-            <p className="text-sm text-center mt-4">
-              Not registered yet? <Link to='/signUp' className="font-medium text-primary underline">Create an Account</Link>
+            <p className="text-sm text-center mt-4 text-gray-600">
+              Not registered yet? <Link to='/signUp' className="font-medium text-blue-500 hover:underline">Create an Account</Link>
             </p>
           </form>
         </div>

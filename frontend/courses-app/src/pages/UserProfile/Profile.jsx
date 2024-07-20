@@ -50,29 +50,25 @@ export default function Profile() {
         onSearchCourse={onSearchCourse}
         handleClearSearch={handleClearSearch}
       />
-      <div className="flex items-center justify-center mt-28 text-center">
-        <div className="w-full max-w-lg border border-gray-300 rounded-lg bg-white px-8 py-10 shadow-lg">
-          <h1 className="text-3xl mb-6 text-black font-semibold underline">
+      <div className="flex items-center justify-center mt-20 text-center">
+        <div className="w-full max-w-lg border border-gray-200 rounded-lg bg-white px-8 py-10 shadow-lg">
+          <h1 className="text-3xl mb-6 text-gray-900 font-semibold">
             User Profile
           </h1>
-          <h3 className="text-lg mb-4">
-            <span className="font-semibold underline">Email:</span>{" "}
-            {userInfo.email}
+          <h3 className="text-lg mb-4 text-gray-700">
+            <span className="font-semibold">Email:</span> {userInfo.email}
           </h3>
-          <h3 className="text-lg mb-4">
-            <span className="font-semibold underline">Full Name:</span>{" "}
-            {userInfo.fullName}
+          <h3 className="text-lg mb-4 text-gray-700">
+            <span className="font-semibold">Full Name:</span> {userInfo.fullName}
           </h3>
-          <h3 className="text-lg mb-4">
-            <span className="font-semibold underline">Age:</span> {userInfo.age}
+          <h3 className="text-lg mb-4 text-gray-700">
+            <span className="font-semibold">Age:</span> {userInfo.age}
           </h3>
-          <h3 className="text-lg mb-4">
-            <span className="font-semibold underline">Phone:</span>{" "}
-            {userInfo.phone}
+          <h3 className="text-lg mb-4 text-gray-700">
+            <span className="font-semibold">Phone:</span> {userInfo.phone}
           </h3>
-          <h3 className="text-lg mb-6">
-            <span className="font-semibold underline">Address:</span>{" "}
-            {userInfo.address}
+          <h3 className="text-lg mb-6 text-gray-700">
+            <span className="font-semibold">Address:</span> {userInfo.address}
           </h3>
           <button
             type="submit"

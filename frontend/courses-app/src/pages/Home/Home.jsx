@@ -128,10 +128,14 @@ const Home = () => {
   return (
     <>
       <Navbar
-        userInfo={userInfo}
-        onSearchCourse={onSearchCourse}
-        handleClearSearch={handleClearSearch}
-      />
+  userInfo={userInfo}
+  onSearchCourse={onSearchCourse}
+  handleClearSearch={handleClearSearch}
+  onAddCourse={() => {
+    setOpenAddEditModal({ isShown: true, type: "add", data: null });
+  }}
+/>
+
 
       <div className="container mx-auto p-[30px]">
         {isSearch && (
@@ -175,17 +179,7 @@ const Home = () => {
         )}
       </div>
 
-      {userInfo &&
-        (userInfo.role === "admin" || userInfo.role === "teacher") && (
-          <button
-            className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 fixed right-10 bottom-10"
-            onClick={() => {
-              setOpenAddEditModal({ isShown: true, type: "add", data: null });
-            }}
-          >
-            <MdAdd className="text-[32px] text-white" />
-          </button>
-        )}
+    
 
       <Modal
         isOpen={openAddEditModal.isShown}
