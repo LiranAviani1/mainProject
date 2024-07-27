@@ -12,6 +12,8 @@ import AddEditUser from "../EditUser/Edit";
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
     message: "",
@@ -98,15 +100,54 @@ const AdminPanel = () => {
       entityType: "course",
     });
   };
+  const onSearchCourse = async (query) => {
+    try {
+      const response = await axiosInstance.get("/search-courses", {
+        params: { query },
+      });
 
+      if (response.data && response.data.courses) {
+        setIsSearch(true);
+        setAllCourses(response.data.courses);
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  const handleClearSearch = () => {
+    setIsSearch(false);
+    getAllCourses();
+  };
+
+  const getUserInfo = async () => {
+    try {
+      const response = await axiosInstance.get("/get-user");
+      if (response.data && response.data.user) {
+        setUserInfo(response.data.user);
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        localStorage.clear();
+        navigate("/login");
+      }
+    }
+  };
+
+ 
   useEffect(() => {
+    getUserInfo();
     getAllUsers();
     getAllCourses();
   }, []);
 
   return (
     <>
-      <Navbar />
+       <Navbar
+        userInfo={userInfo}
+        onSearchCourse={onSearchCourse}
+        handleClearSearch={handleClearSearch}
+      />
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6 text-center">Admin Panel</h1>
         <div className="mb-6">
