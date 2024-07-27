@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import CourseCard from "../../components/Cards/CourseCard";
-import { MdAdd } from "react-icons/md";
 import Modal from "react-modal";
 import AddEditCourses from "./AddEditCourses";
 import Toast from "../../components/ToastMessage/Toast";
@@ -13,11 +12,8 @@ import EmptyCard from "../../components/EmptyCard/EmptyCard";
 
 const Home = () => {
   const [allCourses, setAllCourses] = useState([]);
-
   const [isSearch, setIsSearch] = useState(false);
-
   const [userInfo, setUserInfo] = useState(null);
-
   const navigate = useNavigate();
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -128,22 +124,21 @@ const Home = () => {
   return (
     <>
       <Navbar
-  userInfo={userInfo}
-  onSearchCourse={onSearchCourse}
-  handleClearSearch={handleClearSearch}
-  onAddCourse={() => {
-    setOpenAddEditModal({ isShown: true, type: "add", data: null });
-  }}
-/>
+        userInfo={userInfo}
+        onSearchCourse={onSearchCourse}
+        handleClearSearch={handleClearSearch}
+        onAddCourse={() => {
+          setOpenAddEditModal({ isShown: true, type: "add", data: null });
+        }}
+      />
 
-
-      <div className="container mx-auto p-[30px]">
+      <div className="container mx-auto p-6">
         {isSearch && (
           <h3 className="text-lg font-medium mt-5">Search Results</h3>
         )}
 
         {allCourses.length > 0 ? (
-          <div className="grid grid-cols-3 gap-4 mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
             {allCourses.map((item) => {
               return (
                 <CourseCard
@@ -178,29 +173,39 @@ const Home = () => {
           />
         )}
       </div>
-
-    
-
       <Modal
         isOpen={openAddEditModal.isShown}
-        onRequestClose={() => {}}
+        onRequestClose={() => setOpenAddEditModal({ isShown: false, type: "add", data: null })}
         style={{
           overlay: {
-            backgroundColor: "rgba(0,0,0,0.2)",
+            backgroundColor: "rgba(0,0,0,0.5)",
+          },
+          content: {
+            inset: "10%",
+            border: "none",
+            borderRadius: "1rem",
+            padding: "0",
+            maxWidth: "1000px",
+            margin: "auto",
+            background: "transparent",
           },
         }}
-        contentLabel="Example Modal"
-        className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll"
+        contentLabel="Add/Edit Course Modal"
       >
-        <AddEditCourses
-          type={openAddEditModal.type}
-          courseData={openAddEditModal.data}
-          onClose={() => {
-            setOpenAddEditModal({ isShown: false, type: "add", data: null });
-          }}
-          showToastMessage={showToastMessage}
-          getAllCourses={getAllCourses}
-        />
+        <div className="relative bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-auto">
+          <button
+            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+            onClick={() => setOpenAddEditModal({ isShown: false, type: "add", data: null })}
+          >
+          </button>
+          <AddEditCourses
+            type={openAddEditModal.type}
+            courseData={openAddEditModal.data}
+            onClose={() => setOpenAddEditModal({ isShown: false, type: "add", data: null })}
+            showToastMessage={showToastMessage}
+            getAllCourses={getAllCourses}
+          />
+        </div>
       </Modal>
 
       <Toast
