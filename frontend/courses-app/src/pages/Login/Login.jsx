@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import PasswordInput from "../../components/Input/PasswordInput";
 import axiosInstance from "../../utils/axiosInstance";
@@ -8,9 +8,25 @@ import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [saveEmail, setSaveEmail] = useState(false);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if a valid token exists in local storage for automatic login
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Optionally, verify token validity with an API call
+      navigate('/dashboard');
+    }
+
+    const savedEmail = localStorage.getItem("savedEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setSaveEmail(true);
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,22 +43,24 @@ const Login = () => {
 
     setError("");
 
-    //Login API Call
-
     try {
       const response = await axiosInstance.post("/login", {
         email: email,
         password: password,
       });
 
-      // Handle successful login response 
       if (response.data && response.data.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
+
+        if (saveEmail) {
+          localStorage.setItem("savedEmail", email);
+        } else {
+          localStorage.removeItem("savedEmail");
+        }
+
         navigate('/dashboard');
       }
-
     } catch (error) {
-      // Handle login error
       if (error.response && error.response.data && error.response.data.message) {
         setError(error.response.data.message);
       } else {
@@ -74,6 +92,16 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+            </div>
+
+            <div className="flex items-center mb-4">
+              <input
+                type="checkbox"
+                checked={saveEmail}
+                onChange={(e) => setSaveEmail(e.target.checked)}
+                className="mr-2"
+              />
+              <label className="text-sm">Remember Email</label>
             </div>
 
             {error && <p className="text-red-500 text-sm pb-2">{error}</p>}
