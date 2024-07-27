@@ -547,6 +547,69 @@ app.delete("/delete-course/:courseId", authenticateToken, async (req, res) => {
   }
 });
 
+app.put("/remove-member/:courseId/:memberId", authenticateToken, async (req, res) => {
+  const courseId = req.params.courseId;
+  const memberId = req.params.memberId;
+  const { user } = req.user;
+
+  try {
+    const course = await Course.findOne({ _id: courseId });
+
+    if (!course) {
+      return res.status(404).json({ error: true, message: "Course not found" });
+    }
+    
+    if (user.role !== 'admin' && user.role !== 'teacher') {
+      return res.status(403).json({ error: true, message: "Unauthorized" });
+    }
+
+    // Allow teachers to remove members only if they own the course
+    if (user.role === 'teacher' && course.userId.toString() !== user._id.toString()) {
+      return res.status(403).json({ error: true, message: "Unauthorized" });
+    }
+
+    const memberIndex = course.members.indexOf(memberId);
+
+    if (memberIndex > -1) {
+      course.members.splice(memberIndex, 1);
+
+      // Update course status if it's full and now has space
+      if (course.status === "closed" && course.members.length < course.capacity) {
+        course.status = "open";
+      }
+
+      await course.save();
+
+      // Remove course from the user's course list
+      const member = await User.findById(memberId);
+      if (member) {
+        const courseIndex = member.courses.indexOf(courseId);
+        if (courseIndex > -1) {
+          member.courses.splice(courseIndex, 1);
+          await member.save();
+        }
+      }
+
+      return res.json({
+        error: false,
+        course,
+        message: "Member removed successfully",
+      });
+    } else {
+      return res.status(404).json({
+        error: true,
+        message: "Member not found in this course",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
+});
+
+
 // Search Courses
 app.get("/search-courses", authenticateToken, async (req, res) => {
   const { user } = req.user;

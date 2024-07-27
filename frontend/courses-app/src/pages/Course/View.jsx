@@ -100,11 +100,16 @@ const View = () => {
   const handleRegisterd = () => {
     const userCourses = userInfo.courses;
     const courseId = courseDetails._id;
-    if (userCourses.includes(courseId)) {
+    if (
+      userCourses.includes(courseId) ||
+      (userInfo.role === "teacher" && courseDetails.userId === userInfo._id) ||
+      userInfo.role === "admin"
+    ) {
       return true;
     }
     return false;
   };
+  
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -119,6 +124,34 @@ const View = () => {
 
       if (response.data.error === false) {
         showToastMessage("Successfully registered", "add");
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else {
+        showToastMessage(response.data.message, "delete");
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
+    }
+  };
+
+  const handleRemoveMember = async (memberId) => {
+    try {
+      const response = await axiosInstance.put(
+        `/remove-member/${courseDetails._id}/${memberId}`
+      );
+
+      if (response.data.error === false) {
+        showToastMessage("Member removed successfully", "delete");
+        getMemberInfos();
         setTimeout(() => {
           navigate("/");
         }, 1000);
@@ -229,7 +262,7 @@ const View = () => {
             </div>
           </div>
 
-          {teacherInfo && (
+          
             <div className="bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 mt-12">
               <div className="max-w-4xl mx-auto">
                 <h3 className="text-3xl font-bold mb-6 text-center underline text-gray-800">
@@ -256,9 +289,9 @@ const View = () => {
                 </div>
               </div>
             </div>
-          )}
+          
 
-          {memberInfos.length > 0 && (
+          {(userInfo.role === "teacher" && courseDetails.userId === userInfo._id || userInfo.role === "admin") && memberInfos.length > 0 && (
             <div className="bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 mt-12">
               <div className="max-w-4xl mx-auto">
                 <h3 className="text-3xl font-bold mb-6 text-center underline text-gray-800">
@@ -270,6 +303,15 @@ const View = () => {
                       <b className="underline">Name:</b> {member.fullName} <br />
                       <b className="underline">Email:</b> {member.email} <br />
                       <b className="underline">Phone:</b> {member.phone}
+                      {(userInfo.role === "teacher" || userInfo.role === "admin") && (
+                        <button
+                        className="ml-4 text-red-600 bg-white border border-red-600 px-3 py-1 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-300"
+                        onClick={() => handleRemoveMember(member._id)}
+                      >
+                        Remove
+                      </button>
+                      
+                      )}
                     </div>
                   ))}
                 </div>
