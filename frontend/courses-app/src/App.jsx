@@ -19,7 +19,7 @@ function App() {
           <Route path="/about" exact element={<About />} />
           <Route path="/login" exact element={<Login />} />
           <Route path="/signUp" exact element={<SignUp />} />
-          <Route path="/edit" exact element={<Edit />} />
+          <Route path="/edit-user" exact element={<Edit />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/course-view" element={<View />} />
           <Route path="/admin" element={<Admin />} />

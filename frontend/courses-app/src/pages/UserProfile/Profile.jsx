@@ -89,7 +89,7 @@ export default function Profile() {
             type="submit"
             className="w-3/5 mx-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
           >
-            <Link to="/edit" state={userInfo}>
+            <Link to="/edit-user" state={userInfo}>
               Edit Account
             </Link>
           </button>

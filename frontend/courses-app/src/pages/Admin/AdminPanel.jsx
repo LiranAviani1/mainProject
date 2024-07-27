@@ -87,12 +87,7 @@ const AdminPanel = () => {
   };
 
   const handleEditUser = (user) => {
-    setOpenAddEditModal({
-      isShown: true,
-      data: user,
-      type: "edit",
-      entityType: "user",
-    });
+    navigate("/edit-user", { state: user });
   };
 
   const handleEditCourse = (course) => {
@@ -151,8 +146,6 @@ const AdminPanel = () => {
         contentLabel="Add/Edit Course Modal"
       >
         <div className="relative bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-auto">
-          
-          {openAddEditModal.entityType === "course" ? (
             <AddEditCourses
               type={openAddEditModal.type}
               courseData={openAddEditModal.data}
@@ -167,22 +160,6 @@ const AdminPanel = () => {
               showToastMessage={showToastMessage}
               getAllCourses={getAllCourses}
             />
-          ) : (
-            <AddEditUser
-              type={openAddEditModal.type}
-              userData={openAddEditModal.data}
-              onClose={() =>
-                setOpenAddEditModal({
-                  isShown: false,
-                  type: "add",
-                  data: null,
-                  entityType: "user",
-                })
-              }
-              showToastMessage={showToastMessage}
-              getAllUsers={getAllUsers}
-            />
-          )}
         </div>
       </Modal>
       <Toast
