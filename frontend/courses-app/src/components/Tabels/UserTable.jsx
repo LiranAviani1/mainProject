@@ -11,7 +11,7 @@ const UserTable = ({ users, onDeleteUser, onEditUser }) => {
           <th className="w-1/4 py-2">Actions</th>
         </tr>
       </thead>
-      <tbody className="text-gray-700 text-center">
+      <tbody className="text-gray-700 font-bold text-center">
         {users.map((user) => (
           <tr key={user._id}>
             <td className="py-2">{user.fullName}</td>
