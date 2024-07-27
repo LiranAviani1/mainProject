@@ -258,6 +258,46 @@ app.post("/login", async (req, res) => {
   }
 });
 
+//delete user
+app.delete("/delete-user/:userId", authenticateToken, async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: true, message: "User not found" });
+    }
+
+    await User.findByIdAndDelete(userId);
+
+    return res.json({
+      error: false,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
+});
+
+//Get All Users
+app.get("/get-all-users", authenticateToken, async (req, res) => {
+  const { user } = req.user;
+  if (user.role !== 'admin') {
+    return res.status(403).json({ error: true, message: "Unauthorized" });
+  }
+
+  try {
+    const users = await User.find({});
+    res.json({ error: false, users });
+  } catch (error) {
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
 //Get User
 app.get("/get-user", authenticateToken, async (req, res) => {
   const { user } = req.user;

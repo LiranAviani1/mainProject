@@ -67,6 +67,16 @@ const Navbar = ({
                 About
                 <span className="absolute left-0 bottom-0 w-full h-0.5 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"></span>
               </Link>
+              {userInfo && userInfo.role === "admin" && (
+                <Link
+                  to="/admin"
+                  className="relative text-lg font-semibold hover:font-bold transition-all duration-300 flex items-center group"
+                >
+                  <FaInfoCircle className="mr-1" />
+                  Admin Panel
+                  <span className="absolute left-0 bottom-0 w-full h-0.5 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"></span>
+                </Link>
+              )}
             </>
           )}
         </div>
