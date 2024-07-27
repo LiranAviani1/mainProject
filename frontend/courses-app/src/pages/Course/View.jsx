@@ -12,6 +12,7 @@ const View = () => {
   const courseDetails = location.state.courseDetails;
   const teacherId = courseDetails.userId;
   const [teacherInfo, setTeacherInfo] = useState([]);
+  const [memberInfos, setMemberInfos] = useState([]);
 
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -32,6 +33,20 @@ const View = () => {
     } catch (error) {
       if (error.response.status === 401) {
       }
+    }
+  };
+
+  const getMemberInfos = async () => {
+    try {
+      const members = await Promise.all(
+        courseDetails.members.map(async (memberId) => {
+          const response = await axiosInstance.get("/get-user/" + memberId);
+          return response.data.user;
+        })
+      );
+      setMemberInfos(members);
+    } catch (error) {
+      console.log("Error fetching member info: ", error);
     }
   };
 
@@ -125,6 +140,7 @@ const View = () => {
 
   useEffect(() => {
     getTeacherInfo();
+    getMemberInfos();
     return () => {};
   }, []);
 
@@ -237,6 +253,25 @@ const View = () => {
                       <b className="underline">Email:</b> {teacherInfo.email}
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {memberInfos.length > 0 && (
+            <div className="bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 mt-12">
+              <div className="max-w-4xl mx-auto">
+                <h3 className="text-3xl font-bold mb-6 text-center underline text-gray-800">
+                  Members
+                </h3>
+                <div className="bg-white rounded-lg shadow-lg p-8">
+                  {memberInfos.map((member) => (
+                    <div key={member._id} className="mb-4 text-lg text-gray-700">
+                      <b className="underline">Name:</b> {member.fullName} <br />
+                      <b className="underline">Email:</b> {member.email} <br />
+                      <b className="underline">Phone:</b> {member.phone}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
