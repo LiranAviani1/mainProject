@@ -46,7 +46,16 @@ const AdminPanel = () => {
     try {
       const response = await axiosInstance.get("/get-all-courses");
       if (response.data && response.data.courses) {
-        setCourses(response.data.courses);
+        const coursesWithTeacherInfo = await Promise.all(
+          response.data.courses.map(async (course) => {
+            const teacherResponse = await axiosInstance.get(`/get-user/${course.userId}`);
+            return {
+              ...course,
+              teacher: teacherResponse.data.user,
+            };
+          })
+        );
+        setCourses(coursesWithTeacherInfo);
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -175,7 +184,16 @@ const AdminPanel = () => {
           params: { query: searchQuery },
         });
         if (response.data && response.data.courses) {
-          setCourses(response.data.courses);
+          const coursesWithTeacherInfo = await Promise.all(
+            response.data.courses.map(async (course) => {
+              const teacherResponse = await axiosInstance.get(`/get-user/${course.userId}`);
+              return {
+                ...course,
+                teacher: teacherResponse.data.user,
+              };
+            })
+          );
+          setCourses(coursesWithTeacherInfo);
           setIsSearch(true);
           console.log("Courses found:", response.data.courses);
         }
