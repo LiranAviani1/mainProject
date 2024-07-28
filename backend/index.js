@@ -594,6 +594,28 @@ app.delete("/delete-course/:courseId", authenticateToken, async (req, res) => {
   }
 });
 
+// Change user role by user ID
+app.put('/change-user-role/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { role } = req.body;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: true, message: "User not found" });
+    }
+
+    user.role = role;
+    await user.save();
+
+    res.status(200).json({ error: false, message: "User role updated successfully" });
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    res.status(500).json({ error: true, message: "An unexpected error occurred. Please try again." });
+  }
+});
+
+
 app.put("/remove-member/:courseId/:memberId", authenticateToken, async (req, res) => {
   const courseId = req.params.courseId;
   const memberId = req.params.memberId;

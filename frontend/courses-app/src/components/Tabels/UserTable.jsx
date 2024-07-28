@@ -1,6 +1,6 @@
 import React from "react";
 
-const UserTable = ({ users, onDeleteUser, onEditUser }) => {
+const UserTable = ({ users, onDeleteUser, onEditUser, onChangeUserRole }) => {
   return (
     <table className="min-w-full bg-white">
       <thead className="bg-gray-800 text-white">
@@ -25,11 +25,19 @@ const UserTable = ({ users, onDeleteUser, onEditUser }) => {
                 Edit
               </button>
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded"
+                className="bg-red-500 text-white px-4 py-2 rounded mr-2"
                 onClick={() => onDeleteUser(user._id)}
               >
                 Delete
               </button>
+              {user.role !== 'user' && (
+                <button
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                  onClick={() => onChangeUserRole(user._id)}
+                >
+                  Make User
+                </button>
+              )}
             </td>
           </tr>
         ))}

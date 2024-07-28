@@ -114,6 +114,21 @@ const AdminPanel = () => {
     }
   };
 
+  const changeUserRoleToUser = async (userId) => {
+    try {
+      const response = await axiosInstance.put(`/change-user-role/${userId}`, { role: 'user' });
+      if (response.data && !response.data.error) {
+        showToastMessage("User role updated to 'user' successfully", "success");
+        getAllUsers();
+        setTimeout(() => {
+          window.location.reload(); // Reload the page after showing the toast message
+        }, 700);
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
   const showToastMessage = (message, type) => {
     setShowToastMsg({
       isShown: true,
@@ -270,6 +285,7 @@ const AdminPanel = () => {
               users={users}
               onDeleteUser={deleteUser}
               onEditUser={handleEditUser}
+              onChangeUserRole={changeUserRoleToUser}
             />
           </div>
         )}
