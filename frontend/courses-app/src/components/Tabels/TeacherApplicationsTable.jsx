@@ -17,13 +17,21 @@ const TeacherApplicationsTable = ({ applications, onApprove, onDeny }) => {
       <tbody className="text-gray-700 text-center">
         {applications.map((app) => (
           <tr key={app._id} className="border-b border-gray-300">
-            <td className="py-2">{app.fullName}</td>
-            <td className="py-2">{app.email}</td>
-            <td className="py-2">{app.phone}</td>
-            <td className="py-2">{app.qualifications}</td>
-            <td className="py-2">{app.experience}</td>
-            <td className="py-2">{app.status}</td>
-            <td className="py-2 flex justify-center space-x-2">
+            <td className="py-2 px-4">{app.fullName}</td>
+            <td className="py-2 px-4">{app.email}</td>
+            <td className="py-2 px-4">{app.phone}</td>
+            <td className="py-2 px-4">
+              <div className="max-h-32 overflow-y-auto p-2 border border-gray-200 rounded">
+                {app.qualifications}
+              </div>
+            </td>
+            <td className="py-2 px-4">
+              <div className="max-h-32 overflow-y-auto p-2 border border-gray-200 rounded">
+                {app.experience}
+              </div>
+            </td>
+            <td className="py-2 px-4">{app.status}</td>
+            <td className="py-2 px-4 flex justify-center space-x-2">
               {app.status === "pending" && (
                 <>
                   <button

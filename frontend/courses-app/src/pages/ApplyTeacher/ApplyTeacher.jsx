@@ -1,5 +1,3 @@
-// src/pages/ApplyTeacher.jsx
-
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import axiosInstance from "../../utils/axiosInstance";
@@ -14,6 +12,7 @@ const ApplyTeacher = () => {
   const [qualifications, setQualifications] = useState('');
   const [error, setError] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [applicationStatus, setApplicationStatus] = useState('');
   const [isSearch, setIsSearch] = useState(false);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
@@ -102,6 +101,12 @@ const ApplyTeacher = () => {
       const response = await axiosInstance.get("/get-user");
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
+
+        // Check application status
+        const applicationResponse = await axiosInstance.get(`/get-application-status/${response.data.user._id}`);
+        if (applicationResponse.data && applicationResponse.data.status) {
+          setApplicationStatus(applicationResponse.data.status);
+        }
       }
     } catch (error) {
       if (error.response.status === 401) {
@@ -124,10 +129,14 @@ const ApplyTeacher = () => {
         handleClearSearch={handleClearSearch}
       />
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+        <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md">
           {userInfo && userInfo.role === "teacher" ? (
             <div className="text-center font-semibold text-red-500 text-lg">
               You are already a teacher and cannot apply again!
+            </div>
+          ) : applicationStatus === "pending" ? (
+            <div className="text-center font-semibold text-red-500 text-lg">
+              Your application is pending. You cannot apply again at this time.
             </div>
           ) : (
             <form onSubmit={handleApply}>
@@ -166,7 +175,7 @@ const ApplyTeacher = () => {
               <div className="mb-4">
                 <textarea
                   placeholder="Experience"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full h-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={experience}
                   onChange={(e) => setExperience(e.target.value)}
                 />
@@ -175,7 +184,7 @@ const ApplyTeacher = () => {
               <div className="mb-4">
                 <textarea
                   placeholder="Qualifications"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full h-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={qualifications}
                   onChange={(e) => setQualifications(e.target.value)}
                 />

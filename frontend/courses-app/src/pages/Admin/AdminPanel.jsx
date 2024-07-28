@@ -106,10 +106,8 @@ const AdminPanel = () => {
     try {
       const response = await axiosInstance.put(`/deny-application/${applicationId}`);
       if (response.data && !response.data.error) {
-        showToastMessage("Application Denied Successfully", "deny");
-        setTimeout(() => {
-          window.location.reload(); // Reload the page after showing the toast message
-        }, 700); // Adjust the delay as needed
+        showToastMessage("Application Denied and Deleted Successfully", "deny");
+        getAllApplications(); // Refresh the applications list
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");

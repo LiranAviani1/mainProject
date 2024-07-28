@@ -782,9 +782,29 @@ app.put("/deny-application/:applicationId", async (req, res) => {
     application.status = "denied";
     await application.save();
 
-    return res.json({ error: false, message: "Application denied successfully" });
+    // Delete the application after denying it
+    await TeacherApplication.findByIdAndDelete(applicationId);
+
+    return res.json({ error: false, message: "Application denied and deleted successfully" });
   } catch (error) {
     return res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+// Get application status by user ID
+app.get('/get-application-status/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const application = await TeacherApplication.findOne({ userId: userId });
+
+    if (!application) {
+      return res.status(200).json({ message: 'No application found', status: 'none' });
+    }
+
+    res.status(200).json({ status: application.status });
+  } catch (error) {
+    console.error('Error fetching application status:', error);
+    res.status(500).json({ message: 'An unexpected error occurred. Please try again.' });
   }
 });
 
