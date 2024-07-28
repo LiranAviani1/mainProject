@@ -8,6 +8,7 @@ import Edit from "./pages/EditUser/Edit";
 import Profile from "./pages/UserProfile/Profile";
 import View from "./pages/Course/View";
 import Admin from "./pages/Admin/AdminPanel.jsx"
+import ApplyTeacher from "./pages/ApplyTeacher/ApplyTeacher.jsx";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/course-view" element={<View />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/apply-teacher" element={<ApplyTeacher />} />
         </Routes>
       </Router>
     </div>

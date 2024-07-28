@@ -6,6 +6,7 @@ mongoose.connect(config.connectionString);
 
 const User = require("./models/user.model");
 const Course = require("./models/course.model");
+const TeacherApplication = require("./models/teacherApplication.model");
 
 const express = require("express");
 const cors = require("cors");
@@ -689,6 +690,171 @@ app.get("/search-courses", authenticateToken, async (req, res) => {
     });
   }
 });
+
+// In your backend file (e.g., app.js)
+app.post("/apply-teacher", authenticateToken, async (req, res) => {
+  const { fullName, email, phone, qualifications, experience } = req.body;
+  const userId = req.user.user._id; // Assuming user ID is stored in req.user.user._id
+
+  if (!fullName || !email || !phone || !qualifications || !experience) {
+    return res.status(400).json({ error: true, message: "All fields are required" });
+  }
+
+  // Save application to the database
+  try {
+    const application = new TeacherApplication({
+      userId, // Store the user ID
+      fullName,
+      email,
+      phone,
+      qualifications,
+      experience,
+      status: "pending", // you can add a status field to track application status
+      appliedOn: new Date(),
+    });
+
+    await application.save();
+
+    return res.json({ error: false, message: "Application submitted successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+
+// Get all teacher applications
+app.get("/get-all-teacher-applications", authenticateToken, async (req, res) => {
+  const { user } = req.user;
+
+  if (user.role !== "admin") {
+    return res.status(403).json({ error: true, message: "Unauthorized" });
+  }
+
+  try {
+    const applications = await TeacherApplication.find({});
+    res.json({ error: false, applications });
+  } catch (error) {
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+// Approve teacher application
+app.put("/approve-application/:applicationId", authenticateToken, async (req, res) => {
+  const { user } = req.user;
+  const applicationId = req.params.applicationId;
+
+  if (user.role !== "admin") {
+    return res.status(403).json({ error: true, message: "Unauthorized" });
+  }
+
+  try {
+    const application = await TeacherApplication.findById(applicationId);
+    if (!application) {
+      return res.status(404).json({ error: true, message: "Application not found" });
+    }
+
+    const userToUpdate = await User.findById(application.userId);
+    if (!userToUpdate) {
+      return res.status(404).json({ error: true, message: "User not found" });
+    }
+
+    userToUpdate.role = "teacher";
+    await userToUpdate.save();
+
+    application.status = "approved";
+    await application.save();
+
+    res.json({ error: false, message: "Application approved and user role updated" });
+  } catch (error) {
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+app.put("/deny-application/:applicationId", async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    const application = await TeacherApplication.findById(applicationId);
+
+    if (!application) {
+      return res.status(404).json({ error: true, message: "Application not found" });
+    }
+
+    application.status = "denied";
+    await application.save();
+
+    return res.json({ error: false, message: "Application denied successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+
+app.get("/search-users", authenticateToken, async (req, res) => {
+  const query = req.query.query;
+  if (!query) {
+    return res.status(400).json({ error: true, message: "Query is required" });
+  }
+
+  try {
+    const users = await User.find({
+      $or: [
+        { fullName: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+        { phone: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    return res.json({ error: false, users });
+  } catch (error) {
+    return res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+app.get("/search-courses", authenticateToken, async (req, res) => {
+  const query = req.query.query;
+  if (!query) {
+    return res.status(400).json({ error: true, message: "Query is required" });
+  }
+
+  try {
+    const courses = await Course.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+        { subCategory: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    return res.json({ error: false, courses });
+  } catch (error) {
+    return res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+app.get("/search-applications", authenticateToken, async (req, res) => {
+  const query = req.query.query;
+  if (!query) {
+    return res.status(400).json({ error: true, message: "Query is required" });
+  }
+
+  try {
+    const applications = await TeacherApplication.find({
+      $or: [
+        { fullName: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+        { phone: { $regex: query, $options: "i" } },
+        { qualifications: { $regex: query, $options: "i" } },
+        { experience: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    return res.json({ error: false, applications });
+  } catch (error) {
+    return res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+
 
 app.listen(8000);
 

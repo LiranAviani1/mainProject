@@ -134,7 +134,7 @@ const Edit = () => {
       <div className="flex items-center justify-center mt-20">
         <div className="w-full max-w-lg border border-gray-300 rounded-lg bg-white px-8 py-10 shadow-lg">
           <form onSubmit={handleEditUser}>
-            <h4 className="text-2xl text-center mb-8 font-semibold">Edit User</h4>
+            <h4 className="text-2xl text-center mb-8 font-semibold underline">Edit User</h4>
 
             <div className="space-y-4">
               <div className="flex flex-col">

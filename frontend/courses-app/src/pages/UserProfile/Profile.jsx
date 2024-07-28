@@ -61,7 +61,7 @@ export default function Profile() {
       />
       <div className="flex items-center justify-center mt-20 text-center">
         <div className="w-full max-w-lg border border-gray-200 rounded-lg bg-white px-8 py-10 shadow-lg">
-          <h1 className="text-3xl mb-6 text-gray-900 font-semibold">
+          <h1 className="text-3xl mb-6 text-gray-900 font-semibold underline">
             User Profile
           </h1>
           <h3 className="text-lg mb-4 text-gray-700">
