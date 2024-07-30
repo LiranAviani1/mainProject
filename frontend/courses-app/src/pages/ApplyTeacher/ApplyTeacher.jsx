@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faEnvelope, faPhone, faFileAlt, faImage } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../components/Navbar/Navbar";
 import axiosInstance from "../../utils/axiosInstance";
 import Toast from "../../components/ToastMessage/Toast";
@@ -59,14 +61,14 @@ const ApplyTeacher = () => {
 
   const handleApply = async (e) => {
     e.preventDefault();
-  
+
     if (!fullName || !email || !phone || !experience || !qualifications || !file) {
       setError('Please fill all fields and upload a file.');
       return;
     }
-  
+
     setError('');
-  
+
     try {
       const token = localStorage.getItem("token"); // Get token from local storage
       const formData = new FormData();
@@ -76,14 +78,14 @@ const ApplyTeacher = () => {
       formData.append("experience", experience);
       formData.append("qualifications", qualifications);
       formData.append("file", file);
-  
+
       const response = await axiosInstance.post('/apply-teacher', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         }
       });
-  
+
       if (response.data && !response.data.error) {
         showToastMessage('Application submitted successfully!', 'success');
         setFullName('');
@@ -135,7 +137,7 @@ const ApplyTeacher = () => {
     setIsSearch(false);
     getAllCourses();
   };
-  
+
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
@@ -184,49 +186,54 @@ const ApplyTeacher = () => {
             <form onSubmit={handleApply}>
               <h4 className="text-2xl font-semibold text-center mb-6 underline">Apply to be a Teacher</h4>
 
-              <div className="mb-4">
+              <div className="mb-4 relative">
+                <FontAwesomeIcon icon={faUser} className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Full Name"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
 
-              <div className="mb-4">
+              <div className="mb-4 relative">
+                <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="email"
                   placeholder="Email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
-              <div className="mb-4">
+              <div className="mb-4 relative">
+                <FontAwesomeIcon icon={faPhone} className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Phone"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
 
-              <div className="mb-4">
+              <div className="mb-4 relative">
+                <FontAwesomeIcon icon={faFileAlt} className="absolute left-3 top-3 text-gray-400" />
                 <textarea
                   placeholder="Experience"
-                  className="w-full h-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full h-32 px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={experience}
                   onChange={(e) => setExperience(e.target.value)}
                 />
               </div>
 
-              <div className="mb-4">
+              <div className="mb-4 relative">
+                <FontAwesomeIcon icon={faFileAlt} className="absolute left-3 top-3 text-gray-400" />
                 <textarea
                   placeholder="Qualifications"
-                  className="w-full h-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full h-32 px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={qualifications}
                   onChange={(e) => setQualifications(e.target.value)}
                 />
@@ -238,7 +245,7 @@ const ApplyTeacher = () => {
                   {file ? (
                     <p>{file.name}</p>
                   ) : (
-                    <p>Drag 'n' drop an image here, or click to select an image</p>
+                    <p><FontAwesomeIcon icon={faImage} className="text-gray-400 mr-2" />Drag and drop an image here, or click to select an image</p>
                   )}
                 </div>
                 {fileError && <p className="text-red-500 text-sm mt-2">{fileError}</p>}

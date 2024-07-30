@@ -72,7 +72,7 @@ function About() {
         <h1 className="text-4xl font-bold mb-6 text-center text-gray-800 underline">
           About Us
         </h1>
-        <div className="text-lg text-gray-700 mb-6">
+        <div className="text-lg text-gray-700 mb-6 space-y-6">
           <p className="mb-4">
             Welcome to our platform, where private teachers can create and
             manage their own courses. Whether you are students looking for
