@@ -35,6 +35,10 @@ const AdminPanel = () => {
     isShown: false,
     data: null,
   });
+  const [viewCourse, setViewCourse] = useState({
+    isShown: false,
+    data: null,
+  });
   const navigate = useNavigate();
 
   const getAllUsers = async () => {
@@ -184,6 +188,13 @@ const AdminPanel = () => {
     setViewApplication({
       isShown: true,
       data: application,
+    });
+  };
+
+  const handleViewCourse = (course) => {
+    setViewCourse({
+      isShown: true,
+      data: course,
     });
   };
 
@@ -348,6 +359,7 @@ const AdminPanel = () => {
               courses={courses}
               onDeleteCourse={deleteCourse}
               onEditCourse={handleEditCourse}
+              onViewCourse={handleViewCourse}
             />
           </div>
         )}
@@ -468,6 +480,73 @@ const AdminPanel = () => {
                 onClick={() =>
                   setViewApplication({ isShown: false, data: null })
                 }
+                className="mt-6 py-2 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 block mx-auto"
+              >
+                Close
+              </button>
+            </>
+          )}
+        </div>
+      </Modal>
+      <Modal
+        isOpen={viewCourse.isShown}
+        onRequestClose={() => setViewCourse({ isShown: false, data: null })}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.5)",
+          },
+          content: {
+            inset: "10%",
+            border: "none",
+            borderRadius: "1rem",
+            padding: "0",
+            maxWidth: "800px",
+            margin: "auto",
+            background: "transparent",
+          },
+        }}
+        contentLabel="View Course Modal"
+      >
+        <div className="relative bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-auto">
+          {viewCourse.data && (
+            <>
+              <h2 className="text-3xl font-bold mb-6 text-center underline">
+                Course Details
+              </h2>
+              <div className="space-y-4">
+                <p className="text-lg">
+                  <strong>Title:</strong> {viewCourse.data.title}
+                </p>
+                <p className="text-lg">
+                  <strong>Category:</strong> {viewCourse.data.category}
+                </p>
+                <p className="text-lg">
+                  <strong>Sub-Category:</strong> {viewCourse.data.subCategory}
+                </p>
+                <p className="text-lg">
+                  <strong>Teacher:</strong> {viewCourse.data.teacher?.fullName || "N/A"}
+                </p>
+                <p className="text-lg">
+                  <strong>Content:</strong>
+                </p>
+                <div className="border border-gray-300 rounded p-4 bg-gray-50">
+                  {viewCourse.data.content}
+                </div>
+                <p className="text-lg">
+                  <strong>Date Start:</strong> {new Date(viewCourse.data.dateStart).toLocaleDateString()}
+                </p>
+                <p className="text-lg">
+                  <strong>Date End:</strong> {new Date(viewCourse.data.dateEnd).toLocaleDateString()}
+                </p>
+                <p className="text-lg">
+                  <strong>Capacity:</strong> {viewCourse.data.capacity}
+                </p>
+                <p className="text-lg">
+                  <strong>Price:</strong> ${viewCourse.data.price}
+                </p>
+              </div>
+              <button
+                onClick={() => setViewCourse({ isShown: false, data: null })}
                 className="mt-6 py-2 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 block mx-auto"
               >
                 Close

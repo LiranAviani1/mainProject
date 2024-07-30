@@ -1,6 +1,6 @@
 import React from "react";
 
-const CourseTable = ({ courses, onDeleteCourse, onEditCourse }) => {
+const CourseTable = ({ courses, onDeleteCourse, onEditCourse, onViewCourse }) => {
   return (
     <table className="min-w-full bg-white">
       <thead className="bg-gray-800 text-white">
@@ -20,6 +20,12 @@ const CourseTable = ({ courses, onDeleteCourse, onEditCourse }) => {
             <td className="py-2">{course.subCategory}</td>
             <td className="py-2">{course.teacher?.fullName || "N/A"}</td>
             <td className="py-2">
+            <button
+                className="bg-green-500 text-white px-4 py-2 rounded mr-2"
+                onClick={() => onViewCourse(course)}
+              >
+                View
+              </button>
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
                 onClick={() => onEditCourse(course)}
@@ -32,6 +38,7 @@ const CourseTable = ({ courses, onDeleteCourse, onEditCourse }) => {
               >
                 Delete
               </button>
+              
             </td>
           </tr>
         ))}
