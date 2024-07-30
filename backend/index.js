@@ -815,19 +815,14 @@ app.put("/deny-application/:applicationId", async (req, res) => {
 app.delete('/delete-application/:userId', authenticateToken, async (req, res) => {
   try {
     const userId = req.params.userId;
-    console.log(`Attempting to delete application for user ID: ${userId}`); // Log the user ID
-
     const application = await TeacherApplication.findOne({ userId: userId });
     if (!application) {
-      console.log(`Application for user ID: ${userId} not found.`);
       return res.status(404).json({ error: true, message: 'Application not found' });
     }
 
     await TeacherApplication.findByIdAndDelete(application._id);
-    console.log(`Application for user ID: ${userId} deleted successfully.`);
     res.json({ message: 'Application deleted successfully!' });
   } catch (error) {
-    console.error('Error deleting application:', error); // Log the error details
     res.status(500).json({ error: 'An error occurred while deleting the application.' });
   }
 });
