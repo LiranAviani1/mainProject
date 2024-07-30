@@ -736,15 +736,15 @@ app.get("/search-courses", authenticateToken, async (req, res) => {
 });
 
 // In your backend file (e.g., app.js)
-app.post("/apply-teacher", authenticateToken, upload.single("file"), async (req, res) => {
+app.post("/apply-teacher", authenticateToken, upload.single('file'), async (req, res) => {
   const { fullName, email, phone, qualifications, experience } = req.body;
-  const userId = req.user.user._id;
+  const userId = req.user.user._id; // Assuming user ID is stored in req.user.user._id
 
-  if (!fullName || !email || !phone || !qualifications || !experience) {
+  if (!fullName || !email || !phone || !qualifications || !experience || !req.file) {
     return res.status(400).json({ error: true, message: "All fields are required" });
   }
 
-  const filePath = req.file ? req.file.path : null;
+  const fileUrl = req.file.path; // Get the file path
 
   try {
     const application = new TeacherApplication({
@@ -754,9 +754,9 @@ app.post("/apply-teacher", authenticateToken, upload.single("file"), async (req,
       phone,
       qualifications,
       experience,
+      fileUrl,
       status: "pending",
       appliedOn: new Date(),
-      imagePath: filePath // Save the image path
     });
 
     await application.save();
@@ -766,6 +766,7 @@ app.post("/apply-teacher", authenticateToken, upload.single("file"), async (req,
     return res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
 
 
 

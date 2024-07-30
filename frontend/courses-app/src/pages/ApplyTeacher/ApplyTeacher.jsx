@@ -12,6 +12,7 @@ const ApplyTeacher = () => {
   const [experience, setExperience] = useState('');
   const [qualifications, setQualifications] = useState('');
   const [file, setFile] = useState(null);
+  const [fileError, setFileError] = useState(null);
   const [error, setError] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [applicationStatus, setApplicationStatus] = useState('');
@@ -41,7 +42,14 @@ const ApplyTeacher = () => {
   };
 
   const onDrop = (acceptedFiles) => {
-    setFile(acceptedFiles[0]);
+    const file = acceptedFiles[0];
+    if (file && !['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+      setFileError('Only image files are allowed (jpeg, png, gif)');
+      setFile(null);
+    } else {
+      setFileError(null);
+      setFile(file);
+    }
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -233,6 +241,7 @@ const ApplyTeacher = () => {
                     <p>Drag 'n' drop an image here, or click to select an image</p>
                   )}
                 </div>
+                {fileError && <p className="text-red-500 text-sm mt-2">{fileError}</p>}
               </div>
 
               {error && <p className="text-red-500 text-sm pb-2">{error}</p>}
