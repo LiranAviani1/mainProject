@@ -458,6 +458,17 @@ const AdminPanel = () => {
                 <div className="border border-gray-300 rounded p-4 bg-gray-50">
                   {viewApplication.data.experience}
                 </div>
+                {viewApplication.data.imagePath && (
+                  <div className="mt-4">
+                    <p className="text-lg"><strong>Uploaded Image:</strong></p>
+                    <img
+                      src={`/${viewApplication.data.imagePath}`}
+                      alt="Uploaded file"
+                      className="border border-gray-300 rounded p-2 mt-2"
+                      style={{ maxWidth: "100%", height: "auto" }}
+                    />
+                  </div>
+                )}
               </div>
               <button
                 onClick={() =>

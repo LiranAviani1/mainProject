@@ -14,6 +14,8 @@ const app = express();
 
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
+const multer = require("multer");
+const path = require("path");
 
 app.use(express.json());
 
@@ -22,6 +24,26 @@ app.use(
     origin: "*",
   })
 );
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Save files to the "uploads" directory
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Use timestamp as the file name
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only images are allowed"), false);
+  }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 app.get("/", (req, res) => {
   res.json({ data: "hello" });
@@ -714,25 +736,27 @@ app.get("/search-courses", authenticateToken, async (req, res) => {
 });
 
 // In your backend file (e.g., app.js)
-app.post("/apply-teacher", authenticateToken, async (req, res) => {
+app.post("/apply-teacher", authenticateToken, upload.single("file"), async (req, res) => {
   const { fullName, email, phone, qualifications, experience } = req.body;
-  const userId = req.user.user._id; // Assuming user ID is stored in req.user.user._id
+  const userId = req.user.user._id;
 
   if (!fullName || !email || !phone || !qualifications || !experience) {
     return res.status(400).json({ error: true, message: "All fields are required" });
   }
 
-  // Save application to the database
+  const filePath = req.file ? req.file.path : null;
+
   try {
     const application = new TeacherApplication({
-      userId, // Store the user ID
+      userId,
       fullName,
       email,
       phone,
       qualifications,
       experience,
-      status: "pending", // you can add a status field to track application status
+      status: "pending",
       appliedOn: new Date(),
+      imagePath: filePath // Save the image path
     });
 
     await application.save();
@@ -742,6 +766,8 @@ app.post("/apply-teacher", authenticateToken, async (req, res) => {
     return res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
+
 
 
 // Get all teacher applications

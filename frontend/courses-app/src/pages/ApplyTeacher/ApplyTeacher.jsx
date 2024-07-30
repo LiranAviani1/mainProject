@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDropzone } from "react-dropzone";
 import Navbar from "../../components/Navbar/Navbar";
 import axiosInstance from "../../utils/axiosInstance";
 import Toast from "../../components/ToastMessage/Toast";
@@ -10,6 +11,7 @@ const ApplyTeacher = () => {
   const [phone, setPhone] = useState('');
   const [experience, setExperience] = useState('');
   const [qualifications, setQualifications] = useState('');
+  const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [applicationStatus, setApplicationStatus] = useState('');
@@ -38,11 +40,20 @@ const ApplyTeacher = () => {
     });
   };
 
+  const onDrop = (acceptedFiles) => {
+    setFile(acceptedFiles[0]);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: "image/jpeg, image/png, image/gif",
+  });
+
   const handleApply = async (e) => {
     e.preventDefault();
   
-    if (!fullName || !email || !phone || !experience || !qualifications) {
-      setError('Please fill all fields.');
+    if (!fullName || !email || !phone || !experience || !qualifications || !file) {
+      setError('Please fill all fields and upload a file.');
       return;
     }
   
@@ -50,16 +61,18 @@ const ApplyTeacher = () => {
   
     try {
       const token = localStorage.getItem("token"); // Get token from local storage
+      const formData = new FormData();
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("experience", experience);
+      formData.append("qualifications", qualifications);
+      formData.append("file", file);
   
-      const response = await axiosInstance.post('/apply-teacher', {
-        fullName,
-        email,
-        phone,
-        experience,
-        qualifications
-      }, {
+      const response = await axiosInstance.post('/apply-teacher', formData, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
         }
       });
   
@@ -70,6 +83,7 @@ const ApplyTeacher = () => {
         setPhone('');
         setExperience('');
         setQualifications('');
+        setFile(null);
         navigate('/');
       }
     } catch (error) {
@@ -208,6 +222,17 @@ const ApplyTeacher = () => {
                   value={qualifications}
                   onChange={(e) => setQualifications(e.target.value)}
                 />
+              </div>
+
+              <div className="mb-4">
+                <div {...getRootProps({ className: "dropzone" })} className="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer">
+                  <input {...getInputProps()} />
+                  {file ? (
+                    <p>{file.name}</p>
+                  ) : (
+                    <p>Drag 'n' drop an image here, or click to select an image</p>
+                  )}
+                </div>
               </div>
 
               {error && <p className="text-red-500 text-sm pb-2">{error}</p>}
