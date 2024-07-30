@@ -9,6 +9,7 @@ import TeacherApplicationsTable from "../../components/Tabels/TeacherApplication
 import Modal from "react-modal";
 import AddEditCourses from "../Home/AddEditCourses";
 import AddEditUser from "../EditUser/Edit";
+import { UserIcon, BookOpenIcon, ClipboardListIcon, SearchIcon } from '@heroicons/react/solid';
 
 Modal.setAppElement("#root");
 
@@ -302,39 +303,43 @@ const AdminPanel = () => {
           </div>
           <div className="flex justify-center space-x-2">
             <button
-              className={`px-4 py-2 rounded ${
+              className={`flex items-center px-4 py-2 rounded ${
                 filter === "users"
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 hover:bg-gray-300"
               }`}
               onClick={() => setFilter("users")}
             >
+              <UserIcon className="h-5 w-5 mr-2" />
               Users
             </button>
             <button
-              className={`px-4 py-2 rounded ${
+              className={`flex items-center px-4 py-2 rounded ${
                 filter === "courses"
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 hover:bg-gray-300"
               }`}
               onClick={() => setFilter("courses")}
             >
+              <BookOpenIcon className="h-5 w-5 mr-2" />
               Courses
             </button>
             <button
-              className={`px-4 py-2 rounded ${
+              className={`flex items-center px-4 py-2 rounded ${
                 filter === "applications"
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 hover:bg-gray-300"
               }`}
               onClick={() => setFilter("applications")}
             >
+              <ClipboardListIcon className="h-5 w-5 mr-2" />
               Applications
             </button>
             <button
               onClick={onSearch}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
+              className="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
             >
+              <SearchIcon className="h-5 w-5 mr-2" />
               Search
             </button>
           </div>
@@ -466,7 +471,9 @@ const AdminPanel = () => {
                 </div>
                 {viewApplication.data.fileUrl && (
                   <div className="mt-4">
-                    <p className="text-lg"><strong>Uploaded Image:</strong></p>
+                    <p className="text-lg">
+                      <strong>Uploaded Image:</strong>
+                    </p>
                     <img
                       src={`http://localhost:8000${viewApplication.data.fileUrl}`}
                       alt="Uploaded file"
@@ -524,7 +531,8 @@ const AdminPanel = () => {
                   <strong>Sub-Category:</strong> {viewCourse.data.subCategory}
                 </p>
                 <p className="text-lg">
-                  <strong>Teacher:</strong> {viewCourse.data.teacher?.fullName || "N/A"}
+                  <strong>Teacher:</strong>{" "}
+                  {viewCourse.data.teacher?.fullName || "N/A"}
                 </p>
                 <p className="text-lg">
                   <strong>Content:</strong>
@@ -533,10 +541,12 @@ const AdminPanel = () => {
                   {viewCourse.data.content}
                 </div>
                 <p className="text-lg">
-                  <strong>Date Start:</strong> {new Date(viewCourse.data.dateStart).toLocaleDateString()}
+                  <strong>Date Start:</strong>{" "}
+                  {new Date(viewCourse.data.dateStart).toLocaleDateString()}
                 </p>
                 <p className="text-lg">
-                  <strong>Date End:</strong> {new Date(viewCourse.data.dateEnd).toLocaleDateString()}
+                  <strong>Date End:</strong>{" "}
+                  {new Date(viewCourse.data.dateEnd).toLocaleDateString()}
                 </p>
                 <p className="text-lg">
                   <strong>Capacity:</strong> {viewCourse.data.capacity}
