@@ -13,6 +13,7 @@ const ApplyTeacher = () => {
   const [error, setError] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [applicationStatus, setApplicationStatus] = useState('');
+  const [applicationId, setApplicationId] = useState('');
   const [isSearch, setIsSearch] = useState(false);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
@@ -76,6 +77,26 @@ const ApplyTeacher = () => {
     }
   };
 
+  const handleCancelApplication = async () => {
+    try {
+      console.log(`Request to delete application with ID: ${userInfo._id}`); // Log the application ID
+      const response = await axiosInstance.delete(`/delete-application/${userInfo._id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      console.log('Delete response:', response); // Log the response
+      if (response.data && !response.data.error) {
+        showToastMessage('Application canceled successfully!', 'success');
+        setApplicationStatus('');
+        setApplicationId('');
+      }
+    } catch (error) {
+      console.error('An error occurred while canceling the application:', error); // Log the error details
+      showToastMessage('An error occurred while canceling the application. Please try again.', 'error');
+    }
+  };
+
   const onSearchCourse = async (query) => {
     try {
       const response = await axiosInstance.get("/search-courses", {
@@ -106,6 +127,7 @@ const ApplyTeacher = () => {
         const applicationResponse = await axiosInstance.get(`/get-application-status/${response.data.user._id}`);
         if (applicationResponse.data && applicationResponse.data.status) {
           setApplicationStatus(applicationResponse.data.status);
+          setApplicationId(applicationResponse.data.applicationId); // Set the application ID
         }
       }
     } catch (error) {
@@ -137,6 +159,7 @@ const ApplyTeacher = () => {
           ) : applicationStatus === "pending" ? (
             <div className="text-center font-semibold text-red-500 text-lg">
               Your application is pending. You cannot apply again at this time.
+              <button onClick={handleCancelApplication} className="mt-4 py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300">Cancel Application</button>
             </div>
           ) : (
             <form onSubmit={handleApply}>
