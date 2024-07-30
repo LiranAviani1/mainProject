@@ -54,7 +54,7 @@ const ApplyTeacher = () => {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: "image/jpeg, image/png, image/gif",
+    accept: { 'image/jpeg': [], 'image/png': [], 'image/gif': [] },
   });
 
   const handleApply = async (e) => {

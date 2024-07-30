@@ -25,12 +25,14 @@ app.use(
   })
 );
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Save files to the "uploads" directory
+    cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Use timestamp as the file name
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
@@ -44,6 +46,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
+
 
 app.get("/", (req, res) => {
   res.json({ data: "hello" });
@@ -738,13 +741,13 @@ app.get("/search-courses", authenticateToken, async (req, res) => {
 // In your backend file (e.g., app.js)
 app.post("/apply-teacher", authenticateToken, upload.single('file'), async (req, res) => {
   const { fullName, email, phone, qualifications, experience } = req.body;
-  const userId = req.user.user._id; // Assuming user ID is stored in req.user.user._id
+  const userId = req.user.user._id;
 
   if (!fullName || !email || !phone || !qualifications || !experience || !req.file) {
     return res.status(400).json({ error: true, message: "All fields are required" });
   }
 
-  const fileUrl = req.file.path; // Get the file path
+  const fileUrl = `/uploads/${req.file.filename}`;
 
   try {
     const application = new TeacherApplication({
@@ -766,8 +769,6 @@ app.post("/apply-teacher", authenticateToken, upload.single('file'), async (req,
     return res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
-
-
 
 
 

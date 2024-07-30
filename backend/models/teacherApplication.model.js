@@ -9,7 +9,7 @@ const TeacherApplicationSchema = new mongoose.Schema({
   experience: { type: String, required: true },
   status: { type: String, default: "pending" },
   appliedOn: { type: Date, default: Date.now },
-  imagePath: { type: String },
+  fileUrl: { type: String }, // Ensure this matches the frontend key
 });
 
 const TeacherApplication = mongoose.model("TeacherApplication", TeacherApplicationSchema);

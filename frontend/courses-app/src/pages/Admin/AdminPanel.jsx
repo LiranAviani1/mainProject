@@ -10,8 +10,7 @@ import Modal from "react-modal";
 import AddEditCourses from "../Home/AddEditCourses";
 import AddEditUser from "../EditUser/Edit";
 
-// Set the app element for accessibility
-Modal.setAppElement("#root"); // Use your main app element here
+Modal.setAppElement("#root");
 
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
@@ -114,8 +113,8 @@ const AdminPanel = () => {
       if (response.data && !response.data.error) {
         showToastMessage("Application Approved Successfully", "approve");
         setTimeout(() => {
-          window.location.reload(); // Reload the page after showing the toast message
-        }, 700); // Adjust the delay as needed
+          window.location.reload();
+        }, 700);
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -129,7 +128,7 @@ const AdminPanel = () => {
       );
       if (response.data && !response.data.error) {
         showToastMessage("Application Denied and Deleted Successfully", "deny");
-        getAllApplications(); // Refresh the applications list
+        getAllApplications();
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -145,7 +144,7 @@ const AdminPanel = () => {
         showToastMessage("User role updated to 'user' successfully", "success");
         getAllUsers();
         setTimeout(() => {
-          window.location.reload(); // Reload the page after showing the toast message
+          window.location.reload();
         }, 700);
       }
     } catch (error) {
@@ -189,8 +188,6 @@ const AdminPanel = () => {
   };
 
   const onSearch = async () => {
-    console.log("Searching for:", searchQuery);
-    console.log("Filter:", filter);
     try {
       if (filter === "users") {
         const response = await axiosInstance.get("/search-users", {
@@ -199,7 +196,6 @@ const AdminPanel = () => {
         if (response.data && response.data.users) {
           setUsers(response.data.users);
           setIsSearch(true);
-          console.log("Users found:", response.data.users);
         }
       } else if (filter === "courses") {
         const response = await axiosInstance.get("/search-courses", {
@@ -219,7 +215,6 @@ const AdminPanel = () => {
           );
           setCourses(coursesWithTeacherInfo);
           setIsSearch(true);
-          console.log("Courses found:", response.data.courses);
         }
       } else if (filter === "applications") {
         const response = await axiosInstance.get("/search-applications", {
@@ -228,7 +223,6 @@ const AdminPanel = () => {
         if (response.data && response.data.applications) {
           setApplications(response.data.applications);
           setIsSearch(true);
-          console.log("Applications found:", response.data.applications);
         }
       }
     } catch (error) {
@@ -423,7 +417,7 @@ const AdminPanel = () => {
             border: "none",
             borderRadius: "1rem",
             padding: "0",
-            maxWidth: "800px", // Adjusted width
+            maxWidth: "800px",
             margin: "auto",
             background: "transparent",
           },
@@ -458,11 +452,11 @@ const AdminPanel = () => {
                 <div className="border border-gray-300 rounded p-4 bg-gray-50">
                   {viewApplication.data.experience}
                 </div>
-                {viewApplication.data.imagePath && (
+                {viewApplication.data.fileUrl && (
                   <div className="mt-4">
                     <p className="text-lg"><strong>Uploaded Image:</strong></p>
                     <img
-                      src={`/${viewApplication.data.imagePath}`}
+                      src={`http://localhost:8000${viewApplication.data.fileUrl}`}
                       alt="Uploaded file"
                       className="border border-gray-300 rounded p-2 mt-2"
                       style={{ maxWidth: "100%", height: "auto" }}
