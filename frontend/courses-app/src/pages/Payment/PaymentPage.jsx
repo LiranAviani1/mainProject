@@ -28,9 +28,9 @@ const PaymentPage = () => {
     const cvvRegex = /^\d{3}$/;
 
     if (!cardType) {
-        showToastMessage("Please select a card type", "error");
-        return false;
-      }
+      showToastMessage("Please select a card type", "error");
+      return false;
+    }
     if (!idRegex.test(ID)) {
       showToastMessage("Identification number must be exactly 9 digits", "error");
       return false;
@@ -47,7 +47,6 @@ const PaymentPage = () => {
       showToastMessage("CVV must be exactly 3 digits", "error");
       return false;
     }
-    
 
     return true;
   };
@@ -127,9 +126,10 @@ const PaymentPage = () => {
                     name="cardType"
                     value="visa"
                     onChange={(e) => setCardType(e.target.value)}
+                    className="form-radio text-blue-500"
                   />
                   <FaCcVisa size={40} />
-                  <span>Visa</span>
+                  <span className="text-sm">Visa</span>
                 </label>
                 <label className="flex flex-col items-center space-y-1">
                   <input
@@ -137,9 +137,10 @@ const PaymentPage = () => {
                     name="cardType"
                     value="mastercard"
                     onChange={(e) => setCardType(e.target.value)}
+                    className="form-radio text-blue-500"
                   />
                   <FaCcMastercard size={40} />
-                  <span>Mastercard</span>
+                  <span className="text-sm">Mastercard</span>
                 </label>
                 <label className="flex flex-col items-center space-y-1">
                   <input
@@ -147,9 +148,10 @@ const PaymentPage = () => {
                     name="cardType"
                     value="isracard"
                     onChange={(e) => setCardType(e.target.value)}
+                    className="form-radio text-blue-500"
                   />
                   <FaCreditCard size={40} />
-                  <span>Isracard</span>
+                  <span className="text-sm">Isracard</span>
                 </label>
                 <label className="flex flex-col items-center space-y-1">
                   <input
@@ -157,9 +159,10 @@ const PaymentPage = () => {
                     name="cardType"
                     value="amex"
                     onChange={(e) => setCardType(e.target.value)}
+                    className="form-radio text-blue-500"
                   />
                   <FaCcAmex size={40} />
-                  <span>American Express</span>
+                  <span className="text-sm">American Express</span>
                 </label>
               </div>
             </div>
