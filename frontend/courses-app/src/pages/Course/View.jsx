@@ -110,38 +110,49 @@ const View = () => {
     return false;
   };
   
-
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await axiosInstance.put(
-        "/register-course/" + courseDetails._id,
-        {
-          userId: userInfo._id,
-        }
-      );
-
-      if (response.data.error === false) {
-        showToastMessage("Successfully registered", "add");
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      } else {
-        showToastMessage(response.data.message, "delete");
-      }
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        setError(error.response.data.message);
-      } else {
-        setError("An unexpected error occurred");
-      }
-    }
+  
+    // Navigate to payment page instead of directly registering
+    navigate("/payment", {
+      state: {
+        userInfo: userInfo,
+        courseDetails: courseDetails,
+      },
+    });
   };
+  
+  // const handleRegister = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const response = await axiosInstance.put(
+  //       "/register-course/" + courseDetails._id,
+  //       {
+  //         userId: userInfo._id,
+  //       }
+  //     );
+
+  //     if (response.data.error === false) {
+  //       showToastMessage("Successfully registered", "add");
+  //       setTimeout(() => {
+  //         navigate("/");
+  //       }, 1000);
+  //     } else {
+  //       showToastMessage(response.data.message, "delete");
+  //     }
+  //   } catch (error) {
+  //     if (
+  //       error.response &&
+  //       error.response.data &&
+  //       error.response.data.message
+  //     ) {
+  //       setError(error.response.data.message);
+  //     } else {
+  //       setError("An unexpected error occurred");
+  //     }
+  //   }
+  // };
 
   const handleRemoveMember = async (memberId) => {
     try {

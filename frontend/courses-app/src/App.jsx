@@ -9,6 +9,7 @@ import Profile from "./pages/UserProfile/Profile";
 import View from "./pages/Course/View";
 import Admin from "./pages/Admin/AdminPanel.jsx"
 import ApplyTeacher from "./pages/ApplyTeacher/ApplyTeacher.jsx";
+import PaymentPage from "./pages/Payment/PaymentPage.jsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/course-view" element={<View />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/apply-teacher" element={<ApplyTeacher />} />
+          <Route path="/payment" element={<PaymentPage />} />
         </Routes>
       </Router>
     </div>
