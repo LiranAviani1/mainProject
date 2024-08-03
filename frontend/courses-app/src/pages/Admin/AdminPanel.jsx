@@ -256,6 +256,9 @@ const AdminPanel = () => {
       const response = await axiosInstance.get("/get-user");
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
+        if (response.data.user.role !== "admin") {
+          navigate("/");
+        }
       }
     } catch (error) {
       if (error.response.status === 401) {
