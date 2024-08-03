@@ -1,5 +1,5 @@
 import moment from "moment";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdCreate, MdDelete } from "react-icons/md";
 import CourseImage from "../../assets/images/course-image.jpg";
 
@@ -7,7 +7,6 @@ const CourseCard = ({
   userInfo,
   userId,
   title,
-  content,
   category,
   subCategory,
   dateStart,
@@ -19,6 +18,14 @@ const CourseCard = ({
   onDelete,
   onView,
 }) => {
+  const [currentStatus, setCurrentStatus] = useState(status);
+
+  useEffect(() => {
+    if (moment(dateEnd).isBefore(moment())) {
+      setCurrentStatus("close");
+    }
+  }, [dateEnd]);
+
   return (
     <div className="border rounded-lg overflow-hidden bg-white shadow-md hover:shadow-xl transition-transform transform hover:scale-105 duration-300">
       <div className="relative">
@@ -62,16 +69,21 @@ const CourseCard = ({
           <div className="text-m font-semibold">
             Status:{" "}
             <span
-              className={status === "open" ? "text-green-600" : "text-red-600"}
+              className={
+                currentStatus === "open" ? "text-green-600" : "text-red-600"
+              }
             >
-              {status === "open" ? "OPEN" : "CLOSE"}
+              {currentStatus === "open" ? "OPEN" : "CLOSE"}
             </span>
           </div>
         </div>
         <div className="flex justify-center gap-3 mt-4">
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+            className={`bg-blue-500 text-white px-4 py-2 rounded-lg transition-colors duration-300 ${
+              currentStatus === "close" ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+            }`}
             onClick={onView}
+            disabled={currentStatus === "close" && moment(dateEnd).isBefore(moment())}
           >
             View Course
           </button>
