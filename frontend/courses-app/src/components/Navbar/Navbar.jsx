@@ -6,6 +6,8 @@ import {
   FaSearch,
   FaChalkboardTeacher,
   FaUserShield,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import ProfileInfo from "../Cards/ProfileInfo";
@@ -18,6 +20,7 @@ const Navbar = ({
 }) => {
   const isToken = localStorage.getItem("token");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -37,6 +40,10 @@ const Navbar = ({
     setSearchQuery("");
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <nav className="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white shadow-lg py-4">
       <div className="container mx-auto flex items-center justify-between px-6">
@@ -54,7 +61,7 @@ const Navbar = ({
             )}
           </h2>
         </div>
-        <div className="flex items-center space-x-8">
+        <div className="hidden xl:flex items-center space-x-8">
           {isToken && (
             <>
               <NavItem to="/dashboard" icon={FaHome} label="Home" />
@@ -74,7 +81,7 @@ const Navbar = ({
         </div>
 
         {isToken && (
-          <div className="flex items-center space-x-4">
+          <div className="hidden xl:flex items-center space-x-4">
             <SearchBar
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -95,7 +102,58 @@ const Navbar = ({
               )}
           </div>
         )}
+
+        <div className="xl:hidden flex items-center">
+          <button onClick={toggleMobileMenu}>
+            {isMobileMenuOpen ? (
+              <FaTimes className="text-2xl" />
+            ) : (
+              <FaBars className="text-2xl" />
+            )}
+          </button>
+        </div>
       </div>
+
+      {isMobileMenuOpen && (
+        <div className="xl:hidden bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white py-4">
+          <div className="container mx-auto flex flex-col space-y-4 px-6">
+            {isToken && (
+              <>
+                <NavItem to="/dashboard" icon={FaHome} label="Home" />
+                <NavItem to="/about" icon={FaInfoCircle} label="About" />
+                <NavItem
+                  to="/apply-teacher"
+                  icon={FaChalkboardTeacher}
+                  label="Teacher Application"
+                />
+                {userInfo && userInfo.role === "admin" && (
+                  <>
+                    <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" />
+                  </>
+                )}
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  handleSearch={handleSearch}
+                  onClearSearch={onClearSearch}
+                />
+                <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+                {userInfo &&
+                  (userInfo.role === "admin" || userInfo.role === "teacher") &&
+                  location.pathname === "/dashboard" && (
+                    <button
+                      className="flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-full shadow-md transition duration-300"
+                      onClick={onAddCourse}
+                    >
+                      <MdAdd className="text-2xl" />
+                      <span className="ml-2">Add Course</span>
+                    </button>
+                  )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
