@@ -168,7 +168,7 @@ app.post("/create-account", async (req, res) => {
 //edit user
 app.put("/edit-user/:userId", authenticateToken, async (req, res) => {
   const userId = req.params.userId;
-  const { email, password, fullName, birthday, gender, age, phone, address, role } = req.body;
+  const { email, password, fullName, birthday, gender, age, phone, address} = req.body;
 
   if (birthday) {
     const date = new Date(birthday);
@@ -208,8 +208,7 @@ app.put("/edit-user/:userId", authenticateToken, async (req, res) => {
     !gender &&
     !age &&
     !phone &&
-    !address &&
-    !role
+    !address
   ) {
     return res
       .status(400)
@@ -232,11 +231,6 @@ app.put("/edit-user/:userId", authenticateToken, async (req, res) => {
     if (phone) user.phone = phone;
     if (address) user.address = address;
 
-    // Only allow admins to update the role
-    const loggedInUser = req.user.user; // Assuming authenticateToken middleware sets req.user
-    if (role && loggedInUser.role === 'admin') {
-      user.role = role;
-    }
 
     await user.save();
 

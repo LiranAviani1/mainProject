@@ -85,6 +85,9 @@ export default function Profile() {
           <h3 className="text-lg mb-6 text-gray-700">
             <span className="font-semibold">Address:</span> {userInfo.address}
           </h3>
+          <h3 className="text-lg mb-6 text-gray-700">
+            <span className="font-semibold">Role:</span> {userInfo.role}
+          </h3>
           <button
             type="submit"
             className="w-3/5 mx-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"

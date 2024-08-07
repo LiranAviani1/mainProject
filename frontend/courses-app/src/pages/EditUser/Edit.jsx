@@ -24,7 +24,6 @@ const Edit = () => {
   const [password, setPassword] = useState(userInfo.password || "");
   const [birthday, setBirthday] = useState(userInfo.birthday ? formatDate(userInfo.birthday) : "");
   const [gender, setGender] = useState(userInfo.gender || "");
-  const [role, setRole] = useState(userInfo.role || "user");
   const [error, setError] = useState(null);
   const [allCourses, setAllCourses] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
@@ -101,7 +100,6 @@ const Edit = () => {
         address,
         birthday,
         gender,
-        role,
       });
 
       if (response.data && response.data.user) {
@@ -219,21 +217,6 @@ const Edit = () => {
                   <option value="other">Other</option>
                 </select>
               </div>
-
-              {userInfo.role === "admin" && (
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium text-gray-700">Role</label>
-                  <select
-                    className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                  >
-                    <option value="user">User</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div>
-              )}
 
               {error && <p className="text-red-500 text-xs">{error}</p>}
 
