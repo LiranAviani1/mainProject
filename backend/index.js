@@ -70,20 +70,6 @@ app.post("/create-account", async (req, res) => {
       .json({ error: true, message: "Birthday is required" });
   }
 
-  if (birthday) {
-    const date = new Date(birthday);
-    const today = new Date();
-    const age = today.getFullYear() - date.getFullYear();
-    const month = today.getMonth() - date.getMonth();
-    if (month < 0 || (month === 0 && today.getDate() < date.getDate())) {
-      age--;
-    }
-    if (age < 18) {
-      return res
-        .status(400)
-        .json({ error: true, message: "You must be 18 years or older" });
-    }
-  }
 
   if (birthday && age) {
     const date = new Date(birthday);
@@ -170,20 +156,6 @@ app.put("/edit-user/:userId", authenticateToken, async (req, res) => {
   const userId = req.params.userId;
   const { email, password, fullName, birthday, gender, age, phone, address} = req.body;
 
-  if (birthday) {
-    const date = new Date(birthday);
-    const today = new Date();
-    const age = today.getFullYear() - date.getFullYear();
-    const month = today.getMonth() - date.getMonth();
-    if (month < 0 || (month === 0 && today.getDate() < date.getDate())) {
-      age--;
-    }
-    if (age < 18) {
-      return res
-        .status(400)
-        .json({ error: true, message: "You must be 18 years or older" });
-    }
-  }
 
   if (birthday && age) {
     const date = new Date(birthday);
