@@ -140,13 +140,13 @@ const AdminPanel = () => {
     }
   };
 
-  const changeUserRoleToUser = async (userId) => {
+  const changeUserRole = async (userId, role) => {
     try {
       const response = await axiosInstance.put(`/change-user-role/${userId}`, {
-        role: "user",
+        role,
       });
       if (response.data && !response.data.error) {
-        showToastMessage("User role updated to 'user' successfully", "success");
+        showToastMessage(`User role updated to '${role}' successfully`, "success");
         getAllUsers();
         setTimeout(() => {
           window.location.reload();
@@ -354,7 +354,7 @@ const AdminPanel = () => {
               users={users}
               onDeleteUser={deleteUser}
               onEditUser={handleEditUser}
-              onChangeUserRole={changeUserRoleToUser}
+              onChangeUserRole={changeUserRole}
             />
           </div>
         )}
