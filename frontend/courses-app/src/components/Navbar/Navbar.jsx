@@ -8,6 +8,7 @@ import {
   FaUserShield,
   FaBars,
   FaTimes,
+  FaBook,
 } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import ProfileInfo from "../Cards/ProfileInfo";
@@ -45,9 +46,10 @@ const Navbar = ({
   };
 
   return (
-    <nav className="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white shadow-lg py-4">
+    <nav className="bg-gray-800 text-white shadow-lg py-4">
       <div className="container mx-auto flex items-center justify-between px-6">
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-2">
+          <FaBook className="text-2xl" />
           <h2 className="text-xl font-bold tracking-tight">
             {isToken ? (
               <Link
@@ -115,7 +117,7 @@ const Navbar = ({
       </div>
 
       {isMobileMenuOpen && (
-        <div className="xl:hidden bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white py-4">
+        <div className="xl:hidden bg-gray-800 text-white py-4">
           <div className="container mx-auto flex flex-col space-y-4 px-6">
             {isToken && (
               <>
@@ -180,7 +182,7 @@ const SearchBar = ({
       type="text"
       value={searchQuery}
       onChange={({ target }) => setSearchQuery(target.value)}
-      className="bg-white text-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+      className="bg-gray-200 text-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"
       placeholder="Search..."
     />
     <button onClick={handleSearch} className="absolute right-0 top-0 mt-2 mr-2">

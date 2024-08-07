@@ -12,7 +12,7 @@ const UserTable = ({ users, onDeleteUser, onEditUser, onChangeUserRole }) => {
             <th className="w-1/4 py-3 px-4 border-b text-sm font-semibold text-center">Actions</th>
           </tr>
         </thead>
-        <tbody className="text-gray-700 font-bold text-center">
+        <tbody className="text-gray-700 font-semibold text-center">
           {users.map((user) => (
             <tr key={user._id} className="hover:bg-gray-100 transition-colors duration-200">
               <td className="py-3 px-4 border-b text-center">{user.fullName}</td>

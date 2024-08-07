@@ -13,7 +13,7 @@ const CourseTable = ({ courses, onDeleteCourse, onEditCourse, onViewCourse }) =>
             <th className="w-1/5 py-3 px-4 text-center">Actions</th>
           </tr>
         </thead>
-        <tbody className="text-gray-700 font-bold">
+        <tbody className="text-gray-700 font-semibold">
           {courses.map((course) => (
             <tr
               key={course._id}

@@ -13,7 +13,7 @@ const TeacherApplicationsTable = ({ applications, onApprove, onDeny, onView }) =
             <th className="w-1/5 py-3 px-4 border-b text-sm font-semibold text-center">Actions</th>
           </tr>
         </thead>
-        <tbody className="text-gray-700 font-bold text-center">
+        <tbody className="text-gray-700 font-semibold text-center">
           {applications.map((app) => (
             <tr key={app._id} className="hover:bg-gray-100 transition-colors duration-200">
               <td className="py-3 px-4 border-b text-center">{app.fullName}</td>
