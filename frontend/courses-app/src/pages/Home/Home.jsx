@@ -167,8 +167,7 @@ const Home = () => {
             message={
               isSearch
                 ? `Oops! No courses found matching your search.`
-                : `Start creating your first course! Click the 'Add' button to jot down your
-          thoughts, ideas, and reminders. Let's get started!`
+                : `Start creating your first course! Click the 'Add Course' button to add first course on the site`
             }
           />
         )}
