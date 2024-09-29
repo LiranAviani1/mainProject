@@ -16,7 +16,7 @@ const ProfileInfo = ({ userInfo, onLogout }) => {
             <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-yellow-300"></span>
           </p>
           <button
-            className="text-m font-medium group text-red-500 transition duration-30 hover:font-bold" onClick={onLogout}>
+            className="text-m font-medium group text-red-500 transition duration-30 " onClick={onLogout}>
             Logout
             <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-yellow-300"></span>
           </button>

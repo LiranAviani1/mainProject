@@ -10,6 +10,7 @@ import View from "./pages/Course/View";
 import Admin from "./pages/Admin/AdminPanel.jsx"
 import ApplyTeacher from "./pages/ApplyTeacher/ApplyTeacher.jsx";
 import PaymentPage from "./pages/Payment/PaymentPage.jsx";
+import ExpiredCourses from "./pages/Home/ExpiredCourses.jsx"
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/apply-teacher" element={<ApplyTeacher />} />
           <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/expired-courses" element={<ExpiredCourses />} />
         </Routes>
       </Router>
     </div>

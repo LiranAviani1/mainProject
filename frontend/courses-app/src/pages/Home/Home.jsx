@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import AddCoursesImg from "../../assets/images/add-courses.svg";
 import NoDataImg from "../../assets/images/no-data.svg";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
+import moment from "moment"; // Make sure to import moment
 
 const Home = () => {
   const [allCourses, setAllCourses] = useState([]);
@@ -139,27 +140,29 @@ const Home = () => {
 
         {allCourses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-            {allCourses.map((item) => {
-              return (
-                <CourseCard
-                  userInfo={userInfo ? userInfo : getUserInfo()}
-                  userId={item.userId}
-                  key={item._id}
-                  title={item.title}
-                  content={item.content}
-                  category={item.category}
-                  subCategory={item.subCategory}
-                  dateStart={item.dateStart}
-                  dateEnd={item.dateEnd}
-                  capacity={item.capacity}
-                  members={item.members}
-                  status={item.status}
-                  onEdit={() => handleEdit(item)}
-                  onDelete={() => deleteCourse(item)}
-                  onView={() => handleView(item)}
-                />
-              );
-            })}
+            {allCourses
+              .filter((item) => moment(item.dateEnd).isAfter(moment())) // Filter out expired courses
+              .map((item) => {
+                return (
+                  <CourseCard
+                    userInfo={userInfo ? userInfo : getUserInfo()}
+                    userId={item.userId}
+                    key={item._id}
+                    title={item.title}
+                    content={item.content}
+                    category={item.category}
+                    subCategory={item.subCategory}
+                    dateStart={item.dateStart}
+                    dateEnd={item.dateEnd}
+                    capacity={item.capacity}
+                    members={item.members}
+                    status={item.status}
+                    onEdit={() => handleEdit(item)}
+                    onDelete={() => deleteCourse(item)}
+                    onView={() => handleView(item)}
+                  />
+                );
+              })}
           </div>
         ) : (
           <EmptyCard

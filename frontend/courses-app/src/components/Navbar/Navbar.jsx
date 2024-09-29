@@ -47,7 +47,7 @@ const Navbar = ({
 
   return (
     <nav className="bg-gray-800 text-white shadow-lg py-4">
-      <div className="container mx-auto flex items-center justify-between px-6">
+      <div className="container mx-auto flex items-center justify-between ">
         <div className="flex items-center space-x-2">
           <FaBook className="text-2xl" />
           <h2 className="text-xl font-bold tracking-tight">
@@ -75,6 +75,7 @@ const Navbar = ({
               />
               {userInfo && userInfo.role === "admin" && (
                 <>
+                  <NavItem to="/expired-courses" icon={FaBook} label="Expired Courses" />
                   <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" />
                 </>
               )}

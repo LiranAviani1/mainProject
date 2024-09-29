@@ -26,6 +26,8 @@ const CourseCard = ({
     }
   }, [dateEnd]);
 
+  const isExpired = moment(dateEnd).isBefore(moment());
+
   return (
     <div className="border rounded-lg overflow-hidden bg-white shadow-md hover:shadow-xl transition-transform transform hover:scale-105 duration-300">
       <div className="relative">
@@ -80,10 +82,12 @@ const CourseCard = ({
         <div className="flex justify-center gap-3 mt-4">
           <button
             className={`bg-blue-500 text-white px-4 py-2 rounded-lg transition-colors duration-300 ${
-              currentStatus === "close" ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+              currentStatus === "close"
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-blue-700"
             }`}
             onClick={onView}
-            disabled={currentStatus === "close" && moment(dateEnd).isBefore(moment())}
+            disabled={isExpired}
           >
             View Course
           </button>
@@ -93,10 +97,12 @@ const CourseCard = ({
             (userInfo.role === "admin" ||
               (userInfo.role === "teacher" && userId === userInfo._id)) && (
               <>
-                <MdCreate
-                  className="text-2xl cursor-pointer hover:text-green-600 transition-colors duration-300"
-                  onClick={onEdit}
-                />
+                {!isExpired && (
+                  <MdCreate
+                    className="text-2xl cursor-pointer hover:text-green-600 transition-colors duration-300"
+                    onClick={onEdit}
+                  />
+                )}
                 <MdDelete
                   className="text-2xl cursor-pointer hover:text-red-600 transition-colors duration-300"
                   onClick={onDelete}
