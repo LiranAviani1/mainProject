@@ -25,7 +25,7 @@ const AddEditCourses = ({
   const [status, setStatus] = useState(courseData?.status || "open");
   const [error, setError] = useState(null);
 
-  const addNewCourse = async () => {
+  const addNewCourse = async (finalStatus) => {
     try {
       const response = await axiosInstance.post("/add-course", {
         title,
@@ -36,9 +36,9 @@ const AddEditCourses = ({
         dateEnd,
         capacity,
         price,
-        status,
+        status: finalStatus,  // Set the status based on the condition
       });
-
+  
       if (response.data && response.data.course) {
         showToastMessage("Course Added Successfully");
         getAllCourses();
@@ -46,11 +46,7 @@ const AddEditCourses = ({
         clearFields();
       }
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
+      if (error.response && error.response.data && error.response.data.message) {
         setError(error.response.data.message);
       } else {
         setError("An unexpected error occurred. Please try again.");
@@ -58,9 +54,9 @@ const AddEditCourses = ({
     }
   };
 
-  const editCourse = async () => {
+  const editCourse = async (finalStatus) => {
     const courseId = courseData._id;
-
+  
     try {
       const response = await axiosInstance.put("/edit-course/" + courseId, {
         title,
@@ -71,20 +67,16 @@ const AddEditCourses = ({
         dateEnd,
         capacity,
         price,
-        status,
+        status: finalStatus,  // Set the status based on the condition
       });
-
+  
       if (response.data && response.data.course) {
         showToastMessage("Course Updated Successfully", "update");
         getAllCourses();
         onClose();
       }
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
+      if (error.response && error.response.data && error.response.data.message) {
         setError(error.response.data.message);
       } else {
         setError("An unexpected error occurred. Please try again.");
@@ -97,73 +89,75 @@ const AddEditCourses = ({
       setError("Please enter the title");
       return;
     }
-
+  
     if (!content) {
       setError("Please enter the content");
       return;
     }
-
+  
     if (!category) {
       setError("Please enter the category");
       return;
     }
-
+  
     if (!subCategory) {
       setError("Please enter the subCategory");
       return;
     }
-
+  
     if (!dateStart) {
       setError("Please enter the dateStart");
       return;
     }
-
+  
     if (!dateEnd) {
       setError("Please enter the dateEnd");
       return;
     }
-
+  
     if (dateStart > dateEnd) {
       setError("Date Start should be less than Date End");
       return;
     }
-
+  
     if (!capacity) {
       setError("Please enter the capacity");
       return;
     }
-
+  
     if (capacity <= 0) {
       setError("Capacity should be greater than 0");
       return;
     }
-
+  
     if (members.length > capacity) {
       setError("Members should be less than or equal to capacity");
       return;
     }
-
-    if (!status) {
-      setError("Please enter the status");
-      return;
-    }
-
+  
     if (!price) {
       setError("Please enter the price");
       return;
     }
-
+  
     if (price <= 0) {
       setError("Price should be greater than 0");
       return;
     }
-
+  
+    // Calculate the current date and the course end date without time
+    const currentDate = new Date().setHours(0, 0, 0, 0);
+    const courseEndDate = new Date(dateEnd).setHours(0, 0, 0, 0);
+  
+    // If the course end date is today or in the past, set the status to "closed"
+    const finalStatus = courseEndDate <= currentDate ? "close" : status;
+  
     setError("");
-
+  
     if (type === "edit") {
-      editCourse();
+      editCourse(finalStatus);
     } else {
-      addNewCourse();
+      addNewCourse(finalStatus);
     }
   };
 
