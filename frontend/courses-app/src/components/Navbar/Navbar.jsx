@@ -85,12 +85,14 @@ const Navbar = ({
 
         {isToken && (
           <div className="hidden xl:flex items-center space-x-4">
-            <SearchBar
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              handleSearch={handleSearch}
-              onClearSearch={onClearSearch}
-            />
+            {location.pathname == "/dashboard" && (
+              <SearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                handleSearch={handleSearch}
+                onClearSearch={onClearSearch}
+              />
+            )}
             <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             {userInfo &&
               (userInfo.role === "admin" || userInfo.role === "teacher") &&
@@ -131,15 +133,18 @@ const Navbar = ({
                 />
                 {userInfo && userInfo.role === "admin" && (
                   <>
+                    <NavItem to="/expired-courses" icon={FaBook} label="Expired Courses" />
                     <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" />
                   </>
                 )}
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  handleSearch={handleSearch}
-                  onClearSearch={onClearSearch}
-                />
+                {location.pathname == "/dashboard" && (
+                  <SearchBar
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    handleSearch={handleSearch}
+                    onClearSearch={onClearSearch}
+                  />
+                )}
                 <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
                 {userInfo &&
                   (userInfo.role === "admin" || userInfo.role === "teacher") &&
