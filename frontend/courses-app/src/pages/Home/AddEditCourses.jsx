@@ -36,7 +36,7 @@ const AddEditCourses = ({
         dateEnd,
         capacity,
         price,
-        status: finalStatus,  // Set the status based on the condition
+        status: finalStatus,  
       });
   
       if (response.data && response.data.course) {
