@@ -50,7 +50,7 @@ export default function Profile() {
               <span className="font-semibold">Role:</span> {userInfo.role}
             </p>
           </div>
-          <div className="flex justify-center space-x-4 mt-8">
+          <div className="flex flex-col items-center mt-8 space-y-4">
             <button
               type="button"
               className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
