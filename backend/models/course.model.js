@@ -8,7 +8,7 @@ const courseSchema = new Schema({
   subCategory: { type: String, required: true },
   dateStart: { type: Date, default: new Date().getTime() },
   dateEnd: { type: Date, default: new Date().getTime() },
-  capacity: { type: Number, default: 0 },
+  capacity: { type: Number, default: 1 },
   members: { type: [String], default: [] },
   price: { type: Number, default: 0 },
   status: { type: String, default: "open" },
