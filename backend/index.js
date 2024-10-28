@@ -686,7 +686,6 @@ app.put("/remove-member/:courseId/:memberId", authenticateToken, async (req, res
 
 // Search Courses
 app.get("/search-courses", authenticateToken, async (req, res) => {
-  const { user } = req.user;
   const { query } = req.query;
 
   if (!query) {
