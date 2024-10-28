@@ -1,47 +1,13 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+// src/pages/Profile/Profile.jsx
+
+import React, { useState, useEffect } from "react";
+import { useLocation, Link } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import axiosInstance from "../../utils/axiosInstance";
-import { useState } from "react";
 
 export default function Profile() {
   const location = useLocation();
   const userInfo = location.state;
-  const [allCourses, setAllCourses] = useState([]);
-  const [isSearch, setIsSearch] = useState(false);
-
-  const getAllCourses = async () => {
-    try {
-      const response = await axiosInstance.get("/get-all-courses");
-
-      if (response.data && response.data.courses) {
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const onSearchCourse = async (query) => {
-    try {
-      const response = await axiosInstance.get("/search-courses", {
-        params: { query },
-      });
-
-      if (response.data && response.data.courses) {
-        setIsSearch(true);
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleClearSearch = () => {
-    setIsSearch(false);
-    getAllCourses();
-  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -54,48 +20,54 @@ export default function Profile() {
 
   return (
     <>
-      <Navbar
-        userInfo={userInfo}
-        onSearchCourse={onSearchCourse}
-        handleClearSearch={handleClearSearch}
-      />
-      <div className="flex items-center justify-center mt-20 text-center">
+      <Navbar userInfo={userInfo} />
+      <div className="flex flex-col items-center mt-20 text-center px-4 space-y-8">
         <div className="w-full max-w-lg border border-gray-200 rounded-lg bg-white px-8 py-10 shadow-lg">
-          <h1 className="text-3xl mb-6 text-gray-900 font-semibold underline">
-            User Profile
-          </h1>
-          <h3 className="text-lg mb-4 text-gray-700">
-            <span className="font-semibold">Email:</span> {userInfo.email}
-          </h3>
-          <h3 className="text-lg mb-4 text-gray-700">
-            <span className="font-semibold">Full Name:</span> {userInfo.fullName}
-          </h3>
-          <h3 className="text-lg mb-4 text-gray-700">
-            <span className="font-semibold">Age:</span> {userInfo.age}
-          </h3>
-          <h3 className="text-lg mb-4 text-gray-700">
-            <span className="font-semibold">Phone:</span> {userInfo.phone}
-          </h3>
-          <h3 className="text-lg mb-4 text-gray-700">
-            <span className="font-semibold">Birthday:</span> {formatDate(userInfo.birthday)}
-          </h3>
-          <h3 className="text-lg mb-4 text-gray-700">
-            <span className="font-semibold">Gender:</span> {userInfo.gender}
-          </h3>
-          <h3 className="text-lg mb-6 text-gray-700">
-            <span className="font-semibold">Address:</span> {userInfo.address}
-          </h3>
-          <h3 className="text-lg mb-6 text-gray-700">
-            <span className="font-semibold">Role:</span> {userInfo.role}
-          </h3>
-          <button
-            type="submit"
-            className="w-3/5 mx-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
-          >
-            <Link to="/edit-user" state={userInfo}>
-              Edit Account
-            </Link>
-          </button>
+          <h1 className="text-3xl mb-6 text-gray-900 font-semibold underline">User Profile</h1>
+          <div className="space-y-4">
+            <p className="text-lg text-gray-700">
+              <span className="font-semibold">Email:</span> {userInfo.email}
+            </p>
+            <p className="text-lg text-gray-700">
+              <span className="font-semibold">Full Name:</span> {userInfo.fullName}
+            </p>
+            <p className="text-lg text-gray-700">
+              <span className="font-semibold">Age:</span> {userInfo.age}
+            </p>
+            <p className="text-lg text-gray-700">
+              <span className="font-semibold">Phone:</span> {userInfo.phone}
+            </p>
+            <p className="text-lg text-gray-700">
+              <span className="font-semibold">Birthday:</span> {formatDate(userInfo.birthday)}
+            </p>
+            <p className="text-lg text-gray-700">
+              <span className="font-semibold">Gender:</span> {userInfo.gender}
+            </p>
+            <p className="text-lg text-gray-700">
+              <span className="font-semibold">Address:</span> {userInfo.address}
+            </p>
+            <p className="text-lg text-gray-700">
+              <span className="font-semibold">Role:</span> {userInfo.role}
+            </p>
+          </div>
+          <div className="flex justify-center space-x-4 mt-8">
+            <button
+              type="button"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+            >
+              <Link to="/edit-user" state={userInfo}>
+                Edit Account
+              </Link>
+            </button>
+            <button
+              type="button"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+            >
+              <Link to="/registered-courses" state={userInfo}>
+                View Registered Courses
+              </Link>
+            </button>
+          </div>
         </div>
       </div>
     </>
