@@ -17,6 +17,7 @@ const { authenticateToken } = require("./utilities");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require("bcrypt");
 
 app.use(express.json());
 
@@ -70,7 +71,6 @@ app.post("/create-account", async (req, res) => {
       .json({ error: true, message: "Birthday is required" });
   }
 
-
   if (birthday && age) {
     const date = new Date(birthday);
     const today = new Date();
@@ -87,7 +87,7 @@ app.post("/create-account", async (req, res) => {
   }
 
   if (!gender) {
-    return res.status(400).json({ error: true, message: "gender is required" });
+    return res.status(400).json({ error: true, message: "Gender is required" });
   }
 
   if (!age) {
@@ -119,37 +119,46 @@ app.post("/create-account", async (req, res) => {
   if (isUser) {
     return res.json({
       error: true,
-      message: "User already exist",
+      message: "User already exists",
     });
   }
 
-  const user = new User({
-    email,
-    password,
-    fullName,
-    birthday,
-    gender,
-    age,
-    phone,
-    address,
-    courses: [],
-    role: "user",
-    createdOn: new Date().getTime(),
-  });
+  try {
+    // Encrypt the password
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 rounds of salting
 
-  await user.save();
+    const user = new User({
+      email,
+      password: hashedPassword,
+      fullName,
+      birthday,
+      gender,
+      age,
+      phone,
+      address,
+      courses: [],
+      role: "user",
+      createdOn: new Date().getTime(),
+    });
 
-  const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "36000m",
-  });
+    await user.save();
 
-  return res.json({
-    error: false,
-    user,
-    accessToken,
-    message: "Registration Successful",
-  });
+    const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "36000m",
+    });
+
+    return res.json({
+      error: false,
+      user,
+      accessToken,
+      message: "Registration Successful",
+    });
+  } catch (error) {
+    console.error("Error creating account:", error);
+    return res.status(500).json({ error: true, message: "Server error" });
+  }
 });
+
 
 //edit user
 app.put("/edit-user/:userId", authenticateToken, async (req, res) => {
