@@ -109,10 +109,10 @@ const View = () => {
     }
     return false;
   };
-  
+
   const handleRegister = async (e) => {
     e.preventDefault();
-  
+
     // Navigate to payment page instead of directly registering
     navigate("/payment", {
       state: {
@@ -121,7 +121,7 @@ const View = () => {
       },
     });
   };
-  
+
   const handleRemoveMember = async (memberId) => {
     try {
       const response = await axiosInstance.put(
@@ -241,62 +241,89 @@ const View = () => {
             </div>
           </div>
 
-          
-            <div className="bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 mt-12">
-              <div className="max-w-4xl mx-auto">
-                <h3 className="text-3xl font-bold mb-6 text-center underline text-gray-800">
-                  Teacher Info
-                </h3>
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                  <div className="mb-6">
-                    <div className="text-lg mb-4 text-gray-700">
-                      <b className="underline">Full Name:</b>{" "}
-                      {teacherInfo.fullName}
-                    </div>
-                    <div className="text-lg mb-4 text-gray-700">
-                      <b className="underline">Age:</b> {teacherInfo.age}
-                    </div>
+          <div className="bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 mt-12">
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-3xl font-bold mb-6 text-center underline text-gray-800">
+                Teacher Info
+              </h3>
+              <div className="bg-white rounded-lg shadow-lg p-8">
+                <div className="mb-6">
+                  <div className="text-lg mb-4 text-gray-700">
+                    <b className="underline">Full Name:</b>{" "}
+                    {teacherInfo.fullName}
                   </div>
-                  <div className="mb-6">
-                    <div className="text-lg mb-4 text-gray-700">
-                      <b className="underline">Phone:</b> {teacherInfo.phone}
-                    </div>
-                    <div className="text-lg mb-4 text-gray-700">
-                      <b className="underline">Email:</b> {teacherInfo.email}
-                    </div>
+                  <div className="text-lg mb-4 text-gray-700">
+                    <b className="underline">Age:</b> {teacherInfo.age}
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <div className="text-lg mb-4 text-gray-700">
+                    <b className="underline">Phone:</b> {teacherInfo.phone}
+                  </div>
+                  <div className="text-lg mb-4 text-gray-700">
+                    <b className="underline">Email:</b> {teacherInfo.email}
                   </div>
                 </div>
               </div>
             </div>
-          
+          </div>
 
-          {(userInfo.role === "teacher" && courseDetails.userId === userInfo._id || userInfo.role === "admin") && memberInfos.length > 0 && (
-            <div className="bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 mt-12">
-              <div className="max-w-4xl mx-auto">
-                <h3 className="text-3xl font-bold mb-6 text-center underline text-gray-800">
-                  Members
-                </h3>
-                <div className="bg-white rounded-lg shadow-lg p-8">
-                  {memberInfos.map((member) => (
-                    <div key={member._id} className="mb-4 text-lg text-gray-700">
-                      <b className="underline">Name:</b> {member.fullName} <br />
-                      <b className="underline">Email:</b> {member.email} <br />
-                      <b className="underline">Phone:</b> {member.phone}
-                      {(userInfo.role === "teacher" || userInfo.role === "admin") && (
-                        <button
-                        className="ml-4 text-red-600 bg-white border border-red-600 px-3 py-1 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-300"
-                        onClick={() => handleRemoveMember(member._id)}
-                      >
-                        Remove
-                      </button>
-                      
-                      )}
-                    </div>
-                  ))}
+          {((userInfo.role === "teacher" &&
+            courseDetails.userId === userInfo._id) ||
+            userInfo.role === "admin") &&
+            memberInfos.length > 0 && (
+              <div className="bg-gray-100 py-8 px-4 sm:px-6 lg:px-8 mt-12">
+                <div className="max-w-4xl mx-auto">
+                  <h3 className="text-3xl font-bold mb-6 text-center underline text-gray-800">
+                    Members
+                  </h3>
+                  <div className="bg-white rounded-lg shadow-lg p-8 overflow-x-auto">
+                    <table className="w-full table-auto">
+                      <thead>
+                        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                          <th className="py-3 px-6 text-left">Name</th>
+                          <th className="py-3 px-6 text-left">Email</th>
+                          <th className="py-3 px-6 text-left">Phone</th>
+                          {(userInfo.role === "teacher" ||
+                            userInfo.role === "admin") && (
+                            <th className="py-3 px-6 text-center">Actions</th>
+                          )}
+                        </tr>
+                      </thead>
+                      <tbody className="text-gray-700 text-sm font-light">
+                        {memberInfos.map((member) => (
+                          <tr
+                            key={member._id}
+                            className="border-b border-gray-200 hover:bg-gray-100"
+                          >
+                            <td className="py-3 px-6 text-left whitespace-nowrap">
+                              {member.fullName}
+                            </td>
+                            <td className="py-3 px-6 text-left">
+                              {member.email}
+                            </td>
+                            <td className="py-3 px-6 text-left">
+                              {member.phone}
+                            </td>
+                            {(userInfo.role === "teacher" ||
+                              userInfo.role === "admin") && (
+                              <td className="py-3 px-6 text-center">
+                                <button
+                                  className="text-red-600 border border-red-600 px-3 py-1 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-300"
+                                  onClick={() => handleRemoveMember(member._id)}
+                                >
+                                  Remove
+                                </button>
+                              </td>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
       ) : (
         <div className="bg-gray-100 p-6 pb-12">
