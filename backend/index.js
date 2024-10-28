@@ -494,7 +494,7 @@ app.put("/edit-course/:courseId", authenticateToken, async (req, res) => {
   }
 });
 
-// update course
+// register to course
 app.put("/register-course/:courseId", authenticateToken, async (req, res) => {
   const courseId = req.params.courseId;
 
@@ -577,7 +577,6 @@ app.get("/get-all-courses", authenticateToken, async (req, res) => {
 // Delete Course
 app.delete("/delete-course/:courseId", authenticateToken, async (req, res) => {
   const courseId = req.params.courseId;
-  const { user } = req.user;
 
   try {
     const course = await Course.findOne({ _id: courseId });

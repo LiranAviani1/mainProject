@@ -44,6 +44,7 @@ const AddEditCourses = ({
         getAllCourses();
         onClose();
         clearFields();
+        window.location.reload();
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -74,6 +75,7 @@ const AddEditCourses = ({
         showToastMessage("Course Updated Successfully", "update");
         getAllCourses();
         onClose();
+        window.location.reload();
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
