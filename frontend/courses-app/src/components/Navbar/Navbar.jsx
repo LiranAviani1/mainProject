@@ -13,12 +13,7 @@ import {
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import ProfileInfo from "../Cards/ProfileInfo";
 
-const Navbar = ({
-  userInfo,
-  onSearchCourse,
-  handleClearSearch,
-  onAddCourse,
-}) => {
+const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
   const isToken = localStorage.getItem("token");
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -47,8 +42,8 @@ const Navbar = ({
 
   return (
     <nav className="bg-gray-800 text-white shadow-lg py-4">
-      <div className="container mx-auto flex items-center justify-between ">
-        <div className="flex items-center space-x-2">
+      <div className=" flex items-center ml-4 mr-4 justify-between">
+        <div className="flex items-center space-x-2 mr-3">
           <FaBook className="text-2xl" />
           <h2 className="text-xl font-bold tracking-tight">
             {isToken ? (
@@ -63,7 +58,7 @@ const Navbar = ({
             )}
           </h2>
         </div>
-        <div className="hidden xl:flex items-center space-x-8">
+        <NavItemsContainer>
           {isToken && (
             <>
               <NavItem to="/dashboard" icon={FaHome} label="Home" />
@@ -81,11 +76,11 @@ const Navbar = ({
               )}
             </>
           )}
-        </div>
+        </NavItemsContainer>
 
         {isToken && (
           <div className="hidden xl:flex items-center space-x-4">
-            {location.pathname == "/dashboard" && (
+            {location.pathname === "/dashboard" && (
               <SearchBar
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
@@ -94,17 +89,6 @@ const Navbar = ({
               />
             )}
             <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
-            {userInfo &&
-              (userInfo.role === "admin" || userInfo.role === "teacher") &&
-              location.pathname === "/dashboard" && (
-                <button
-                  className="flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-full shadow-md transition duration-300"
-                  onClick={onAddCourse}
-                >
-                  <MdAdd className="text-2xl" />
-                  <span className="ml-2">Add Course</span>
-                </button>
-              )}
           </div>
         )}
 
@@ -137,7 +121,7 @@ const Navbar = ({
                     <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" />
                   </>
                 )}
-                {location.pathname == "/dashboard" && (
+                {location.pathname === "/dashboard" && (
                   <SearchBar
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
@@ -146,17 +130,6 @@ const Navbar = ({
                   />
                 )}
                 <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
-                {userInfo &&
-                  (userInfo.role === "admin" || userInfo.role === "teacher") &&
-                  location.pathname === "/dashboard" && (
-                    <button
-                      className="flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-full shadow-md transition duration-300"
-                      onClick={onAddCourse}
-                    >
-                      <MdAdd className="text-2xl" />
-                      <span className="ml-2">Add Course</span>
-                    </button>
-                  )}
               </>
             )}
           </div>
@@ -166,17 +139,28 @@ const Navbar = ({
   );
 };
 
+// Component for a navigation item with responsive styling
 const NavItem = ({ to, icon: Icon, label }) => (
   <Link
     to={to}
-    className="relative text-lg font-semibold hover:font-bold transition-all duration-300 flex items-center group"
+    className="relative text-base lg:text-lg xl:text-xl font-semibold hover:font-bold transition-all duration-300 flex items-center group px-1 sm:px-2 lg:px-3 xl:px-4"
   >
-    <Icon className="mr-2 text-xl" />
-    {label}
-    <span className="absolute left-0 bottom-0 w-full h-1 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"></span>
+    <Icon className="mr-1 sm:mr-2 text-sm lg:text-lg xl:text-xl" />
+    <span>{label}</span>
+    <span
+      className="absolute left-0 bottom-0 w-full h-1 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"
+    ></span>
   </Link>
 );
 
+// Container component to manage responsive layout and spacing of NavItems
+const NavItemsContainer = ({ children }) => (
+  <div className="hidden xl:flex items-center gap-0 md:gap-0 lg:gap-0 xl:gap-1 2xl:gap-4">
+    {children}
+  </div>
+);
+
+// Search bar component for searching courses
 const SearchBar = ({
   searchQuery,
   setSearchQuery,

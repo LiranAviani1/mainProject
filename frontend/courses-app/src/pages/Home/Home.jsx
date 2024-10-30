@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 import AddCoursesImg from "../../assets/images/add-courses.svg";
 import NoDataImg from "../../assets/images/no-data.svg";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
-import moment from "moment"; // Make sure to import moment
+import moment from "moment"; 
+import { MdAdd } from "react-icons/md";
 
 const Home = () => {
   const [allCourses, setAllCourses] = useState([]);
@@ -116,6 +117,10 @@ const Home = () => {
     getAllCourses();
   };
 
+  const onAddCourse = () => {
+    setOpenAddEditModal({ isShown: true, type: "add", data: null });
+  };
+
   useEffect(() => {
     getAllCourses();
     getUserInfo();
@@ -128,10 +133,21 @@ const Home = () => {
         userInfo={userInfo}
         onSearchCourse={onSearchCourse}
         handleClearSearch={handleClearSearch}
-        onAddCourse={() => {
-          setOpenAddEditModal({ isShown: true, type: "add", data: null });
-        }}
       />
+
+      <div>
+      {userInfo &&
+                  (userInfo.role === "admin" || userInfo.role === "teacher") &&
+                  location.pathname === "/dashboard" && (
+                    <button
+                      className="flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-full shadow-md transition duration-300"
+                      onClick={onAddCourse}
+                    >
+                      <MdAdd className="text-2xl" />
+                      <span className="ml-2">Add Course</span>
+                    </button>
+                  )}
+      </div>
 
       <div className="container mx-auto p-6">
         {isSearch && (
