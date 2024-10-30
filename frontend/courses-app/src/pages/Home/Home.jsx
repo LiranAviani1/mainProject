@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import AddCoursesImg from "../../assets/images/add-courses.svg";
 import NoDataImg from "../../assets/images/no-data.svg";
 import EmptyCard from "../../components/EmptyCard/EmptyCard";
-import moment from "moment"; 
+import moment from "moment";
 import { MdAdd } from "react-icons/md";
 
 const Home = () => {
@@ -35,7 +35,9 @@ const Home = () => {
   };
 
   const handleView = (courseDetails) => {
-    navigate("/course-view", { state: { userInfo: userInfo, courseDetails: courseDetails } });
+    navigate("/course-view", {
+      state: { userInfo: userInfo, courseDetails: courseDetails },
+    });
   };
 
   const showToastMessage = (message, type) => {
@@ -135,19 +137,20 @@ const Home = () => {
         handleClearSearch={handleClearSearch}
       />
 
-      <div>
-      {userInfo &&
-                  (userInfo.role === "admin" || userInfo.role === "teacher") &&
-                  location.pathname === "/dashboard" && (
-                    <button
-                      className="flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-full shadow-md transition duration-300"
-                      onClick={onAddCourse}
-                    >
-                      <MdAdd className="text-2xl" />
-                      <span className="ml-2">Add Course</span>
-                    </button>
-                  )}
-      </div>
+<div className="flex justify-center my-8">
+  {userInfo &&
+    (userInfo.role === "admin" || userInfo.role === "teacher") &&
+    location.pathname === "/dashboard" && (
+      <button
+        className="flex items-center px-5 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
+        onClick={onAddCourse}
+      >
+        <MdAdd className="text-2xl mr-2" />
+        <span>Add Course</span>
+      </button>
+    )}
+</div>
+
 
       <div className="container mx-auto p-6">
         {isSearch && (
@@ -193,7 +196,9 @@ const Home = () => {
       </div>
       <Modal
         isOpen={openAddEditModal.isShown}
-        onRequestClose={() => setOpenAddEditModal({ isShown: false, type: "add", data: null })}
+        onRequestClose={() =>
+          setOpenAddEditModal({ isShown: false, type: "add", data: null })
+        }
         style={{
           overlay: {
             backgroundColor: "rgba(0,0,0,0.5)",
@@ -213,13 +218,16 @@ const Home = () => {
         <div className="relative bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-auto">
           <button
             className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
-            onClick={() => setOpenAddEditModal({ isShown: false, type: "add", data: null })}
-          >
-          </button>
+            onClick={() =>
+              setOpenAddEditModal({ isShown: false, type: "add", data: null })
+            }
+          ></button>
           <AddEditCourses
             type={openAddEditModal.type}
             courseData={openAddEditModal.data}
-            onClose={() => setOpenAddEditModal({ isShown: false, type: "add", data: null })}
+            onClose={() =>
+              setOpenAddEditModal({ isShown: false, type: "add", data: null })
+            }
             showToastMessage={showToastMessage}
             getAllCourses={getAllCourses}
           />
