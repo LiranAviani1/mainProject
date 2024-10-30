@@ -47,6 +47,9 @@ export default function Profile() {
               <span className="font-semibold">Address:</span> {userInfo.address}
             </p>
             <p className="text-lg text-gray-700">
+              <span className="font-semibold">Registerd courses:</span> {userInfo.courses.length}
+            </p>
+            <p className="text-lg text-gray-700">
               <span className="font-semibold">Role:</span> {userInfo.role}
             </p>
           </div>

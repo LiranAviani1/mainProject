@@ -162,49 +162,17 @@ app.post("/create-account", async (req, res) => {
 
 //edit user
 app.put("/edit-user/:userId", authenticateToken, async (req, res) => {
-  const userId = req.params.userId;
-  const { email, password, fullName, birthday, gender, age, phone, address} = req.body;
-
-
-  if (birthday && age) {
-    const date = new Date(birthday);
-    const today = new Date();
-    const ageCheck = today.getFullYear() - date.getFullYear();
-    const month = today.getMonth() - date.getMonth();
-    if (month < 0 || (month === 0 && today.getDate() < date.getDate())) {
-      ageCheck--;
-    }
-    if (ageCheck != age) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Age does not match birthday" });
-    }
-  }
-
-  if (
-    !email &&
-    !password &&
-    !fullName &&
-    !birthday &&
-    !gender &&
-    !age &&
-    !phone &&
-    !address
-  ) {
-    return res
-      .status(400)
-      .json({ error: true, message: "No changes provided" });
-  }
+  const { userId } = req.params;
+  const { email, password, fullName, birthday, gender, age, phone, address } = req.body;
 
   try {
-    const user = await User.findOne({ _id: userId });
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ error: true, message: "User not found" });
     }
 
     if (email) user.email = email;
-    if (password) user.password = password;
     if (fullName) user.fullName = fullName;
     if (birthday) user.birthday = birthday;
     if (gender) user.gender = gender;
@@ -212,6 +180,10 @@ app.put("/edit-user/:userId", authenticateToken, async (req, res) => {
     if (phone) user.phone = phone;
     if (address) user.address = address;
 
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+    }
 
     await user.save();
 

@@ -28,6 +28,7 @@ const Edit = () => {
   const [allCourses, setAllCourses] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
+  
 
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
@@ -82,18 +83,20 @@ const Edit = () => {
     getAllCourses();
   };
 
+  
   const handleEditUser = async (e) => {
     e.preventDefault();
-
+  
     if (!validateEmail(email)) {
       setError("Invalid email");
       return;
     }
-
+  
     try {
-      const response = await axiosInstance.put("/edit-user/" + userInfo._id, {
+      
+      const response = await axiosInstance.put(`/edit-user/${userInfo._id}`, {
         email,
-        password,
+        password: password !== userInfo.password ? password : undefined, 
         fullName,
         age,
         phone,
@@ -101,7 +104,7 @@ const Edit = () => {
         birthday,
         gender,
       });
-
+  
       if (response.data && response.data.user) {
         showToastMessage("User Edited Successfully", "edit");
         setTimeout(() => {
@@ -109,17 +112,14 @@ const Edit = () => {
         }, 1000);
       }
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
+      if (error.response && error.response.data && error.response.data.message) {
         setError(error.response.data.message);
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
     }
   };
+  
 
   return (
     <>
