@@ -44,7 +44,6 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
     <nav className="bg-gray-800 text-white shadow-lg py-4">
       <div className=" flex items-center ml-4 mr-4 justify-between">
         <div className="flex items-center space-x-2 mr-3">
-          <FaBook className="text-2xl" />
           <h2 className="text-xl font-bold tracking-tight">
             {isToken ? (
               <Link
@@ -61,9 +60,9 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
         <NavItemsContainer>
           {isToken && (
             <>
-              <NavItem to="/dashboard" icon={FaHome} label="Home" />
-              <NavItem to="/about" icon={FaInfoCircle} label="About" />
-              <NavItem
+              
+              <NavItem to="/about" icon={FaHome} label="Home" />
+              <NavItem to="/dashboard" icon={FaBook} label="Courses" /><NavItem
                 to="/apply-teacher"
                 icon={FaChalkboardTeacher}
                 label="Teacher Application"
