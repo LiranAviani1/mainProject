@@ -5,15 +5,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import axiosInstance from "../../utils/axiosInstance";
 import Toast from "../../components/ToastMessage/Toast";
-
 const Edit = () => {
   const location = useLocation();
   const userInfo = location.state;
- 
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toISOString().split("T")[0]; // Ensure the date is in YYYY-MM-DD format
+    return date.toISOString().split("T")[0];
   };
 
   const [fullName, setFullName] = useState(userInfo.fullName || "");
@@ -21,14 +19,11 @@ const Edit = () => {
   const [phone, setPhone] = useState(userInfo.phone || "");
   const [address, setAddress] = useState(userInfo.address || "");
   const [email, setEmail] = useState(userInfo.email || "");
-  const [password, setPassword] = useState(userInfo.password || "");
+  const [password, setPassword] = useState(""); // Initialize password as empty
   const [birthday, setBirthday] = useState(userInfo.birthday ? formatDate(userInfo.birthday) : "");
   const [gender, setGender] = useState(userInfo.gender || "");
   const [error, setError] = useState(null);
-  const [allCourses, setAllCourses] = useState([]);
-  const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
-  
 
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
@@ -51,52 +46,18 @@ const Edit = () => {
     });
   };
 
-  const getAllCourses = async () => {
-    try {
-      const response = await axiosInstance.get("/get-all-courses");
-
-      if (response.data && response.data.courses) {
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const onSearchCourse = async (query) => {
-    try {
-      const response = await axiosInstance.get("/search-courses", {
-        params: { query },
-      });
-
-      if (response.data && response.data.courses) {
-        setIsSearch(true);
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleClearSearch = () => {
-    setIsSearch(false);
-    getAllCourses();
-  };
-
-  
   const handleEditUser = async (e) => {
     e.preventDefault();
-  
+
     if (!validateEmail(email)) {
       setError("Invalid email");
       return;
     }
-  
+
     try {
-      
       const response = await axiosInstance.put(`/edit-user/${userInfo._id}`, {
         email,
-        password: password !== userInfo.password ? password : undefined, 
+        password: password ? password : undefined, // Only send if a new password is entered
         fullName,
         age,
         phone,
@@ -104,7 +65,7 @@ const Edit = () => {
         birthday,
         gender,
       });
-  
+
       if (response.data && response.data.user) {
         showToastMessage("User Edited Successfully", "edit");
         setTimeout(() => {
@@ -119,15 +80,10 @@ const Edit = () => {
       }
     }
   };
-  
 
   return (
     <>
-      <Navbar
-        userInfo={userInfo}
-        onSearchCourse={onSearchCourse}
-        handleClearSearch={handleClearSearch}
-      />
+      <Navbar userInfo={userInfo} />
 
       <div className="flex items-center justify-center mt-20">
         <div className="w-full max-w-lg border border-gray-300 rounded-lg bg-white px-8 py-10 shadow-lg">
@@ -150,6 +106,7 @@ const Edit = () => {
                 <PasswordInput
                   className="text-lg w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={password}
+                  placeholder="Enter a new password to update"
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
