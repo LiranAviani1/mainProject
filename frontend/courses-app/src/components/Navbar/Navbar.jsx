@@ -60,9 +60,9 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
         <NavItemsContainer>
           {isToken && (
             <>
-              
-              <NavItem to="/about" icon={FaHome} label="Home" />
-              <NavItem to="/dashboard" icon={FaBook} label="Courses" /><NavItem
+              <NavItem to="/dashboard" icon={FaHome} label="Home" />
+              <NavItem to="/about" icon={FaInfoCircle} label="About" />
+              <NavItem
                 to="/apply-teacher"
                 icon={FaChalkboardTeacher}
                 label="Teacher Application"
