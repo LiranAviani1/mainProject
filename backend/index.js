@@ -7,6 +7,7 @@ mongoose.connect(config.connectionString);
 const User = require("./models/user.model");
 const Course = require("./models/course.model");
 const TeacherApplication = require("./models/teacherApplication.model");
+const Purchase = require("./models/purchase");
 
 const express = require("express");
 const cors = require("cors");
@@ -498,8 +499,9 @@ app.put("/register-course/:courseId", authenticateToken, async (req, res) => {
         message: "Course is closed",
       });
     } else {
+      // Register the user in the course
       course.members.push(req.body.userId);
-      if (course.members.length == course.capacity) {
+      if (course.members.length === course.capacity) {
         course.status = "closed";
       }
       if (!user.courses.includes(courseId)) {
@@ -510,17 +512,30 @@ app.put("/register-course/:courseId", authenticateToken, async (req, res) => {
           message: "User already registered for this course",
         });
       }
+
+      // Create a new Purchase record
+      const newPurchase = new Purchase({
+        userId: user._id,
+        courseId: course._id,
+        courseName: course.title,
+        userName: user.fullName,
+        datePurchase: new Date(),
+        cost: course.price,
+      });
+
+      await newPurchase.save(); // Save the purchase record
     }
 
-    await user.save();
-    await course.save();
+    await user.save(); // Save the user update
+    await course.save(); // Save the course update
 
     return res.json({
       error: false,
       course,
-      message: "Course updated successfully",
+      message: "User registered and purchase recorded successfully",
     });
   } catch (error) {
+    console.error("Error registering for course:", error);
     return res.status(500).json({
       error: true,
       message: "Internal Server Error",
@@ -850,6 +865,69 @@ app.get('/get-application-status/:userId', async (req, res) => {
     res.status(500).json({ message: 'An unexpected error occurred. Please try again.' });
   }
 });
+
+
+app.get("/get-all-purchases", authenticateToken, async (req, res) => {
+  try {
+    const purchases = await Purchase.find()
+      .populate("userId", "fullName email") // Populates user information
+      .populate("courseId", "title") // Populates course information
+      .exec();
+
+    return res.json({
+      error: false,
+      purchases,
+      message: "All purchases retrieved successfully",
+    });
+  } catch (error) {
+    console.error("Error retrieving purchases:", error);
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
+});
+
+app.get("/search-purchases", authenticateToken, async (req, res) => {
+  const query = req.query.query;
+  if (!query) {
+    return res.status(400).json({ error: true, message: "Query is required" });
+  }
+
+  try {
+    
+    let dateQuery = null;
+    if (!isNaN(Date.parse(query))) {
+      dateQuery = new Date(query);
+    }
+
+    
+    const searchConditions = [
+      { "courseName": { $regex: query, $options: "i" } },
+      { "userName": { $regex: query, $options: "i" } },
+    ];
+
+    
+    if (dateQuery) {
+      searchConditions.push({ datePurchase: { $eq: dateQuery } });
+    }
+
+    const purchases = await Purchase.find({
+      $or: searchConditions,
+    })
+      .populate("userId", "fullName") // Replace with the correct field in the User schema
+      .populate("courseId", "title"); // Replace with the correct field in the Course schema
+
+    return res.json({ error: false, purchases });
+  } catch (error) {
+    console.error("Error in /search-purchases route:", error);
+    return res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+
+
+
 
 
 app.get("/search-users", authenticateToken, async (req, res) => {

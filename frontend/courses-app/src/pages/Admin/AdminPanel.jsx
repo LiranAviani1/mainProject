@@ -6,10 +6,16 @@ import Toast from "../../components/ToastMessage/Toast";
 import UserTable from "../../components/Tabels/UserTable";
 import CourseTable from "../../components/Tabels/CourseTable";
 import TeacherApplicationsTable from "../../components/Tabels/TeacherApplicationsTable";
+import PurchaseTable from "../../components/Tabels/PurchaseTable";
 import Modal from "react-modal";
 import AddEditCourses from "../Home/AddEditCourses";
 import AddEditUser from "../EditUser/Edit";
-import { UserIcon, BookOpenIcon, ClipboardListIcon, SearchIcon } from '@heroicons/react/solid';
+import {
+  UserIcon,
+  BookOpenIcon,
+  ClipboardListIcon,
+  SearchIcon,
+} from "@heroicons/react/solid";
 
 Modal.setAppElement("#root");
 
@@ -17,6 +23,7 @@ const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [courses, setCourses] = useState([]);
   const [applications, setApplications] = useState([]);
+  const [purchases, setPurchases] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [openCoursesCount, setOpenCoursesCount] = useState(0);
   const [closedCoursesCount, setClosedCoursesCount] = useState(0);
@@ -77,9 +84,16 @@ const AdminPanel = () => {
         setCourses(coursesWithTeacherInfo);
 
         // Calculate the statistics
-        const openCourses = coursesWithTeacherInfo.filter(course => course.status === "open").length;
-        const closedCourses = coursesWithTeacherInfo.filter(course => course.status === "close").length;
-        const revenue = coursesWithTeacherInfo.reduce((sum, course) => sum + course.price * course.members.length, 0);
+        const openCourses = coursesWithTeacherInfo.filter(
+          (course) => course.status === "open"
+        ).length;
+        const closedCourses = coursesWithTeacherInfo.filter(
+          (course) => course.status === "close"
+        ).length;
+        const revenue = coursesWithTeacherInfo.reduce(
+          (sum, course) => sum + course.price * course.members.length,
+          0
+        );
 
         setOpenCoursesCount(openCourses);
         setClosedCoursesCount(closedCourses);
@@ -89,8 +103,6 @@ const AdminPanel = () => {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
-
-  
 
   const getAllApplications = async () => {
     try {
@@ -102,6 +114,18 @@ const AdminPanel = () => {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
+
+  const getAllPurchases = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-purchases");
+      if (response.data && response.data.purchases) {
+        setPurchases(response.data.purchases);
+      }
+    } catch (error) {
+      console.error("Error fetching purchases:", error); // Log any errors
+    }
+  };
+  
 
   const deleteUser = async (userId) => {
     try {
@@ -163,7 +187,10 @@ const AdminPanel = () => {
         role,
       });
       if (response.data && !response.data.error) {
-        showToastMessage(`User role updated to '${role}' successfully`, "success");
+        showToastMessage(
+          `User role updated to '${role}' successfully`,
+          "success"
+        );
         getAllUsers();
         setTimeout(() => {
           window.location.reload();
@@ -253,12 +280,21 @@ const AdminPanel = () => {
           setApplications(response.data.applications);
           setIsSearch(true);
         }
-      }
+      } else if (filter === "purchases") {
+        const response = await axiosInstance.get("/search-purchases", {
+          params: { query: searchQuery },
+        });
+        if (response.data && response.data.purchases) {
+          console.log("Purchases:", response.data.purchases); // Log to check data
+          setPurchases(response.data.purchases);
+          setIsSearch(true);
+        }
+      }      
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
-
+  
   const handleClearSearch = () => {
     setSearchQuery("");
     setIsSearch(false);
@@ -266,8 +302,9 @@ const AdminPanel = () => {
     getAllUsers();
     getAllCourses();
     getAllApplications();
+    getAllPurchases();
   };
-
+  
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
@@ -290,6 +327,7 @@ const AdminPanel = () => {
     getAllUsers();
     getAllCourses();
     getAllApplications();
+    getAllPurchases();
   }, []);
 
   return (
@@ -305,19 +343,31 @@ const AdminPanel = () => {
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-blue-100 p-4 rounded-lg shadow">
-            <h3 className="text-2xl font-semibold text-blue-800">Open Courses</h3>
-            <p className="text-4xl font-bold text-blue-600">{openCoursesCount}</p>
+            <h3 className="text-2xl font-semibold text-blue-800">
+              Open Courses
+            </h3>
+            <p className="text-4xl font-bold text-blue-600">
+              {openCoursesCount}
+            </p>
           </div>
           <div className="bg-red-100 p-4 rounded-lg shadow">
-            <h3 className="text-2xl font-semibold text-red-800">Closed Courses</h3>
-            <p className="text-4xl font-bold text-red-600">{closedCoursesCount}</p>
+            <h3 className="text-2xl font-semibold text-red-800">
+              Closed Courses
+            </h3>
+            <p className="text-4xl font-bold text-red-600">
+              {closedCoursesCount}
+            </p>
           </div>
           <div className="bg-green-100 p-4 rounded-lg shadow">
-            <h3 className="text-2xl font-semibold text-green-800">Total Revenue</h3>
+            <h3 className="text-2xl font-semibold text-green-800">
+              Total Revenue
+            </h3>
             <p className="text-4xl font-bold text-green-600">₪{totalRevenue}</p>
           </div>
           <div className="bg-yellow-100 p-4 rounded-lg shadow">
-            <h3 className="text-2xl font-semibold text-yellow-800">Total Users</h3>
+            <h3 className="text-2xl font-semibold text-yellow-800">
+              Total Users
+            </h3>
             <p className="text-4xl font-bold text-yellow-600">{totalUsers}</p>
           </div>
         </div>
@@ -374,6 +424,17 @@ const AdminPanel = () => {
               Applications
             </button>
             <button
+              className={`flex items-center px-4 py-2 rounded ${
+                filter === "purchases"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+              onClick={() => setFilter("purchases")}
+            >
+              <ClipboardListIcon className="h-5 w-5 mr-2" />
+              Purchases
+            </button>
+            <button
               onClick={onSearch}
               className="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
             >
@@ -417,6 +478,14 @@ const AdminPanel = () => {
               onDeny={denyApplication}
               onView={handleViewApplication}
             />
+          </div>
+        )}
+        {filter === "purchases" && (
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+              Purchases
+            </h2>
+            <PurchaseTable purchases={purchases} />
           </div>
         )}
       </div>
