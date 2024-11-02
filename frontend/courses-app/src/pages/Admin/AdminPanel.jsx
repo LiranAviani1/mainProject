@@ -24,6 +24,7 @@ const AdminPanel = () => {
   const [courses, setCourses] = useState([]);
   const [applications, setApplications] = useState([]);
   const [purchases, setPurchases] = useState([]);
+  const [allPurchases, setAllPurchases] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [openCoursesCount, setOpenCoursesCount] = useState(0);
   const [closedCoursesCount, setClosedCoursesCount] = useState(0);
@@ -32,6 +33,8 @@ const AdminPanel = () => {
   const [filter, setFilter] = useState("");
   const [isSearch, setIsSearch] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
     message: "",
@@ -119,11 +122,60 @@ const AdminPanel = () => {
     try {
       const response = await axiosInstance.get("/get-all-purchases");
       if (response.data && response.data.purchases) {
-        setPurchases(response.data.purchases);
+        setAllPurchases(response.data.purchases); 
+        setPurchases(response.data.purchases); 
       }
     } catch (error) {
-      console.error("Error fetching purchases:", error); // Log any errors
+      console.error("Error fetching purchases:", error);
     }
+  };
+
+  const handleDateFilter = () => {
+    if (startDate && endDate) {
+      const normalizedStartDate = new Date(new Date(startDate).setHours(0, 0, 0, 0));
+      const normalizedEndDate = new Date(new Date(endDate).setHours(0, 0, 0, 0));
+      
+      // Check if the start date is after the end date
+      if (normalizedStartDate > normalizedEndDate) {
+        alert("Start date cannot be after the end date.");
+        return;
+      }
+    }
+  
+    if (startDate || endDate) {
+      const filteredPurchases = allPurchases.filter((purchase) => {
+        const purchaseDate = new Date(purchase.datePurchase);
+        const normalizedPurchaseDate = new Date(purchaseDate.setHours(0, 0, 0, 0));
+  
+        if (startDate && endDate) {
+          const normalizedStartDate = new Date(new Date(startDate).setHours(0, 0, 0, 0));
+          const normalizedEndDate = new Date(new Date(endDate).setHours(0, 0, 0, 0));
+          return (
+            normalizedPurchaseDate >= normalizedStartDate &&
+            normalizedPurchaseDate <= normalizedEndDate
+          );
+        } else if (startDate) {
+          const normalizedStartDate = new Date(new Date(startDate).setHours(0, 0, 0, 0));
+          return normalizedPurchaseDate >= normalizedStartDate;
+        } else if (endDate) {
+          const normalizedEndDate = new Date(new Date(endDate).setHours(0, 0, 0, 0));
+          return normalizedPurchaseDate <= normalizedEndDate;
+        }
+  
+        return true; // Fallback case, although it shouldn't reach here
+      });
+      setPurchases(filteredPurchases);
+    } else {
+      setPurchases(allPurchases); // Reset to all purchases if no date is selected
+    }
+  };
+  
+  
+  
+  const handleClearDates = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setPurchases(allPurchases); 
   };
   
 
@@ -285,7 +337,6 @@ const AdminPanel = () => {
           params: { query: searchQuery },
         });
         if (response.data && response.data.purchases) {
-          console.log("Purchases:", response.data.purchases); // Log to check data
           setPurchases(response.data.purchases);
           setIsSearch(true);
         }
@@ -481,13 +532,39 @@ const AdminPanel = () => {
           </div>
         )}
         {filter === "purchases" && (
-          <div className="mb-6">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              Purchases
-            </h2>
-            <PurchaseTable purchases={purchases} />
-          </div>
-        )}
+  <div className="mb-6">
+    <h2 className="text-2xl font-semibold mb-4 text-gray-800">Purchases</h2>
+    <div className="flex items-center space-x-4 mb-4">
+      <input
+        type="date"
+        value={startDate || ""}
+        onChange={(e) => setStartDate(e.target.value)}
+        className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Start Date"
+      />
+      <input
+        type="date"
+        value={endDate || ""}
+        onChange={(e) => setEndDate(e.target.value)}
+        className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="End Date"
+      />
+      <button
+        onClick={handleDateFilter}
+        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+      >
+        Apply Date Filter
+      </button>
+      <button
+      onClick={handleClearDates}
+      className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition"
+    >
+      Clear Dates
+    </button>
+    </div>
+    <PurchaseTable purchases={purchases} />
+  </div>
+)}
       </div>
       <Modal
         isOpen={openAddEditModal.isShown}
