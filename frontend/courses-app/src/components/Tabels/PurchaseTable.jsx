@@ -1,52 +1,101 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 const PurchaseTable = ({ purchases }) => {
+  const [isSummaryVisible, setIsSummaryVisible] = useState(false);
+
   // Calculate statistics using useMemo to avoid recalculations on re-renders
-  const { totalCost, bestCourse, topSpender, mostPopularCourse } = useMemo(() => {
+  const { totalCost, bestCourses, topSpenders, mostPopularCourses } = useMemo(() => {
     let totalCost = 0;
     let courseRevenue = {};
     let userSpending = {};
     let courseBuyersCount = {};
 
     purchases.forEach((purchase) => {
-      // Update total cost
       totalCost += purchase.cost;
-
-      // Update course revenue
       const courseName = purchase.courseId.title;
       courseRevenue[courseName] = (courseRevenue[courseName] || 0) + purchase.cost;
 
-      // Count unique buyers for each course
       if (!courseBuyersCount[courseName]) {
         courseBuyersCount[courseName] = new Set();
       }
       courseBuyersCount[courseName].add(purchase.userId._id);
 
-      // Update user spending
       const userName = purchase.userId.fullName;
       userSpending[userName] = (userSpending[userName] || 0) + purchase.cost;
     });
 
-    // Find the best course by revenue
-    const bestCourse = Object.keys(courseRevenue).reduce((a, b) =>
-      courseRevenue[a] > courseRevenue[b] ? a : b
+    const maxRevenue = Math.max(...Object.values(courseRevenue));
+    const bestCourses = Object.keys(courseRevenue).filter(
+      (course) => courseRevenue[course] === maxRevenue
     );
 
-    // Find the top spender
-    const topSpender = Object.keys(userSpending).reduce((a, b) =>
-      userSpending[a] > userSpending[b] ? a : b
+    const maxSpending = Math.max(...Object.values(userSpending));
+    const topSpenders = Object.keys(userSpending).filter(
+      (user) => userSpending[user] === maxSpending
     );
 
-    // Find the course with the most unique buyers
-    const mostPopularCourse = Object.keys(courseBuyersCount).reduce((a, b) =>
-      courseBuyersCount[a].size > courseBuyersCount[b].size ? a : b
+    const maxBuyers = Math.max(...Object.values(courseBuyersCount).map((set) => set.size));
+    const mostPopularCourses = Object.keys(courseBuyersCount).filter(
+      (course) => courseBuyersCount[course].size === maxBuyers
     );
 
-    return { totalCost, bestCourse, topSpender, mostPopularCourse };
+    return { totalCost, bestCourses, topSpenders, mostPopularCourses };
   }, [purchases]);
 
   return (
     <div>
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsSummaryVisible(!isSummaryVisible)}
+        className="mb-4 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition duration-300"
+      >
+        {isSummaryVisible ? "Hide Summary" : "Show Summary"}
+      </button>
+
+      {/* Professional Styled Summary section */}
+{isSummaryVisible && (
+  <div className="mb-6 p-8 bg-white border border-gray-300 rounded-lg shadow-lg">
+    <h3 className="text-3xl font-bold text-gray-800 text-center mb-6">Summary</h3>
+    
+    <div className="grid gap-4">
+      <div className="border-b pb-2">
+        <span className="text-lg font-semibold text-gray-700">Total Cost:</span>
+        <div>
+        <span className="text-lg font-bold text-gray-900">₪{totalCost}</span>
+        </div>
+      </div>
+      
+      <div className="border-b pb-2">
+        <span className="text-lg font-semibold text-gray-700">Best Courses (by Revenue):</span>
+        <div className="mt-2 space-y-1 text-lg text-gray-900">
+          {bestCourses.map((course, index) => (
+            <div key={index} className="font-medium">{course}</div>
+          ))}
+        </div>
+      </div>
+      
+      <div className="border-b pb-2">
+        <span className="text-lg font-semibold text-gray-700">Most Popular Courses (by Buyers):</span>
+        <div className="mt-2 space-y-1 text-lg text-gray-900">
+          {mostPopularCourses.map((course, index) => (
+            <div key={index} className="font-medium">{course}</div>
+          ))}
+        </div>
+      </div>
+      
+      <div>
+        <span className="text-lg font-semibold text-gray-700">Top Spenders:</span>
+        <div className="mt-2 space-y-1 text-lg text-gray-900">
+          {topSpenders.map((spender, index) => (
+            <div key={index} className="font-medium">{spender}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border rounded-lg shadow-lg">
           <thead className="bg-gray-800 text-white">
@@ -87,27 +136,6 @@ const PurchaseTable = ({ purchases }) => {
             )}
           </tbody>
         </table>
-      </div>
-
-      {/* Styled Summary section */}
-      <div className="mt-6 p-6 bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg shadow-lg flex flex-col space-y-4">
-        <h3 className="text-3xl font-bold text-gray-800 text-center underline mb-4">Summary</h3>
-        <div className="flex justify-between items-center border-b pb-2">
-          <span className="text-xl font-semibold text-gray-700">Total Cost:</span>
-          <span className="text-xl font-bold text-blue-600">₪{totalCost}</span>
-        </div>
-        <div className="flex justify-between items-center border-b pb-2">
-          <span className="text-xl font-semibold text-gray-700">Best Course (by Revenue):</span>
-          <span className="text-xl font-bold text-blue-600">{bestCourse}</span>
-        </div>
-        <div className="flex justify-between items-center border-b pb-2">
-          <span className="text-xl font-semibold text-gray-700">Most Popular Course (by Buyers):</span>
-          <span className="text-xl font-bold text-blue-600">{mostPopularCourse}</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-xl font-semibold text-gray-700">Top Spender:</span>
-          <span className="text-xl font-bold text-blue-600">{topSpender}</span>
-        </div>
       </div>
     </div>
   );
