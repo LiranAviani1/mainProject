@@ -446,9 +446,9 @@ const AdminPanel = () => {
               </button>
             )}
           </div>
-          <div className="flex justify-center space-x-2">
+          <div className="flex flex-col md:flex-row md:justify-center space-y-2 md:space-y-0 md:space-x-2">
             <button
-              className={`flex items-center px-4 py-2 rounded ${
+              className={`flex items-center justify-center w-full md:w-auto px-4 py-2 rounded ${
                 filter === "users"
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 hover:bg-gray-300"
@@ -458,8 +458,9 @@ const AdminPanel = () => {
               <UserIcon className="h-5 w-5 mr-2" />
               Users
             </button>
+
             <button
-              className={`flex items-center px-4 py-2 rounded ${
+              className={`flex items-center justify-center w-full md:w-auto px-4 py-2 rounded ${
                 filter === "courses"
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 hover:bg-gray-300"
@@ -469,8 +470,9 @@ const AdminPanel = () => {
               <BookOpenIcon className="h-5 w-5 mr-2" />
               Courses
             </button>
+
             <button
-              className={`flex items-center px-4 py-2 rounded ${
+              className={`flex items-center justify-center w-full md:w-auto px-4 py-2 rounded ${
                 filter === "applications"
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 hover:bg-gray-300"
@@ -480,8 +482,9 @@ const AdminPanel = () => {
               <ClipboardListIcon className="h-5 w-5 mr-2" />
               Applications
             </button>
+
             <button
-              className={`flex items-center px-4 py-2 rounded ${
+              className={`flex items-center justify-center w-full md:w-auto px-4 py-2 rounded ${
                 filter === "purchases"
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 hover:bg-gray-300"
@@ -491,9 +494,10 @@ const AdminPanel = () => {
               <ClipboardListIcon className="h-5 w-5 mr-2" />
               Purchases
             </button>
+
             <button
               onClick={onSearch}
-              className="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
+              className="flex items-center justify-center w-full md:w-auto px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
             >
               <SearchIcon className="h-5 w-5 mr-2" />
               Search
@@ -542,34 +546,38 @@ const AdminPanel = () => {
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">
               Purchases
             </h2>
-            <div className="flex items-center space-x-4 mb-4">
+            <div className="flex flex-col md:flex-row items-center md:space-x-4 space-y-2 md:space-y-0 mb-4">
               <input
                 type="date"
                 value={startDate || ""}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Start Date"
               />
+
               <input
                 type="date"
                 value={endDate || ""}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="End Date"
               />
+
               <button
                 onClick={handleDateFilter}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+                className="w-full md:w-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition duration-300"
               >
                 Apply Date Filter
               </button>
+
               <button
                 onClick={handleClearDates}
-                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition"
+                className="w-full md:w-auto px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition"
               >
                 Clear Dates
               </button>
             </div>
+
             <PurchaseTable purchases={purchases} />
           </div>
         )}
