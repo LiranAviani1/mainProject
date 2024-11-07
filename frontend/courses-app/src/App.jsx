@@ -12,6 +12,7 @@ import ApplyTeacher from "./pages/ApplyTeacher/ApplyTeacher.jsx";
 import PaymentPage from "./pages/Payment/PaymentPage.jsx";
 import ExpiredCourses from "./pages/Home/ExpiredCourses.jsx"
 import RegisteredCourses from "./pages/UserProfile/RegisteredCourses.jsx"
+import ContactUs from "./pages/ContactUs/ContactUs.jsx";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/apply-teacher" element={<ApplyTeacher />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/expired-courses" element={<ExpiredCourses />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/registered-courses" element={<RegisteredCourses />} />
         </Routes>
       </Router>

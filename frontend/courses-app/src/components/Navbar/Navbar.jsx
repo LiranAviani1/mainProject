@@ -40,11 +40,17 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Determine spacing based on screen width and location
+  const navItemSpacing =
+    location.pathname === "/dashboard"
+      ? "space-x-2"
+      : "lg:space-x-1 2xl:space-x-10"; // Using custom 2xl breakpoint
+
   return (
-    <nav className="bg-gray-800 text-white shadow-lg py-4">
-      <div className=" flex items-center ml-4 mr-4 justify-between">
-        <div className="flex items-center space-x-2 mr-3">
-          <h2 className="text-xl font-bold tracking-tight">
+    <nav className="bg-gray-800 text-white shadow-lg py-3 md:py-4">
+      <div className="container mx-auto flex items-center justify-between px-4">
+        <div className="flex items-center">
+          <h2 className="text-lg md:text-xl font-bold tracking-tight mr-4">
             {isToken ? (
               <Link
                 to="/dashboard"
@@ -57,7 +63,17 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
             )}
           </h2>
         </div>
-        <NavItemsContainer>
+
+        {/* Mobile menu toggle button */}
+        <button
+          onClick={toggleMobileMenu}
+          className="xl:hidden ml-auto text-2xl focus:outline-none"
+        >
+          {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
+        {/* Desktop nav items */}
+        <div className={`hidden xl:flex items-center ${navItemSpacing}`}>
           {isToken && (
             <>
               <NavItem to="/dashboard" icon={FaHome} label="Home" />
@@ -67,96 +83,98 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
                 icon={FaChalkboardTeacher}
                 label="Teacher Application"
               />
-              {userInfo && userInfo.role === "admin" && (
+              <NavItem to="/contact-us" icon={MdAdd} label="Contact Us" />
+              {userInfo?.role === "admin" && (
                 <>
-                  <NavItem to="/expired-courses" icon={FaBook} label="Expired Courses" />
+                  <NavItem
+                    to="/expired-courses"
+                    icon={FaBook}
+                    label="Expired Courses"
+                  />
                   <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" />
                 </>
               )}
+              {location.pathname === "/dashboard" && (
+                <SearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  handleSearch={handleSearch}
+                  onClearSearch={onClearSearch}
+                />
+              )}
+              <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             </>
           )}
-        </NavItemsContainer>
+        </div>
 
-        {isToken && (
-          <div className="hidden xl:flex items-center space-x-4">
-            {location.pathname === "/dashboard" && (
-              <SearchBar
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                handleSearch={handleSearch}
-                onClearSearch={onClearSearch}
-              />
-            )}
-            <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+        {/* Mobile nav items */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 top-0 left-0 w-full h-full bg-gray-800 text-white py-4 shadow-lg z-50">
+            {/* Close button for mobile menu */}
+            <button
+              onClick={toggleMobileMenu}
+              className="absolute top-4 right-6 text-2xl focus:outline-none"
+            >
+              <FaTimes />
+            </button>
+            <div className="container mx-auto flex flex-col items-start space-y-3 px-6 mt-12">
+              {isToken && (
+                <>
+                  <NavItem to="/dashboard" icon={FaHome} label="Home" mobile />
+                  <NavItem to="/about" icon={FaInfoCircle} label="About" mobile />
+                  <NavItem
+                    to="/apply-teacher"
+                    icon={FaChalkboardTeacher}
+                    label="Teacher Application"
+                    mobile
+                  />
+                  <NavItem to="/contact-us" icon={MdAdd} label="Contact Us" mobile />
+                  {userInfo?.role === "admin" && (
+                    <>
+                      <NavItem
+                        to="/expired-courses"
+                        icon={FaBook}
+                        label="Expired Courses"
+                        mobile
+                      />
+                      <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" mobile />
+                    </>
+                  )}
+                  {location.pathname === "/dashboard" && (
+                    <SearchBar
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                      handleSearch={handleSearch}
+                      onClearSearch={onClearSearch}
+                    />
+                  )}
+                  <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
+                </>
+              )}
+            </div>
           </div>
         )}
-
-        <div className="xl:hidden flex items-center">
-          <button onClick={toggleMobileMenu}>
-            {isMobileMenuOpen ? (
-              <FaTimes className="text-2xl" />
-            ) : (
-              <FaBars className="text-2xl" />
-            )}
-          </button>
-        </div>
       </div>
-
-      {isMobileMenuOpen && (
-        <div className="xl:hidden bg-gray-800 text-white py-4">
-          <div className="container mx-auto flex flex-col space-y-4 px-6">
-            {isToken && (
-              <>
-                <NavItem to="/dashboard" icon={FaHome} label="Home" />
-                <NavItem to="/about" icon={FaInfoCircle} label="About" />
-                <NavItem
-                  to="/apply-teacher"
-                  icon={FaChalkboardTeacher}
-                  label="Teacher Application"
-                />
-                {userInfo && userInfo.role === "admin" && (
-                  <>
-                    <NavItem to="/expired-courses" icon={FaBook} label="Expired Courses" />
-                    <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" />
-                  </>
-                )}
-                {location.pathname === "/dashboard" && (
-                  <SearchBar
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    handleSearch={handleSearch}
-                    onClearSearch={onClearSearch}
-                  />
-                )}
-                <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
-              </>
-            )}
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
 
 // Component for a navigation item with responsive styling
-const NavItem = ({ to, icon: Icon, label }) => (
+const NavItem = ({ to, icon: Icon, label, mobile = false }) => (
   <Link
     to={to}
-    className="relative text-base lg:text-lg xl:text-xl font-semibold hover:font-bold transition-all duration-300 flex items-center group px-1 sm:px-2 lg:px-3 xl:px-4"
+    className={`relative flex items-center text-base font-semibold transition duration-300 ${
+      mobile
+        ? "w-full py-2 text-left pl-4 pr-8 bg-gray-700 rounded-md mb-1 hover:bg-gray-600"
+        : "group px-2 text-lg hover:text-yellow-300"
+    }`}
   >
-    <Icon className="mr-1 sm:mr-2 text-sm lg:text-lg xl:text-xl" />
+    <Icon className="mr-2 text-lg" />
     <span>{label}</span>
-    <span
-      className="absolute left-0 bottom-0 w-full h-1 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"
-    ></span>
+    {!mobile && (
+      <span className="absolute left-0 bottom-0 w-full h-1 bg-yellow-300 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out origin-left"></span>
+    )}
   </Link>
-);
-
-// Container component to manage responsive layout and spacing of NavItems
-const NavItemsContainer = ({ children }) => (
-  <div className="hidden xl:flex items-center gap-0 md:gap-0 lg:gap-0 xl:gap-1 2xl:gap-4">
-    {children}
-  </div>
 );
 
 // Search bar component for searching courses
