@@ -4,14 +4,14 @@ const PurchaseTable = ({ purchases }) => {
   const [isSummaryVisible, setIsSummaryVisible] = useState(false);
 
   // Calculate statistics using useMemo to avoid recalculations on re-renders
-  const { totalCost, bestCourses, topSpenders, mostPopularCourses } = useMemo(() => {
-    let totalCost = 0;
+  const { totalrevenue, bestCourses, topSpenders, mostPopularCourses } = useMemo(() => {
+    let totalrevenue = 0;
     let courseRevenue = {};
     let userSpending = {};
     let courseBuyersCount = {};
 
     purchases.forEach((purchase) => {
-      totalCost += purchase.cost;
+      totalrevenue += purchase.cost;
       const courseName = purchase.courseId.title;
       courseRevenue[courseName] = (courseRevenue[courseName] || 0) + purchase.cost;
 
@@ -39,7 +39,7 @@ const PurchaseTable = ({ purchases }) => {
       (course) => courseBuyersCount[course].size === maxBuyers
     );
 
-    return { totalCost, bestCourses, topSpenders, mostPopularCourses };
+    return { totalrevenue, bestCourses, topSpenders, mostPopularCourses };
   }, [purchases]);
 
   return (
@@ -59,9 +59,9 @@ const PurchaseTable = ({ purchases }) => {
     
     <div className="grid gap-4">
       <div className="border-b pb-2">
-        <span className="text-lg font-semibold text-gray-700">Total Cost:</span>
+        <span className="text-lg font-semibold text-gray-700">Total Revenue:</span>
         <div>
-        <span className="text-lg font-bold text-gray-900">₪{totalCost}</span>
+        <span className="text-lg font-bold text-gray-900">₪{totalrevenue}</span>
         </div>
       </div>
       

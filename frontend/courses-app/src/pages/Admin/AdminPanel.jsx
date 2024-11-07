@@ -25,7 +25,6 @@ const AdminPanel = () => {
   const [applications, setApplications] = useState([]);
   const [purchases, setPurchases] = useState([]);
   const [allPurchases, setAllPurchases] = useState([]);
-  const [totalRevenue, setTotalRevenue] = useState(0);
   const [openCoursesCount, setOpenCoursesCount] = useState(0);
   const [closedCoursesCount, setClosedCoursesCount] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
@@ -100,7 +99,6 @@ const AdminPanel = () => {
 
         setOpenCoursesCount(openCourses);
         setClosedCoursesCount(closedCourses);
-        setTotalRevenue(revenue);
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -122,8 +120,8 @@ const AdminPanel = () => {
     try {
       const response = await axiosInstance.get("/get-all-purchases");
       if (response.data && response.data.purchases) {
-        setAllPurchases(response.data.purchases); 
-        setPurchases(response.data.purchases); 
+        setAllPurchases(response.data.purchases);
+        setPurchases(response.data.purchases);
       }
     } catch (error) {
       console.error("Error fetching purchases:", error);
@@ -132,36 +130,50 @@ const AdminPanel = () => {
 
   const handleDateFilter = () => {
     if (startDate && endDate) {
-      const normalizedStartDate = new Date(new Date(startDate).setHours(0, 0, 0, 0));
-      const normalizedEndDate = new Date(new Date(endDate).setHours(0, 0, 0, 0));
-      
+      const normalizedStartDate = new Date(
+        new Date(startDate).setHours(0, 0, 0, 0)
+      );
+      const normalizedEndDate = new Date(
+        new Date(endDate).setHours(0, 0, 0, 0)
+      );
+
       // Check if the start date is after the end date
       if (normalizedStartDate > normalizedEndDate) {
         alert("Start date cannot be after the end date.");
         return;
       }
     }
-  
+
     if (startDate || endDate) {
       const filteredPurchases = allPurchases.filter((purchase) => {
         const purchaseDate = new Date(purchase.datePurchase);
-        const normalizedPurchaseDate = new Date(purchaseDate.setHours(0, 0, 0, 0));
-  
+        const normalizedPurchaseDate = new Date(
+          purchaseDate.setHours(0, 0, 0, 0)
+        );
+
         if (startDate && endDate) {
-          const normalizedStartDate = new Date(new Date(startDate).setHours(0, 0, 0, 0));
-          const normalizedEndDate = new Date(new Date(endDate).setHours(0, 0, 0, 0));
+          const normalizedStartDate = new Date(
+            new Date(startDate).setHours(0, 0, 0, 0)
+          );
+          const normalizedEndDate = new Date(
+            new Date(endDate).setHours(0, 0, 0, 0)
+          );
           return (
             normalizedPurchaseDate >= normalizedStartDate &&
             normalizedPurchaseDate <= normalizedEndDate
           );
         } else if (startDate) {
-          const normalizedStartDate = new Date(new Date(startDate).setHours(0, 0, 0, 0));
+          const normalizedStartDate = new Date(
+            new Date(startDate).setHours(0, 0, 0, 0)
+          );
           return normalizedPurchaseDate >= normalizedStartDate;
         } else if (endDate) {
-          const normalizedEndDate = new Date(new Date(endDate).setHours(0, 0, 0, 0));
+          const normalizedEndDate = new Date(
+            new Date(endDate).setHours(0, 0, 0, 0)
+          );
           return normalizedPurchaseDate <= normalizedEndDate;
         }
-  
+
         return true; // Fallback case, although it shouldn't reach here
       });
       setPurchases(filteredPurchases);
@@ -169,15 +181,12 @@ const AdminPanel = () => {
       setPurchases(allPurchases); // Reset to all purchases if no date is selected
     }
   };
-  
-  
-  
+
   const handleClearDates = () => {
     setStartDate(null);
     setEndDate(null);
-    setPurchases(allPurchases); 
+    setPurchases(allPurchases);
   };
-  
 
   const deleteUser = async (userId) => {
     try {
@@ -340,12 +349,12 @@ const AdminPanel = () => {
           setPurchases(response.data.purchases);
           setIsSearch(true);
         }
-      }      
+      }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
-  
+
   const handleClearSearch = () => {
     setSearchQuery("");
     setIsSearch(false);
@@ -355,7 +364,7 @@ const AdminPanel = () => {
     getAllApplications();
     getAllPurchases();
   };
-  
+
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
@@ -392,36 +401,33 @@ const AdminPanel = () => {
         <h1 className="text-4xl font-bold mb-6 text-center text-gray-800 underline">
           Admin Panel
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-blue-100 p-4 rounded-lg shadow">
-            <h3 className="text-2xl font-semibold text-blue-800">
+        <div className="grid text-center grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="p-6 rounded-lg shadow-md bg-white border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-600 mb-1 uppercase tracking-widest">
               Open Courses
             </h3>
-            <p className="text-4xl font-bold text-blue-600">
+            <p className="text-3xl font-bold text-gray-900">
               {openCoursesCount}
             </p>
           </div>
-          <div className="bg-red-100 p-4 rounded-lg shadow">
-            <h3 className="text-2xl font-semibold text-red-800">
+
+          <div className="p-6 rounded-lg shadow-md bg-white border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-600 mb-1 uppercase tracking-widest">
               Closed Courses
             </h3>
-            <p className="text-4xl font-bold text-red-600">
+            <p className="text-3xl font-bold text-gray-900">
               {closedCoursesCount}
             </p>
           </div>
-          <div className="bg-green-100 p-4 rounded-lg shadow">
-            <h3 className="text-2xl font-semibold text-green-800">
-              Total Revenue
-            </h3>
-            <p className="text-4xl font-bold text-green-600">₪{totalRevenue}</p>
-          </div>
-          <div className="bg-yellow-100 p-4 rounded-lg shadow">
-            <h3 className="text-2xl font-semibold text-yellow-800">
+
+          <div className="p-6 rounded-lg shadow-md bg-white border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-600 mb-1 uppercase tracking-widest">
               Total Users
             </h3>
-            <p className="text-4xl font-bold text-yellow-600">{totalUsers}</p>
+            <p className="text-3xl font-bold text-gray-900">{totalUsers}</p>
           </div>
         </div>
+
         <div className="mb-6">
           <div className="relative mb-4">
             <input
@@ -532,39 +538,41 @@ const AdminPanel = () => {
           </div>
         )}
         {filter === "purchases" && (
-  <div className="mb-6">
-    <h2 className="text-2xl font-semibold mb-4 text-gray-800">Purchases</h2>
-    <div className="flex items-center space-x-4 mb-4">
-      <input
-        type="date"
-        value={startDate || ""}
-        onChange={(e) => setStartDate(e.target.value)}
-        className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Start Date"
-      />
-      <input
-        type="date"
-        value={endDate || ""}
-        onChange={(e) => setEndDate(e.target.value)}
-        className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="End Date"
-      />
-      <button
-        onClick={handleDateFilter}
-        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition duration-300"
-      >
-        Apply Date Filter
-      </button>
-      <button
-      onClick={handleClearDates}
-      className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition"
-    >
-      Clear Dates
-    </button>
-    </div>
-    <PurchaseTable purchases={purchases} />
-  </div>
-)}
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+              Purchases
+            </h2>
+            <div className="flex items-center space-x-4 mb-4">
+              <input
+                type="date"
+                value={startDate || ""}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Start Date"
+              />
+              <input
+                type="date"
+                value={endDate || ""}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="End Date"
+              />
+              <button
+                onClick={handleDateFilter}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+              >
+                Apply Date Filter
+              </button>
+              <button
+                onClick={handleClearDates}
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition"
+              >
+                Clear Dates
+              </button>
+            </div>
+            <PurchaseTable purchases={purchases} />
+          </div>
+        )}
       </div>
       <Modal
         isOpen={openAddEditModal.isShown}
