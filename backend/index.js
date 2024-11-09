@@ -1009,6 +1009,22 @@ app.post('/contact', async (req, res) => {
   }
 });
 
+//getAllContactMessages
+app.get("/get-all-contact-messages", authenticateToken, async (req, res) => {
+  const { user } = req.user;
+
+  if (user.role !== "admin") {
+    return res.status(403).json({ error: true, message: "Unauthorized" });
+  }
+
+  try {
+    const messages = await Contact.find({});
+    res.json({ error: false, messages });
+  } catch (error) {
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
 
 
 app.listen(8000);

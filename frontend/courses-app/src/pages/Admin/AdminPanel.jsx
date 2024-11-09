@@ -7,6 +7,7 @@ import UserTable from "../../components/Tabels/UserTable";
 import CourseTable from "../../components/Tabels/CourseTable";
 import TeacherApplicationsTable from "../../components/Tabels/TeacherApplicationsTable";
 import PurchaseTable from "../../components/Tabels/PurchaseTable";
+import ContactTable from "../../components/Tabels/ContactTable";
 import Modal from "react-modal";
 import AddEditCourses from "../Home/AddEditCourses";
 import AddEditUser from "../EditUser/Edit";
@@ -15,7 +16,11 @@ import {
   BookOpenIcon,
   ClipboardListIcon,
   SearchIcon,
+  CurrencyDollarIcon,
+  MailIcon,
 } from "@heroicons/react/solid";
+
+
 
 Modal.setAppElement("#root");
 
@@ -24,6 +29,7 @@ const AdminPanel = () => {
   const [courses, setCourses] = useState([]);
   const [applications, setApplications] = useState([]);
   const [purchases, setPurchases] = useState([]);
+  const [contactMessages, setContactMessages] = useState([]);
   const [allPurchases, setAllPurchases] = useState([]);
   const [openCoursesCount, setOpenCoursesCount] = useState(0);
   const [closedCoursesCount, setClosedCoursesCount] = useState(0);
@@ -110,6 +116,17 @@ const AdminPanel = () => {
       const response = await axiosInstance.get("/get-all-teacher-applications");
       if (response.data && response.data.applications) {
         setApplications(response.data.applications);
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  const getAllContactMessages = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-contact-messages");
+      if (response.data && response.data.messages) {
+        setContactMessages(response.data.messages);
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
@@ -363,6 +380,7 @@ const AdminPanel = () => {
     getAllCourses();
     getAllApplications();
     getAllPurchases();
+    getAllContactMessages();
   };
 
   const getUserInfo = async () => {
@@ -388,6 +406,7 @@ const AdminPanel = () => {
     getAllCourses();
     getAllApplications();
     getAllPurchases();
+    getAllContactMessages();
   }, []);
 
   return (
@@ -491,8 +510,20 @@ const AdminPanel = () => {
               }`}
               onClick={() => setFilter("purchases")}
             >
-              <ClipboardListIcon className="h-5 w-5 mr-2" />
+              <CurrencyDollarIcon className="h-5 w-5 mr-2" />
               Purchases
+            </button>
+
+            <button
+              className={`flex items-center justify-center w-full md:w-auto px-4 py-2 rounded ${
+                filter === "contactMessages"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+              onClick={() => setFilter("contactMessages")}
+            >
+              <MailIcon className="h-5 w-5 mr-2" />
+              Contact Messages
             </button>
 
             <button
@@ -579,6 +610,14 @@ const AdminPanel = () => {
             </div>
 
             <PurchaseTable purchases={purchases} />
+          </div>
+        )}
+        {filter === "contactMessages" && (
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+              Contact Messages
+            </h2>
+            <ContactTable contacts={contactMessages} />
           </div>
         )}
       </div>
