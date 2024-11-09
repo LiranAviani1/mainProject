@@ -8,6 +8,7 @@ const User = require("./models/user.model");
 const Course = require("./models/course.model");
 const TeacherApplication = require("./models/teacherApplication.model");
 const Purchase = require("./models/purchase.model");
+const Contact = require('./models/contact.model');
 
 const express = require("express");
 const cors = require("cors");
@@ -992,6 +993,19 @@ app.get("/search-applications", authenticateToken, async (req, res) => {
     return res.json({ error: false, applications });
   } catch (error) {
     return res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+// Route to handle contact form submission
+app.post('/contact', async (req, res) => {
+  const { name, email, message } = req.body;
+
+  try {
+    const newContact = new Contact({ name, email, message });
+    await newContact.save();
+    res.status(201).json({ message: 'Message received. We will get back to you soon.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error saving message. Please try again.' });
   }
 });
 
