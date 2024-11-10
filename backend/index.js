@@ -1025,6 +1025,23 @@ app.get("/get-all-contact-messages", authenticateToken, async (req, res) => {
   }
 });
 
+// DELETE route to delete a contact message by ID
+app.delete('/delete-contact/:id', async (req, res) => {
+  try {
+    const contactId = req.params.id;
+    const deletedContact = await Contact.findByIdAndDelete(contactId);
+
+    if (!deletedContact) {
+      return res.status(404).json({ error: 'Contact message not found' });
+    }
+
+    res.json({ message: 'Contact message deleted successfully' });
+  } catch (error) {
+    console.error("Error deleting contact message:", error);
+    res.status(500).json({ error: 'Server error. Unable to delete contact message.' });
+  }
+});
+
 
 
 app.listen(8000);

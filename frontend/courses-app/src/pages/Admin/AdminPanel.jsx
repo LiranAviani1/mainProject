@@ -145,6 +145,17 @@ const AdminPanel = () => {
     }
   };
 
+  const handleDeleteMessage = async (messageId) => {
+    try {
+      await axiosInstance.delete(`/delete-contact/${messageId}`);
+      setContactMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg._id !== messageId)
+      );
+    } catch (error) {
+      console.error("Failed to delete message:", error);
+    }
+  };
+
   const handleDateFilter = () => {
     if (startDate && endDate) {
       const normalizedStartDate = new Date(
@@ -617,7 +628,7 @@ const AdminPanel = () => {
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">
               Contact Messages
             </h2>
-            <ContactTable contacts={contactMessages} />
+            <ContactTable contacts={contactMessages} onDeleteMessage={handleDeleteMessage} />
           </div>
         )}
       </div>

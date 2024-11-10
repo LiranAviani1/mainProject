@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import Modal from "react-modal";
 
-const ContactTable = ({ contacts }) => {
+const ContactTable = ({ contacts, onDeleteMessage }) => {
   const [isSummaryVisible, setIsSummaryVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
@@ -92,12 +92,18 @@ const ContactTable = ({ contacts }) => {
                   <td className="py-3 px-4 border-b text-center">
                     {new Date(contact.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="py-3 px-4 border-b text-center">
+                  <td className="py-3 px-4 border-b text-center flex justify-center space-x-2">
                     <button
                       onClick={() => handleViewMessage(contact)}
                       className="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
                     >
                       View
+                    </button>
+                    <button
+                      onClick={() => onDeleteMessage(contact._id)}
+                      className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-700 transition"
+                    >
+                      Delete
                     </button>
                   </td>
                 </tr>
