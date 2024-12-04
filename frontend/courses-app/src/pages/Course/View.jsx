@@ -191,8 +191,9 @@ const View = () => {
                 <h4 className="font-semibold text-xl mb-1 underline">
                   Content
                 </h4>
-                <p>{courseDetails.content}</p>
+                <p className="whitespace-pre-wrap">{courseDetails.content}</p>
               </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                 <div className="text-lg text-gray-600">
                   <h4 className="font-semibold text-xl underline">

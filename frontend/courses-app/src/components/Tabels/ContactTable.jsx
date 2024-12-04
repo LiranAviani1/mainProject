@@ -53,14 +53,6 @@ const ContactTable = ({ contacts, onDeleteMessage }) => {
               </div>
             </div>
             
-            <div>
-              <span className="text-lg font-semibold text-gray-700">Unique Senders:</span>
-              <div className="mt-2 space-y-1 text-lg text-gray-900">
-                {uniqueSenders.map((sender, index) => (
-                  <div key={index} className="font-medium">{sender}</div>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       )}
@@ -130,7 +122,7 @@ const ContactTable = ({ contacts, onDeleteMessage }) => {
         {selectedMessage && (
           <div className="space-y-4 text-gray-800">
             <h2 className="text-2xl font-bold mb-2 text-center border-b pb-2">Message Details</h2>
-            <div className="space-y-2">
+            <div className="space-y-2 whitespace-pre-wrap">
               <p>
                 <strong>Name:</strong> {selectedMessage.name}
               </p>

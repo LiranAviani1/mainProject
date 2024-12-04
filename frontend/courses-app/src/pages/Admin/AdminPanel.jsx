@@ -691,7 +691,7 @@ const AdminPanel = () => {
         }}
         contentLabel="View Application Modal"
       >
-        <div className="relative bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-auto">
+        <div className="relative bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-auto whitespace-pre-wrap">
           {viewApplication.data && (
             <>
               <h2 className="text-3xl font-bold mb-6 text-center underline">
@@ -764,7 +764,7 @@ const AdminPanel = () => {
         }}
         contentLabel="View Course Modal"
       >
-        <div className="relative bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-auto">
+        <div className="relative bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-auto whitespace-pre-wrap">
           {viewCourse.data && (
             <>
               <h2 className="text-3xl font-bold mb-6 text-center underline">
