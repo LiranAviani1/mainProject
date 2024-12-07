@@ -19,7 +19,6 @@ const ApplyTeacher = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [applicationStatus, setApplicationStatus] = useState('');
   const [applicationId, setApplicationId] = useState('');
-  const [isSearch, setIsSearch] = useState(false);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
     message: '',
@@ -118,26 +117,6 @@ const ApplyTeacher = () => {
     }
   };
 
-  const onSearchCourse = async (query) => {
-    try {
-      const response = await axiosInstance.get("/search-courses", {
-        params: { query },
-      });
-
-      if (response.data && response.data.courses) {
-        setIsSearch(true);
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleClearSearch = () => {
-    setIsSearch(false);
-    getAllCourses();
-  };
-
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
@@ -168,8 +147,6 @@ const ApplyTeacher = () => {
     <>
       <Navbar
         userInfo={userInfo}
-        onSearchCourse={onSearchCourse}
-        handleClearSearch={handleClearSearch}
       />
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md">

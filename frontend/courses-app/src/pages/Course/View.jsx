@@ -17,7 +17,6 @@ const View = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [allCourses, setAllCourses] = useState([]);
-  const [isSearch, setIsSearch] = useState(false);
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
     message: "",
@@ -75,26 +74,6 @@ const View = () => {
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
     }
-  };
-
-  const onSearchCourse = async (query) => {
-    try {
-      const response = await axiosInstance.get("/search-courses", {
-        params: { query },
-      });
-
-      if (response.data && response.data.courses) {
-        setIsSearch(true);
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleClearSearch = () => {
-    setIsSearch(false);
-    getAllCourses();
   };
 
   const handleRegisterd = () => {
@@ -160,8 +139,6 @@ const View = () => {
     <>
       <Navbar
         userInfo={userInfo}
-        onSearchCourse={onSearchCourse}
-        handleClearSearch={handleClearSearch}
       />
       {handleRegisterd() ? (
         <div className="bg-gray-100 p-10 pb-12">

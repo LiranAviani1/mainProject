@@ -6,7 +6,6 @@ import { useNavigate, Link } from "react-router-dom";
 
 function About() {
   const [allCourses, setAllCourses] = useState([]);
-  const [isSearch, setIsSearch] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
 
@@ -22,25 +21,6 @@ function About() {
     }
   };
 
-  const onSearchCourse = async (query) => {
-    try {
-      const response = await axiosInstance.get("/search-courses", {
-        params: { query },
-      });
-
-      if (response.data && response.data.courses) {
-        setIsSearch(true);
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleClearSearch = () => {
-    setIsSearch(false);
-    getAllCourses();
-  };
 
   const getUserInfo = async () => {
     try {
@@ -65,8 +45,6 @@ function About() {
     <>
       <Navbar
         userInfo={userInfo}
-        onSearchCourse={onSearchCourse}
-        handleClearSearch={handleClearSearch}
       />
       <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg mt-8">
         <h1 className="text-4xl font-bold mb-6 text-center text-gray-800 underline">

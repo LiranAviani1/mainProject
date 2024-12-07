@@ -3,7 +3,6 @@ import { MdAdd } from "react-icons/md";
 import {
   FaHome,
   FaInfoCircle,
-  FaSearch,
   FaChalkboardTeacher,
   FaUserShield,
   FaBars,
@@ -13,9 +12,8 @@ import {
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import ProfileInfo from "../Cards/ProfileInfo";
 
-const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
+const Navbar = ({ userInfo }) => {
   const isToken = localStorage.getItem("token");
-  const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,17 +21,6 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
   const onLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
-  };
-
-  const handleSearch = () => {
-    if (searchQuery) {
-      onSearchCourse(searchQuery);
-    }
-  };
-
-  const onClearSearch = () => {
-    handleClearSearch();
-    setSearchQuery("");
   };
 
   const toggleMobileMenu = () => {
@@ -44,7 +31,7 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
   const navItemSpacing =
     location.pathname === "/dashboard"
       ? "space-x-2"
-      : "lg:space-x-1 2xl:space-x-10"; // Using custom 2xl breakpoint
+      : "lg:space-x-1 2xl:space-x-10"; 
 
   return (
     <nav className="bg-gray-800 text-white shadow-lg py-3 md:py-4">
@@ -94,14 +81,6 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
                   <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" />
                 </>
               )}
-              {location.pathname === "/dashboard" && (
-                <SearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  handleSearch={handleSearch}
-                  onClearSearch={onClearSearch}
-                />
-              )}
               <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
             </>
           )}
@@ -140,14 +119,6 @@ const Navbar = ({ userInfo, onSearchCourse, handleClearSearch }) => {
                       <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" mobile />
                     </>
                   )}
-                  {location.pathname === "/dashboard" && (
-                    <SearchBar
-                      searchQuery={searchQuery}
-                      setSearchQuery={setSearchQuery}
-                      handleSearch={handleSearch}
-                      onClearSearch={onClearSearch}
-                    />
-                  )}
                   <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
                 </>
               )}
@@ -177,33 +148,5 @@ const NavItem = ({ to, icon: Icon, label, mobile = false }) => (
   </Link>
 );
 
-// Search bar component for searching courses
-const SearchBar = ({
-  searchQuery,
-  setSearchQuery,
-  handleSearch,
-  onClearSearch,
-}) => (
-  <div className="relative">
-    <input
-      type="text"
-      value={searchQuery}
-      onChange={({ target }) => setSearchQuery(target.value)}
-      className="bg-gray-200 text-black rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-      placeholder="Search..."
-    />
-    <button onClick={handleSearch} className="absolute right-0 top-0 mt-2 mr-2">
-      <FaSearch className="text-gray-500 hover:text-gray-700" />
-    </button>
-    {searchQuery && (
-      <button
-        onClick={onClearSearch}
-        className="absolute right-8 top-0 mt-2 mr-2 text-gray-500 hover:text-gray-700"
-      >
-        ✕
-      </button>
-    )}
-  </div>
-);
 
 export default Navbar;

@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import Toast from "../../components/ToastMessage/Toast";
 
 const ContactUs = () => {
-  const [allCourses, setAllCourses] = useState([]);
-  const [isSearch, setIsSearch] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
 
@@ -63,25 +61,6 @@ const ContactUs = () => {
     }
   };
 
-  const onSearchCourse = async (query) => {
-    try {
-      const response = await axiosInstance.get("/search-courses", {
-        params: { query },
-      });
-      if (response.data && response.data.courses) {
-        setIsSearch(true);
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleClearSearch = () => {
-    setIsSearch(false);
-    getAllCourses();
-  };
-
   const getUserInfo = async () => {
     try {
       const response = await axiosInstance.get("/get-user");
@@ -104,8 +83,6 @@ const ContactUs = () => {
     <>
       <Navbar
         userInfo={userInfo}
-        onSearchCourse={onSearchCourse}
-        handleClearSearch={handleClearSearch}
       />
       <div className="container mx-auto p-6 max-w-md mt-10 bg-white rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-center mb-6">Contact Us</h2>

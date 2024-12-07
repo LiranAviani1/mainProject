@@ -14,8 +14,11 @@ import { MdAdd } from "react-icons/md";
 
 const Home = () => {
   const [allCourses, setAllCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [isSearch, setIsSearch] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [filter, setFilter] = useState("all");
   const navigate = useNavigate();
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -39,6 +42,21 @@ const Home = () => {
       state: { userInfo: userInfo, courseDetails: courseDetails },
     });
   };
+  
+  // Delete Course
+  const deleteCourse = async (data) => {
+    const courseId = data._id;
+    try {
+      const response = await axiosInstance.delete("/delete-course/" + courseId);
+
+      if (response.data && !response.data.error) {
+        showToastMessage("Course Deleted Successfully", "delete");
+        getAllCourses();
+      }
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
+    }
+  };
 
   const showToastMessage = (message, type) => {
     setShowToastMsg({
@@ -59,29 +77,70 @@ const Home = () => {
   const getAllCourses = async () => {
     try {
       const response = await axiosInstance.get("/get-all-courses");
-
       if (response.data && response.data.courses) {
         setAllCourses(response.data.courses);
+        setFilteredCourses(response.data.courses); // Initialize filtered courses
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
 
-  // Delete Course
-  const deleteCourse = async (data) => {
-    const courseId = data._id;
-    try {
-      const response = await axiosInstance.delete("/delete-course/" + courseId);
+  // Filter Courses
+  const filterCourses = (filterType) => {
+    setFilter(filterType);
+    let filtered = allCourses;
 
-      if (response.data && !response.data.error) {
-        showToastMessage("Course Deleted Successfully", "delete");
-        getAllCourses();
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
+    if (filterType === "myCourses") {
+      filtered = allCourses.filter((course) => course.userId === userInfo?._id);
+    } else if (filterType === "notRegistered") {
+      filtered = allCourses.filter(
+        (course) => !course.members.includes(userInfo?._id)
+      );
+    } else if (filterType === "openCourses") {
+      filtered = allCourses.filter((course) => course.status === "open");
+    }
+
+    // If there's an active search query, apply it
+    if (searchQuery.trim() !== "") {
+      filtered = filtered.filter((course) =>
+        course.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setFilteredCourses(filtered);
+  };
+
+  // Handle search query change
+  const handleSearchQueryChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
+      filterCourses(filter); 
+    } else {
+      const filtered = allCourses.filter((course) =>
+        course.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredCourses(filtered);
+      setIsSearch(true);
     }
   };
+
+  const handleClearSearch = () => {
+    setSearchQuery(""); 
+    setIsSearch(false); 
+    setFilteredCourses(allCourses); 
+  };
+
+  const onAddCourse = () => {
+    setOpenAddEditModal({ isShown: true, type: "add", data: null });
+  };
+
+  useEffect(() => {
+    getAllCourses();
+    getUserInfo();
+  }, []);
 
   // Get User Info
   const getUserInfo = async () => {
@@ -98,90 +157,112 @@ const Home = () => {
     }
   };
 
-  // Search for a Course
-  const onSearchCourse = async (query) => {
-    try {
-      const response = await axiosInstance.get("/search-courses", {
-        params: { query },
-      });
-
-      if (response.data && response.data.courses) {
-        setIsSearch(true);
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
-  const handleClearSearch = () => {
-    setIsSearch(false);
-    getAllCourses();
-  };
-
-  const onAddCourse = () => {
-    setOpenAddEditModal({ isShown: true, type: "add", data: null });
-  };
-
-  useEffect(() => {
-    getAllCourses();
-    getUserInfo();
-    return () => {};
-  }, []);
-
   return (
     <>
       <Navbar
         userInfo={userInfo}
-        onSearchCourse={onSearchCourse}
-        handleClearSearch={handleClearSearch}
       />
 
-<div className="flex justify-center my-8">
-  {userInfo &&
-    (userInfo.role === "admin" || userInfo.role === "teacher") &&
-    location.pathname === "/dashboard" && (
-      <button
-        className="flex items-center px-5 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
-        onClick={onAddCourse}
-      >
-        <MdAdd className="text-2xl mr-2" />
-        <span>Add Course</span>
-      </button>
-    )}
-</div>
+      <div className="container mx-auto my-8">
+        {/* Filter and Add Course Buttons */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex space-x-4">
+            {userInfo &&
+              (userInfo.role === "admin" || userInfo.role === "teacher") && (
+                <button
+                  className="flex items-center px-5 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
+                  onClick={onAddCourse}
+                >
+                  <MdAdd className="text-2xl mr-2" />
+                  <span>Add Course</span>
+                </button>
+              )}
+            <button
+              onClick={() => filterCourses("all")}
+              className={`px-4 py-2 rounded-lg shadow-md font-medium ${
+                filter === "all"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              All Courses
+            </button>
+            <button
+              onClick={() => filterCourses("myCourses")}
+              className={`px-4 py-2 rounded-lg shadow-md font-medium ${
+                filter === "myCourses"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              My Courses
+            </button>
+            <button
+              onClick={() => filterCourses("notRegistered")}
+              className={`px-4 py-2 rounded-lg shadow-md font-medium ${
+                filter === "notRegistered"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              Not Registered
+            </button>
+            <button
+              onClick={() => filterCourses("openCourses")}
+              className={`px-4 py-2 rounded-lg shadow-md font-medium ${
+                filter === "openCourses"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              Open Courses
+            </button>
+          </div>
 
+          {/* Search Input */}
+          <div className="relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchQueryChange}
+              placeholder="Search courses..."
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {searchQuery && (
+              <button
+                onClick={handleClearSearch}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
 
-      <div className="container mx-auto p-6">
-        {isSearch && (
-          <h3 className="text-lg font-medium mt-5">Search Results</h3>
-        )}
-
-        {allCourses.length > 0 ? (
+        {/* Courses List */}
+        {filteredCourses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
-            {allCourses
-              .filter((item) => moment(item.dateEnd).isAfter(moment())) // Filter out expired courses
-              .map((item) => {
-                return (
-                  <CourseCard
-                    userInfo={userInfo ? userInfo : getUserInfo()}
-                    userId={item.userId}
-                    key={item._id}
-                    title={item.title}
-                    content={item.content}
-                    category={item.category}
-                    subCategory={item.subCategory}
-                    dateStart={item.dateStart}
-                    dateEnd={item.dateEnd}
-                    capacity={item.capacity}
-                    members={item.members}
-                    status={item.status}
-                    onEdit={() => handleEdit(item)}
-                    onDelete={() => deleteCourse(item)}
-                    onView={() => handleView(item)}
-                  />
-                );
-              })}
+            {filteredCourses
+              .filter((item) => moment(item.dateEnd).isAfter(moment()))
+              .map((item) => (
+                <CourseCard
+                  userInfo={userInfo}
+                  userId={item.userId}
+                  key={item._id}
+                  title={item.title}
+                  content={item.content}
+                  category={item.category}
+                  subCategory={item.subCategory}
+                  dateStart={item.dateStart}
+                  dateEnd={item.dateEnd}
+                  capacity={item.capacity}
+                  members={item.members}
+                  status={item.status}
+                  onEdit={() => handleEdit(item)}
+                  onDelete={() => deleteCourse(item)}
+                  onView={() => handleView(item)}
+                />
+              ))}
           </div>
         ) : (
           <EmptyCard
@@ -189,11 +270,13 @@ const Home = () => {
             message={
               isSearch
                 ? `Oops! No courses found matching your search.`
-                : `Start creating your first course! Click the 'Add Course' button to add first course on the site`
+                : `Start creating your first course! Click the 'Add Course' button to add your first course.`
             }
           />
         )}
       </div>
+
+      {/* Add/Edit Modal */}
       <Modal
         isOpen={openAddEditModal.isShown}
         onRequestClose={() =>
@@ -216,12 +299,6 @@ const Home = () => {
         contentLabel="Add/Edit Course Modal"
       >
         <div className="relative bg-white rounded-lg shadow-lg p-8 max-h-[80vh] overflow-auto">
-          <button
-            className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
-            onClick={() =>
-              setOpenAddEditModal({ isShown: false, type: "add", data: null })
-            }
-          ></button>
           <AddEditCourses
             type={openAddEditModal.type}
             courseData={openAddEditModal.data}
