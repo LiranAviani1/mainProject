@@ -64,30 +64,19 @@ const View = () => {
     });
   };
 
-  const getAllCourses = async () => {
-    try {
-      const response = await axiosInstance.get("/get-all-courses");
-
-      if (response.data && response.data.courses) {
-        setAllCourses(response.data.courses);
-      }
-    } catch (error) {
-      console.log("An unexpected error occurred. Please try again.");
-    }
-  };
-
   const handleRegisterd = () => {
     const userCourses = userInfo.courses;
     const courseId = courseDetails._id;
     if (
       userCourses.includes(courseId) ||
       (userInfo.role === "teacher" && courseDetails.userId === userInfo._id) ||
-      userInfo.role === "admin"
+      userInfo.role === "admin" && userCourses.includes(courseId)
     ) {
       return true;
     }
     return false;
   };
+  
 
   const handleRegister = async (e) => {
     e.preventDefault();
