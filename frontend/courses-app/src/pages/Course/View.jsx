@@ -70,7 +70,7 @@ const View = () => {
     if (
       userCourses.includes(courseId) ||
       (userInfo.role === "teacher" && courseDetails.userId === userInfo._id) ||
-      userInfo.role === "admin" && userCourses.includes(courseId)
+      userInfo.role === "admin"
     ) {
       return true;
     }
