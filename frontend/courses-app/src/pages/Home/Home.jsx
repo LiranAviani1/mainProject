@@ -86,19 +86,24 @@ const Home = () => {
     }
   };
 
-  // Filter Courses
   const filterCourses = (filterType) => {
     setFilter(filterType);
     let filtered = allCourses;
 
     if (filterType === "myCourses") {
-      filtered = allCourses.filter((course) => course.userId === userInfo?._id);
+      // Filter courses where the logged-in user is in the members list
+      filtered = allCourses.filter((course) =>
+        course.members.includes(userInfo?._id)
+      );
     } else if (filterType === "notRegistered") {
       filtered = allCourses.filter(
         (course) => !course.members.includes(userInfo?._id)
       );
     } else if (filterType === "openCourses") {
       filtered = allCourses.filter((course) => course.status === "open");
+    } else if (filterType === "ownCourses") {
+      // Filter courses created by the logged-in user
+      filtered = allCourses.filter((course) => course.userId === userInfo?._id);
     }
 
     // If there's an active search query, apply it
@@ -216,6 +221,18 @@ const Home = () => {
             >
               Open Courses
             </button>
+            {userInfo?.role === "teacher" && (
+              <button
+                onClick={() => filterCourses("ownCourses")}
+                className={`px-4 py-2 rounded-lg shadow-md font-medium ${
+                  filter === "ownCourses"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
+              >
+                Own Courses
+              </button>
+            )}
           </div>
 
           {/* Search Input */}
