@@ -27,12 +27,6 @@ const Navbar = ({ userInfo }) => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Determine spacing based on screen width and location
-  const navItemSpacing =
-    location.pathname === "/dashboard"
-      ? "space-x-2"
-      : "lg:space-x-1 2xl:space-x-10"; 
-
   return (
     <nav className="bg-gray-800 text-white shadow-lg py-3 md:py-4">
       <div className="container mx-auto flex items-center justify-between px-4">
@@ -60,7 +54,7 @@ const Navbar = ({ userInfo }) => {
         </button>
 
         {/* Desktop nav items */}
-        <div className={`hidden xl:flex items-center ${navItemSpacing}`}>
+        <div className="hidden xl:flex items-center lg:space-x-1 2xl:space-x-10">
           {isToken && (
             <>
               <NavItem to="/dashboard" icon={FaHome} label="Home" />

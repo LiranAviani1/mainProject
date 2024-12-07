@@ -165,79 +165,81 @@ const Home = () => {
 
       <div className="container mx-auto my-8">
         {/* Filter and Add Course Buttons */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex space-x-4">
-            {userInfo &&
-              (userInfo.role === "admin" || userInfo.role === "teacher") && (
-                <button
-                  className="flex items-center px-5 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
-                  onClick={onAddCourse}
-                >
-                  <MdAdd className="text-2xl mr-2" />
-                  <span>Add Course</span>
-                </button>
-              )}
-            <button
-              onClick={() => filterCourses("all")}
-              className={`px-4 py-2 rounded-lg shadow-md font-medium ${
-                filter === "all"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-            >
-              All Courses
-            </button>
-            <button
-              onClick={() => filterCourses("myCourses")}
-              className={`px-4 py-2 rounded-lg shadow-md font-medium ${
-                filter === "myCourses"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-            >
-              My Courses
-            </button>
-            <button
-              onClick={() => filterCourses("notRegistered")}
-              className={`px-4 py-2 rounded-lg shadow-md font-medium ${
-                filter === "notRegistered"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-            >
-              Not Registered
-            </button>
-            <button
-              onClick={() => filterCourses("openCourses")}
-              className={`px-4 py-2 rounded-lg shadow-md font-medium ${
-                filter === "openCourses"
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-            >
-              Open Courses
-            </button>
-          </div>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
+  {/* Buttons Section */}
+  <div className="flex flex-wrap gap-4">
+    {userInfo &&
+      (userInfo.role === "admin" || userInfo.role === "teacher") && (
+        <button
+          className="flex items-center px-5 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-semibold rounded-full shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
+          onClick={onAddCourse}
+        >
+          <MdAdd className="text-2xl mr-2" />
+          <span>Add Course</span>
+        </button>
+      )}
+    <button
+      onClick={() => filterCourses("all")}
+      className={`px-4 py-2 rounded-lg shadow-md font-medium ${
+        filter === "all"
+          ? "bg-blue-500 text-white"
+          : "bg-gray-200 hover:bg-gray-300"
+      }`}
+    >
+      All Courses
+    </button>
+    <button
+      onClick={() => filterCourses("myCourses")}
+      className={`px-4 py-2 rounded-lg shadow-md font-medium ${
+        filter === "myCourses"
+          ? "bg-blue-500 text-white"
+          : "bg-gray-200 hover:bg-gray-300"
+      }`}
+    >
+      My Courses
+    </button>
+    <button
+      onClick={() => filterCourses("notRegistered")}
+      className={`px-4 py-2 rounded-lg shadow-md font-medium ${
+        filter === "notRegistered"
+          ? "bg-blue-500 text-white"
+          : "bg-gray-200 hover:bg-gray-300"
+      }`}
+    >
+      Not Registered
+    </button>
+    <button
+      onClick={() => filterCourses("openCourses")}
+      className={`px-4 py-2 rounded-lg shadow-md font-medium ${
+        filter === "openCourses"
+          ? "bg-blue-500 text-white"
+          : "bg-gray-200 hover:bg-gray-300"
+      }`}
+    >
+      Open Courses
+    </button>
+  </div>
 
-          {/* Search Input */}
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchQueryChange}
-              placeholder="Search courses..."
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {searchQuery && (
-              <button
-                onClick={handleClearSearch}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        </div>
+  {/* Search Input */}
+  <div className="relative w-full md:w-auto">
+    <input
+      type="text"
+      value={searchQuery}
+      onChange={handleSearchQueryChange}
+      placeholder="Search courses..."
+      className="w-full md:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+    {searchQuery && (
+      <button
+        onClick={handleClearSearch}
+        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+      >
+        ✕
+      </button>
+    )}
+  </div>
+</div>
+
 
         {/* Courses List */}
         {filteredCourses.length > 0 ? (
