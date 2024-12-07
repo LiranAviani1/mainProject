@@ -9,14 +9,13 @@ import {
   FaTimes,
   FaBook,
 } from "react-icons/fa";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProfileInfo from "../Cards/ProfileInfo";
 
 const Navbar = ({ userInfo }) => {
   const isToken = localStorage.getItem("token");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const onLogout = () => {
     localStorage.removeItem("token");
@@ -54,7 +53,7 @@ const Navbar = ({ userInfo }) => {
         </button>
 
         {/* Desktop nav items */}
-        <div className="hidden xl:flex items-center lg:space-x-1 2xl:space-x-10">
+        <div className="hidden xl:flex items-center flex-grow justify-evenly">
           {isToken && (
             <>
               <NavItem to="/dashboard" icon={FaHome} label="Home" />
@@ -110,7 +109,12 @@ const Navbar = ({ userInfo }) => {
                         label="Expired Courses"
                         mobile
                       />
-                      <NavItem to="/admin" icon={FaUserShield} label="Admin Panel" mobile />
+                      <NavItem
+                        to="/admin"
+                        icon={FaUserShield}
+                        label="Admin Panel"
+                        mobile
+                      />
                     </>
                   )}
                   <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
@@ -131,7 +135,7 @@ const NavItem = ({ to, icon: Icon, label, mobile = false }) => (
     className={`relative flex items-center text-base font-semibold transition duration-300 ${
       mobile
         ? "w-full py-2 text-left pl-4 pr-8 bg-gray-700 rounded-md mb-1 hover:bg-gray-600"
-        : "group px-2 text-lg hover:text-yellow-300"
+        : "group px-2 hover:text-yellow-300"
     }`}
   >
     <Icon className="mr-2 text-lg" />
@@ -141,6 +145,5 @@ const NavItem = ({ to, icon: Icon, label, mobile = false }) => (
     )}
   </Link>
 );
-
 
 export default Navbar;
