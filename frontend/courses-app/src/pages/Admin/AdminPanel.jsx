@@ -804,6 +804,9 @@ const AdminPanel = () => {
                 <p className="text-lg">
                   <strong>Price:</strong> ${viewCourse.data.price}
                 </p>
+                <p className="text-lg">
+                  <strong>Status:</strong> {viewCourse.data.status}
+                </p>
               </div>
               <button
                 onClick={() => setViewCourse({ isShown: false, data: null })}

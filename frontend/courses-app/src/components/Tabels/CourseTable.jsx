@@ -10,6 +10,7 @@ const CourseTable = ({ courses, onDeleteCourse, onEditCourse, onViewCourse }) =>
             <th className="w-1/5 py-3 px-4 text-center">Category</th>
             <th className="w-1/5 py-3 px-4 text-center">Sub-Category</th>
             <th className="w-1/5 py-3 px-4 text-center">Teacher</th>
+            <th className="w-1/5 py-3 px-4 text-center">Status</th>
             <th className="w-1/5 py-3 px-4 text-center">Actions</th>
           </tr>
         </thead>
@@ -23,6 +24,7 @@ const CourseTable = ({ courses, onDeleteCourse, onEditCourse, onViewCourse }) =>
               <td className="py-3 px-4 border-b text-center">{course.category}</td>
               <td className="py-3 px-4 border-b text-center">{course.subCategory}</td>
               <td className="py-3 px-4 border-b text-center">{course.teacher?.fullName || "N/A"}</td>
+              <td className="py-3 px-4 border-b text-center">{course.status}</td>
               <td className="py-3 px-4 border-b flex justify-center space-x-2">
                 <button
                   className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition duration-300"
