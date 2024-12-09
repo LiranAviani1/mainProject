@@ -377,6 +377,14 @@ const AdminPanel = () => {
           setPurchases(response.data.purchases);
           setIsSearch(true);
         }
+      } else if(filter === "contactMessages") {
+        const response = await axiosInstance.get("/search-contact-messages", {
+          params: { query: searchQuery },
+        });
+        if (response.data && response.data.contacts) {
+          setContactMessages(response.data.contacts);
+          setIsSearch(true);
+        }
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");

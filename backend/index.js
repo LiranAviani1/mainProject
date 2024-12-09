@@ -1042,6 +1042,27 @@ app.delete('/delete-contact/:id', async (req, res) => {
   }
 });
 
+app.get("/search-contact-messages", authenticateToken, async (req, res) => {
+  const query = req.query.query;
+  if (!query) {
+    return res.status(400).json({ error: true, message: "Query is required" });
+  }
+
+  try {
+    const contacts = await Contact.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+        { message: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    return res.json({ error: false, contacts });
+  } catch (error) {
+    return res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
 
 
 app.listen(8000);
