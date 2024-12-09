@@ -76,7 +76,6 @@ const View = () => {
     }
     return false;
   };
-  
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -126,9 +125,7 @@ const View = () => {
 
   return (
     <>
-      <Navbar
-        userInfo={userInfo}
-      />
+      <Navbar userInfo={userInfo} />
       {handleRegisterd() ? (
         <div className="bg-gray-100 p-10 pb-12">
           <div className="container mx-auto mt-8 px-4">
@@ -293,49 +290,60 @@ const View = () => {
             )}
         </div>
       ) : (
-        <div className="bg-gray-100 p-6 pb-12">
-          <div className="container mx-auto mt-6 px-4 text-center">
-            <h3 className="text-2xl font-bold mt-6 mb-4 text-gray-800">
+        <div className="bg-gray-100 p-10 pb-12">
+          <div className="container mx-auto mt-8 px-4">
+            <h3 className="text-4xl font-bold text-center mb-8 text-gray-800">
               Course Details
             </h3>
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <div className="mb-4">
-                <h6 className="text-2xl underline font-semibold text-gray-800">
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <div className="mb-6">
+                <h6 className="text-3xl underline font-semibold text-gray-800">
                   {courseDetails.title}
                 </h6>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <div className="text-lg text-gray-600">
-                  <h4 className="font-semibold underline">Category</h4>{" "}
+                  <h4 className="font-semibold text-xl underline">Category</h4>
                   {courseDetails.category}
                 </div>
                 <div className="text-lg text-gray-600">
-                  <h4 className="font-semibold underline">Sub-Category</h4>{" "}
+                  <h4 className="font-semibold text-xl underline">
+                    Sub-Category
+                  </h4>
                   {courseDetails.subCategory}
                 </div>
               </div>
               <div className="text-lg text-gray-700 mb-6">
-                <h4 className="font-semibold underline">Content</h4>{" "}
-                {courseDetails.content}
+                <h4 className="font-semibold text-xl mb-1 underline">
+                  Content
+                </h4>
+                <p className="whitespace-pre-wrap">{courseDetails.content}</p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold text-xl underline">
+                    Date Start
+                  </h4>
+                  <p className="font-bold">
+                    {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
+                  </p>
+                </div>
+                <div className="text-lg text-gray-600">
+                  <h4 className="font-semibold text-xl underline">Date End</h4>
+                  <p className="font-bold">
+                    {moment(courseDetails.dateEnd).format("DD-MM-YYYY")}
+                  </p>
+                </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                 <div className="text-lg text-gray-600">
-                  <h4 className="font-semibold underline">Date Start</h4>{" "}
-                  {moment(courseDetails.dateStart).format("DD-MM-YYYY")}
+                  <b className="font-semibold text-xl underline">Members</b>
+                  <p className="font-bold">{courseDetails.members.length}</p>
                 </div>
                 <div className="text-lg text-gray-600">
-                  <h4 className="font-semibold underline">Date End</h4>{" "}
-                  {moment(courseDetails.dateEnd).format("DD-MM-YYYY")}
-                </div>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                <div className="text-lg text-gray-600">
-                  <b className="font-semibold underline">Members:</b>{" "}
-                  {courseDetails.members.length}
-                </div>
-                <div className="text-lg text-gray-600">
-                  <b className="font-semibold underline">Capacity:</b>{" "}
-                  {courseDetails.capacity}
+                  <b className="font-semibold text-xl underline">Capacity</b>
+                  <p className="font-bold">{courseDetails.capacity}</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
@@ -358,17 +366,18 @@ const View = () => {
                 </div>
               </div>
               <div className="flex justify-center">
-  <button
-    className={`btn-primary text-lg w-[20%] px-4 py-2 rounded-lg transition-colors duration-300 ${
-      courseDetails.status === "close" ? "opacity-50 cursor-not-allowed" : ""
-    }`}
-    onClick={handleRegister}
-    disabled={courseDetails.status === "close"}
-  >
-    Register
-  </button>
-</div>
-
+                <button
+                  className={`btn-primary text-lg w-[20%] px-4 py-2 rounded-lg transition-colors duration-300 ${
+                    courseDetails.status === "close"
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  onClick={handleRegister}
+                  disabled={courseDetails.status === "close"}
+                >
+                  Register
+                </button>
+              </div>
             </div>
           </div>
         </div>
