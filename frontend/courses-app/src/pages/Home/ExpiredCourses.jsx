@@ -86,6 +86,9 @@ const ExpiredCourses = () => {
                 members={course.members}
                 status={course.status}
                 onDelete={() => deleteCourse(course)}
+                onView={() => navigate("/course-view", {
+                  state: { userInfo: userInfo, courseDetails: course },
+                })}
               />
             ))}
           </div>

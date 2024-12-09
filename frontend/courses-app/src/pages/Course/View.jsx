@@ -358,13 +358,17 @@ const View = () => {
                 </div>
               </div>
               <div className="flex justify-center">
-                <button
-                  className="btn-primary text-lg w-[20%] px-4 py-2 rounded-lg transition-colors duration-300"
-                  onClick={handleRegister}
-                >
-                  Register
-                </button>
-              </div>
+  <button
+    className={`btn-primary text-lg w-[20%] px-4 py-2 rounded-lg transition-colors duration-300 ${
+      courseDetails.status === "close" ? "opacity-50 cursor-not-allowed" : ""
+    }`}
+    onClick={handleRegister}
+    disabled={courseDetails.status === "close"}
+  >
+    Register
+  </button>
+</div>
+
             </div>
           </div>
         </div>
